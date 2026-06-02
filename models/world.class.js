@@ -3,6 +3,8 @@ class World {
     enemies = [new Puffer(), new Puffer(), new Puffer()];
     ctx;
     canvas;
+    control = new Control();
+    backgroundObjects = [new BackgroundObject("img/3. Background/Layers/5. Water/D1.png"), new BackgroundObject("img/3. Background/Layers/4.Fondo 2/D1.png"), new BackgroundObject("img/3. Background/Layers/3.Fondo 1/D1.png"), new BackgroundObject("img/3. Background/Layers/2. Floor/D1.png"), new BackgroundObject("img/3. Background/Layers/1. Light/1.png")];
 
     constructor(canvas) {
         this.canvas = canvas;
@@ -13,11 +15,10 @@ class World {
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //Inhalt des canvas wird damit gelöscht
 
-        this.ctx.drawImage(this.character.img, this.character.x, this.character.y, this.character.width, this.character.height);
+        this.addObjectsToMap(this.backgroundObjects);
+        this.addObjectsToMap(this.enemies);
+        this.addToMap(this.character);
 
-        for (let puffer of this.enemies) {
-            this.ctx.drawImage(puffer.img, puffer.x, puffer.y, puffer.width, puffer.height);
-        }
         // draw() wird immer wieder aufgerufen
 
         requestAnimationFrame(() => {
@@ -25,5 +26,15 @@ class World {
             // plant den naechsten draw()-Aufruf fuer den naechsten Render-Zyklus; bei zu geringer Leistung sinkt die FPS
             this.draw();
         });
+    }
+
+    addObjectsToMap(objects) {
+        for (let object of objects) {
+            this.addToMap(object);
+        }
+    }
+
+    addToMap(object) {
+        this.ctx.drawImage(object.img, object.x, object.y, object.width, object.height);
     }
 }
