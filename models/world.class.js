@@ -47,6 +47,33 @@ class World {
     }
 
     addToMap(object) {
+        if (object.otherDirection) {
+            this.ctx.save();
+            // Zeichenzustand sichern, damit die Spiegelung nur fuer dieses Objekt gilt.
+            this.ctx.translate(object.width, 0);
+            /* Ursprung nach rechts verschieben, damit das gespiegelte Bild an der richtigen Stelle bleibt.
+               |<- img x|x  img ->  | Die X Position bleibt beim spiegeln des Bildes auf derselben stellen. Nur wird
+               das Bild somit verschoben. Das ändert man indem man beim links steuern der X-Achse ein offset von der Breite
+               des Bildes gibt */
+            this.ctx.scale(-1, 1);
+            // X-Achse spiegeln, Y-Achse unveraendert lassen.
+            object.x *= -1;
+            // Weltkoordinate kurz negativ setzen, damit die Figur nach dem Spiegeln nicht springt.
+            // | abstand | img | -> |  img  |  abstand  | das wird damit negiert.
+        }
+
+        // Objekt mit seiner Position und Groesse zeichnen.
         this.ctx.drawImage(object.img, object.x, object.y, object.width, object.height);
+
+        if (object.otherDirection) {
+            // Ursprung wieder zuruecksetzen und die originale x-Position wiederherstellen.
+            object.x *= -1;
+            this.ctx.restore();
+
+            //
+            /* save und restore setzen einfach wieder das urpsprüngliche zurück: 
+            this.ctx.scale(-1, 1);
+            this.ctx.translate(-object.width, 0); */
+        }
     }
 }

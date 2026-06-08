@@ -13,6 +13,7 @@ class Character extends MovableObject {
         "img/1.Sharkie/3.Swim/6.png",
     ];
     world;
+    speed = 2;
 
     constructor() {
         super();
@@ -26,6 +27,22 @@ class Character extends MovableObject {
     animate() {
         setInterval(() => {
             if (this.world.keyboard.right) {
+                this.x += this.speed;
+                this.otherDirection = false;
+            } else if (this.world.keyboard.left) {
+                this.x -= this.speed;
+                this.otherDirection = true;
+            }
+
+            if (this.world.keyboard.up) {
+                this.y -= this.speed;
+            } else if (this.world.keyboard.down) {
+                this.y += this.speed;
+            }
+        }, 1000 / 60);
+
+        setInterval(() => {
+            if (this.world.keyboard.right || this.world.keyboard.left || this.world.keyboard.up || this.world.keyboard.down) {
                 let i = this.currentImage % this.imagesSwimming.length;
                 /*
             let i = 0 % 6; 0, Rest 0
@@ -42,6 +59,6 @@ class Character extends MovableObject {
                 this.img = this.imageCache[path];
                 this.currentImage++;
             }
-        }, 300);
+        }, 50);
     }
 }
