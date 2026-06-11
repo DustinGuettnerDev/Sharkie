@@ -10,10 +10,6 @@ class MovableObject {
         this.img.src = path;
     }
 
-    delay(time) {
-        return new Promise((resolve) => setTimeout(resolve, time));
-    }
-
     loadImages(arr) {
         for (let path of arr) {
             let img = new Image();

@@ -26,10 +26,10 @@ class Character extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if (this.world.keyboard.right) {
+            if (this.world.keyboard.right && this.x !== this.world.level.levelEnd_x) {
                 this.x += this.speed;
                 this.otherDirection = false;
-            } else if (this.world.keyboard.left) {
+            } else if (this.world.keyboard.left && this.x > -1) {
                 this.x -= this.speed;
                 this.otherDirection = true;
             }
@@ -39,6 +39,8 @@ class Character extends MovableObject {
             } else if (this.world.keyboard.down) {
                 this.y += this.speed;
             }
+            // bewegen der kamera anhand der zurückgelegten x-stecke der charackters
+            this.world.camera_x = -this.x + 20;
         }, 1000 / 60);
 
         setInterval(() => {

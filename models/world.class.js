@@ -1,16 +1,10 @@
 class World {
     character = new Character();
-    enemies = [new Puffer(), new Puffer(), new Puffer()];
-    backgroundObjects = [
-        new BackgroundObject("img/3. Background/Layers/5. Water/D1.png"),
-        new BackgroundObject("img/3. Background/Layers/4.Fondo 2/D1.png"),
-        new BackgroundObject("img/3. Background/Layers/3.Fondo 1/D1.png"),
-        new BackgroundObject("img/3. Background/Layers/2. Floor/D1.png"),
-        new BackgroundObject("img/3. Background/Layers/1. Light/1.png"),
-    ];
+    level = level_1;
     ctx;
     canvas;
     keyboard;
+    camera_x = 0;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -23,9 +17,18 @@ class World {
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //Inhalt des canvas wird damit gelöscht
 
-        this.addObjectsToMap(this.backgroundObjects);
-        this.addObjectsToMap(this.enemies);
+        this.ctx.translate(this.camera_x, 0);
+        /* der rand oben und links sind jeweils die 0 werte bei der achse
+        wenn der charackter 100 nach vorne läuft, wird mit translate 100  nach links verschoben,
+        Dann wird alles reingezeichnet sowohl charackter als auch alle background-elemente etc. und es
+        wird danach wieder nach vorne verschoben
+        */
+
+        this.addObjectsToMap(this.level.backgroundObjects);
+        this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character);
+
+        this.ctx.translate(-this.camera_x, 0);
 
         // draw() wird immer wieder aufgerufen
 
