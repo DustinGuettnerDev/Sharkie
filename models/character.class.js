@@ -13,7 +13,10 @@ class Character extends MovableObject {
         "img/1.Sharkie/3.Swim/6.png",
     ];
     world;
-    speed = 2;
+    speed = 20;
+    energy = 100;
+    levelLimitUp = -150;
+    levelLimitDown = 160;
 
     constructor() {
         super();
@@ -22,45 +25,41 @@ class Character extends MovableObject {
         this.loadImage("img/1.Sharkie/1.IDLE/1.png");
         this.loadImages(this.imagesSwimming);
         this.animate();
+        /*         this.calculateOffset(); */
     }
 
     animate() {
         setInterval(() => {
             if (this.world.keyboard.right && this.x !== this.world.level.levelEnd_x) {
-                this.x += this.speed;
+                this.moveRight();
                 this.otherDirection = false;
             } else if (this.world.keyboard.left && this.x > -1) {
-                this.x -= this.speed;
+                this.moveLeft();
                 this.otherDirection = true;
             }
 
-            if (this.world.keyboard.up) {
-                this.y -= this.speed;
-            } else if (this.world.keyboard.down) {
-                this.y += this.speed;
+            if (this.world.keyboard.up && this.y >= this.levelLimitUp) {
+                this.moveUp();
+            } else if (this.world.keyboard.down && this.y <= this.levelLimitDown) {
+                this.moveDown();
             }
             // bewegen der kamera anhand der zurückgelegten x-stecke der charackters
-            this.world.camera_x = -this.x + 20;
+            this.moveCamera();
         }, 1000 / 60);
 
         setInterval(() => {
-            if (this.world.keyboard.right || this.world.keyboard.left || this.world.keyboard.up || this.world.keyboard.down) {
-                let i = this.currentImage % this.imagesSwimming.length;
-                /*
-            let i = 0 % 6; 0, Rest 0
-            let i = 7 % 7; 1, Rest 0
-            let i = 8 % 7; 1, Rest 1
-            let i = 15 % 7; 2, Rest 1
-            i = 0, 1, 2, 3, 4, 5, 6, 0 etc.
-            Erklärung :
-            14 / 7 = erster Wert
-            15 - 14 = 1 = zweiter Wert
-            Bei modulo wird der restwert nur ausgegeben
-            */
-                let path = this.imagesSwimming[i];
-                this.img = this.imageCache[path];
-                this.currentImage++;
+            if (
+                this.world.keyboard.right ||
+                this.world.keyboard.left ||
+                this.world.keyboard.up ||
+                this.world.keyboard.down
+            ) {
+                this.playAnimation(this.imagesSwimming);
             }
-        }, 50);
+        }, 200);
+    }
+
+    moveCamera() {
+        this.world.camera_x = -this.x + 20;
     }
 }

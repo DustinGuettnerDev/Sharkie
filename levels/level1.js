@@ -1,5 +1,5 @@
 const level_1 = new Level(
-    [new Puffer(), new Puffer(), new Puffer()],
+    [new Puffer(), new Puffer(), new Puffer(), new Endboss()],
     [
         new BackgroundObject("img/3. Background/Layers/5. Water/D2.png", -720),
         new BackgroundObject("img/3. Background/Layers/4.Fondo 2/D2.png", -720),
