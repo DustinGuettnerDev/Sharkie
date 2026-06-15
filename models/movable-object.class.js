@@ -2,6 +2,7 @@ class MovableObject extends CollidableObject {
     currentImage = 0;
     speed = 1;
     otherDirection = false;
+    isHurt = false;
 
     playAnimation(imagesObject) {
         let i = this.currentImage % imagesObject.length;

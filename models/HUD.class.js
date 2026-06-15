@@ -5,9 +5,11 @@ class HudIcon extends DrawableObject {
     height;
     width;
     iconValue;
+    fontOffsetY;
     world;
+    kind;
 
-    constructor(path, x, y, iconValue, height = 70, width = 70) {
+    constructor({ path, x, y, height = 70, width = 70, fontOffsetY = 0, iconValue = 0, kind }) {
         super();
 
         this.path = path;
@@ -17,11 +19,13 @@ class HudIcon extends DrawableObject {
         this.width = width;
         this.iconValue = iconValue;
         this.loadImage(this.path);
+        this.fontOffsetY = fontOffsetY;
+        this.kind = kind;
     }
-    // einfügen in loop
-    drawHudIconValue() {
-        this.world.ctx.font = "24px Arial";
-        this.world.ctx.fillStyle = "black";
-        this.world.ctx.fillText(`${this.iconValue}`, this.x + 70, this.y + 45);
+
+    updateValue() {
+        if (this.kind === "life") this.iconValue = this.world.character.life;
+        if (this.kind === "coins") this.iconValue = this.world.character.coins;
+        if (this.kind === "poison") this.iconValue = this.world.character.poison;
     }
 }

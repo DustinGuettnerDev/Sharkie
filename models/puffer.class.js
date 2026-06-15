@@ -1,4 +1,4 @@
-class Puffer extends MovableObject {
+class Puffer extends MortalObject {
     height = 100;
     width = 100;
     x = 380 * Math.random() + 250;
@@ -17,6 +17,8 @@ class Puffer extends MovableObject {
         left: 5,
         right: 10,
     };
+    life = 1;
+
     // man muss hier die eigenschaften nicht nochmal deklarieren, da sie schon im parent deklariert wurden
     constructor() {
         super();

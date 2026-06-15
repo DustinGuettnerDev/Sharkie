@@ -1,4 +1,4 @@
-class Endboss extends MovableObject {
+class Endboss extends MortalObject {
     height = 600;
     width = 600;
     x = 1500;
@@ -25,6 +25,7 @@ class Endboss extends MovableObject {
         left: 40,
         right: 45,
     };
+    life = 4;
 
     // man muss hier die eigenschaften nicht nochmal deklarieren, da sie schon im parent deklariert wurden
     constructor() {

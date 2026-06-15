@@ -1,10 +1,32 @@
 class World {
     character = new Character();
-    hudIcons = [
-        new HudIcon("img/4. Marcadores/HUD-icons/poison.png", 30, 20, 0, 80, 80),
-        new HudIcon("img/4. Marcadores/HUD-icons/life.png", 150, 30, 10),
-        new HudIcon("img/4. Marcadores/HUD-icons/coins.png", 270, 30, 0),
-    ];
+    poison = new HudIcon({
+        path: "img/4. Marcadores/HUD-icons/poison.png",
+        x: 30,
+        y: 20,
+        height: 80,
+        width: 80,
+        fontOffsetY: 10,
+        iconValue: this.character.poison,
+        kind: "poison",
+    });
+
+    life = new HudIcon({
+        path: "img/4. Marcadores/HUD-icons/life.png",
+        x: 150,
+        y: 30,
+        iconValue: this.character.life,
+        kind: "life",
+    });
+
+    coins = new HudIcon({
+        path: "img/4. Marcadores/HUD-icons/coins.png",
+        x: 270,
+        y: 35,
+        fontOffsetY: -5,
+        iconValue: this.character.coins,
+        kind: "coins",
+    });
     level = level_1;
     ctx;
     canvas;
@@ -51,9 +73,8 @@ class World {
     checkCollisions() {
         setInterval(() => {
             for (let enemy of this.level.enemies) {
-                if (this.character.isColliding(enemy) && this.character.energy > 0) {
-                    this.character.energy -= 20;
-                    console.log("energy: ", this.character.energy);
+                if (this.character.isColliding(enemy) && !this.character.isDead()) {
+                    this.character.takeDamage();
                 }
             }
         }, 400);
@@ -61,9 +82,9 @@ class World {
 
     setWorld() {
         this.character.world = this;
-        for (let hudIcon of this.hudIcons) {
-            hudIcon.world = this;
-        }
+        this.life.world = this;
+        this.poison.world = this;
+        this.coins.world = this;
     }
 
     addObjectsToMap(drawObjects) {
@@ -82,9 +103,16 @@ class World {
     }
 
     addHudIconsToMap() {
-        this.addObjectsToMap(this.hudIcons);
-        for (let hudIcon of this.hudIcons) {
-            hudIcon.drawHudIconValue();
+        const hudIcons = [this.life, this.poison, this.coins];
+
+        for (let icon of hudIcons) {
+            this.addToMap(icon);
+            icon.updateValue();
+            this.drawValue({
+                text: icon.iconValue,
+                x: icon.x + 70,
+                y: icon.y + 50 + icon.fontOffsetY,
+            });
         }
     }
 
@@ -96,6 +124,12 @@ class World {
             drawObject.width,
             drawObject.height,
         );
+    }
+
+    drawValue({ text, x, y, font = "24px Arial", fillStyle = "white" }) {
+        this.ctx.font = font;
+        this.ctx.fillStyle = fillStyle;
+        this.ctx.fillText(`x ${text}`, x, y);
     }
 
     drawFrame(drawObject) {
