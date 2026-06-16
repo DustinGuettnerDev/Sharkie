@@ -2,9 +2,8 @@ class MortalObject extends MovableObject {
     isDead() {
         return this.life <= 0;
     }
-    takeDamage(amount = 1) {
-        this.isHurt = true;
-        this.life = Math.max(0, this.life - amount);
+    getHit() {
+        this.life = Math.max(0, this.life - 1);
     }
 
     playHurtAnimation(imagesHurt) {
@@ -15,5 +14,9 @@ class MortalObject extends MovableObject {
         if (this.isDead()) {
             this.playAnimation(imagesDeath);
         }
+    }
+
+    playSwimmingAnimation() {
+        this.playAnimation(this.imagesSwimming);
     }
 }

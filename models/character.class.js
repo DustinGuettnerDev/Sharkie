@@ -15,8 +15,8 @@ class Character extends MortalObject {
     world;
 
     imagesHurtShock = [
-        "img/1.Sharkie/5.Hurt/2.Electric shock/.o1.png",
-        "img/1.Sharkie/5.Hurt/2.Electric shock/.o2.png",
+        "img/1.Sharkie/5.Hurt/2.Electric shock/o1.png",
+        "img/1.Sharkie/5.Hurt/2.Electric shock/o2.png",
     ];
 
     imagesHurtPoison = [
@@ -57,10 +57,10 @@ class Character extends MortalObject {
     speed = 20;
     levelLimitUp = -150;
     levelLimitDown = 160;
-    isHurt = false;
     life = 10;
     coins = 0;
     poison = 0;
+    lastHit;
 
     constructor() {
         super();
@@ -72,23 +72,52 @@ class Character extends MortalObject {
         this.loadImages(this.imagesHurtShock);
         this.loadImages(this.imagesPoisonDeath);
         this.loadImages(this.imagesShockDeath);
+        this.moveCharacter();
         this.animate();
         /*         this.calculateOffset(); */
     }
 
-    animate() {
+    moveCharacter() {
         setInterval(() => {
-            this.moveCharacter();
-        }, 1000 / 60);
+            if (this.world.keyboard.right && this.x !== this.world.level.levelEnd_x) {
+                this.moveRight();
+                this.otherDirection = false;
+            } else if (this.world.keyboard.left && this.x > -1) {
+                this.moveLeft();
+                this.otherDirection = true;
+            }
 
+            if (this.world.keyboard.up && this.y >= this.levelLimitUp) {
+                this.moveUp();
+            } else if (this.world.keyboard.down && this.y <= this.levelLimitDown) {
+                this.moveDown();
+            }
+            // bewegen der kamera anhand der zurückgelegten x-stecke der charackters
+            this.moveCamera();
+        }, 1000 / 60);
+    }
+
+    // hier anknüpfen
+    animate() {
+        /*         let counter = 0; */
         setInterval(() => {
             if (this.isDead()) {
                 this.playDieAnimation(this.imagesPoisonDeath);
-            } else if (this.isHurt) {
+                /*                 counter += 1;
+                if (counter >= this.imagesPoisonDeath.length) {
+                    this.deadImageShark("poison");
+                } */
+            } else if (this.isHurt()) {
                 this.playHurtAnimation(this.imagesHurtPoison);
-                this.isHurt = false;
-            } else {
+            } else if (
+                this.world.keyboard.right ||
+                this.world.keyboard.left ||
+                this.world.keyboard.up ||
+                this.world.keyboard.down
+            ) {
                 this.playSwimmingAnimation();
+            } else {
+                this.defaultImageShark();
             }
         }, 200);
     }
@@ -97,32 +126,26 @@ class Character extends MortalObject {
         this.world.camera_x = -this.x + 20;
     }
 
-    playSwimmingAnimation() {
-        if (
-            this.world.keyboard.right ||
-            this.world.keyboard.left ||
-            this.world.keyboard.up ||
-            this.world.keyboard.down
-        ) {
-            this.playAnimation(this.imagesSwimming);
-        }
+    getHit() {
+        this.life = Math.max(0, this.life - 1);
+        this.lastHit = Date.now();
     }
 
-    moveCharacter() {
-        if (this.world.keyboard.right && this.x !== this.world.level.levelEnd_x) {
-            this.moveRight();
-            this.otherDirection = false;
-        } else if (this.world.keyboard.left && this.x > -1) {
-            this.moveLeft();
-            this.otherDirection = true;
-        }
+    isHurt() {
+        let timepassed = Date.now() - this.lastHit;
+        timepassed = timepassed / 1000;
+        return timepassed < 5;
+    }
 
-        if (this.world.keyboard.up && this.y >= this.levelLimitUp) {
-            this.moveUp();
-        } else if (this.world.keyboard.down && this.y <= this.levelLimitDown) {
-            this.moveDown();
+    defaultImageShark() {
+        this.loadImage("img/1.Sharkie/1.IDLE/1.png");
+    }
+
+    deadImageShark(typeOfDeath) {
+        if (typeOfDeath === "poison") {
+            this.loadImage(this.imagesPoisonDeath.at(-1));
+        } else {
+            this.loadImage(this.imagesShockDeath.at(-1));
         }
-        // bewegen der kamera anhand der zurückgelegten x-stecke der charackters
-        this.moveCamera();
     }
 }

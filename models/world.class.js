@@ -74,7 +74,7 @@ class World {
         setInterval(() => {
             for (let enemy of this.level.enemies) {
                 if (this.character.isColliding(enemy) && !this.character.isDead()) {
-                    this.character.takeDamage();
+                    this.character.getHit();
                 }
             }
         }, 400);
