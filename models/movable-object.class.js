@@ -1,9 +1,14 @@
 class MovableObject extends CollidableObject {
     currentImage = 0;
+    lastAnimation = null;
     speed = 1;
     otherDirection = false;
 
     playAnimation(imagesObject) {
+        if (this.lastAnimation !== imagesObject) {
+            this.currentImage = 0;
+            this.lastAnimation = imagesObject;
+        }
         let i = this.currentImage % imagesObject.length;
         /*
             let i = 0 % 6; 0, Rest 0

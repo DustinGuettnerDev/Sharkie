@@ -1,5 +1,5 @@
 class MortalObject extends MovableObject {
-    isDead() {
+    hasZeroLife() {
         return this.life <= 0;
     }
     getHit() {
@@ -11,7 +11,7 @@ class MortalObject extends MovableObject {
     }
 
     playDieAnimation(imagesDeath) {
-        if (this.isDead()) {
+        if (this.hasZeroLife()) {
             this.playAnimation(imagesDeath);
         }
     }

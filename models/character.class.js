@@ -57,10 +57,19 @@ class Character extends MortalObject {
     speed = 20;
     levelLimitUp = -150;
     levelLimitDown = 160;
-    life = 10;
+    life = 2;
     coins = 0;
     poison = 0;
     lastHit;
+    animateInterval;
+    deathRiseLimit = -80;
+    deathFallLimit = 110;
+
+    deathState = {
+        started: false,
+        type: null,
+        frame: 0,
+    };
 
     constructor() {
         super();
@@ -79,35 +88,36 @@ class Character extends MortalObject {
 
     moveCharacter() {
         setInterval(() => {
-            if (this.world.keyboard.right && this.x !== this.world.level.levelEnd_x) {
-                this.moveRight();
-                this.otherDirection = false;
-            } else if (this.world.keyboard.left && this.x > -1) {
-                this.moveLeft();
-                this.otherDirection = true;
-            }
+            if (!this.hasZeroLife() && !this.isHurt()) {
+                if (this.world.keyboard.right && this.x !== this.world.level.levelEnd_x) {
+                    this.moveRight();
+                    this.otherDirection = false;
+                } else if (this.world.keyboard.left && this.x > -1) {
+                    this.moveLeft();
+                    this.otherDirection = true;
+                }
 
-            if (this.world.keyboard.up && this.y >= this.levelLimitUp) {
-                this.moveUp();
-            } else if (this.world.keyboard.down && this.y <= this.levelLimitDown) {
-                this.moveDown();
+                if (this.world.keyboard.up && this.y >= this.levelLimitUp) {
+                    this.moveUp();
+                } else if (this.world.keyboard.down && this.y <= this.levelLimitDown) {
+                    this.moveDown();
+                }
+                // bewegen der kamera anhand der zurückgelegten x-stecke der charackters
+                this.moveCamera();
             }
-            // bewegen der kamera anhand der zurückgelegten x-stecke der charackters
-            this.moveCamera();
         }, 1000 / 60);
     }
 
     // hier anknüpfen
     animate() {
-        /*         let counter = 0; */
-        setInterval(() => {
-            if (this.isDead()) {
-                this.playDieAnimation(this.imagesPoisonDeath);
-                /*                 counter += 1;
-                if (counter >= this.imagesPoisonDeath.length) {
-                    this.deadImageShark("poison");
-                } */
+        this.animateInterval = setInterval(() => {
+            if (this.hasZeroLife()) {
+                this.playDeathTypeAnimation(this.imagesPoisonDeath, "poison");
+                return;
             } else if (this.isHurt()) {
+                this.deathState.started = false;
+                this.deathState.type = null;
+                this.deathState.frame = 0;
                 this.playHurtAnimation(this.imagesHurtPoison);
             } else if (
                 this.world.keyboard.right ||
@@ -141,11 +151,57 @@ class Character extends MortalObject {
         this.loadImage("img/1.Sharkie/1.IDLE/1.png");
     }
 
-    deadImageShark(typeOfDeath) {
-        if (typeOfDeath === "poison") {
-            this.loadImage(this.imagesPoisonDeath.at(-1));
-        } else {
-            this.loadImage(this.imagesShockDeath.at(-1));
+    // shock mit anderen counter
+    playDeathTypeAnimation(imagesTypeDeath, type) {
+        if (!this.deathState.started || this.deathState.type !== type) {
+            this.deathState.started = true;
+            this.deathState.type = type;
+            this.deathState.frame = 0;
         }
+
+        if (this.deathState.frame < imagesTypeDeath.length) {
+            this.playAnimation(imagesTypeDeath);
+            this.deathState.frame += 1;
+        }
+
+        if (this.deathState.frame >= imagesTypeDeath.length) {
+            this.lastDeathFrame(imagesTypeDeath);
+            clearInterval(this.animateInterval);
+            if (this.deathState.type === "poison") {
+                this.riseUp();
+            } else if (this.deathState.type === "shock") {
+                this.fallDown();
+            }
+        }
+    }
+
+    lastDeathFrame(imagesTypeDeath) {
+        return this.loadImage(imagesTypeDeath.at(-1));
+    }
+
+    riseUp() {
+        let yRiseInterval = setInterval(() => {
+            if (this.y > this.deathRiseLimit) {
+                this.y -= 1;
+            } else {
+                clearInterval(yRiseInterval);
+            }
+        }, 1000 / 60);
+    }
+
+    fallDown() {
+        let yFallInterval = setInterval(() => {
+            if (this.y < this.deathFallLimit) {
+                this.y += 1;
+            } else {
+                clearInterval(yFallInterval);
+            }
+        }, 1000 / 60);
+    }
+
+    resetDeathSequence() {
+        this.deathState.started = false;
+        this.deathState.type = null;
+        this.deathState.frame = 0;
     }
 }

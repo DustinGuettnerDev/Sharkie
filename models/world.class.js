@@ -73,7 +73,11 @@ class World {
     checkCollisions() {
         setInterval(() => {
             for (let enemy of this.level.enemies) {
-                if (this.character.isColliding(enemy) && !this.character.isDead()) {
+                if (
+                    this.character.isColliding(enemy) &&
+                    !this.character.hasZeroLife() &&
+                    !this.character.isHurt()
+                ) {
                     this.character.getHit();
                 }
             }
