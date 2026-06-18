@@ -54,6 +54,44 @@ class Character extends MortalObject {
         "img/1.Sharkie/6.dead/2.Electro_shock/10.png",
     ];
 
+    imagesWait = [
+        "img/1.Sharkie/1.IDLE/1.png",
+        "img/1.Sharkie/1.IDLE/2.png",
+        "img/1.Sharkie/1.IDLE/3.png",
+        "img/1.Sharkie/1.IDLE/4.png",
+        "img/1.Sharkie/1.IDLE/5.png",
+        "img/1.Sharkie/1.IDLE/6.png",
+        "img/1.Sharkie/1.IDLE/7.png",
+        "img/1.Sharkie/1.IDLE/8.png",
+        "img/1.Sharkie/1.IDLE/9.png",
+        "img/1.Sharkie/1.IDLE/10.png",
+        "img/1.Sharkie/1.IDLE/11.png",
+        "img/1.Sharkie/1.IDLE/12.png",
+        "img/1.Sharkie/1.IDLE/13.png",
+        "img/1.Sharkie/1.IDLE/14.png",
+        "img/1.Sharkie/1.IDLE/15.png",
+        "img/1.Sharkie/1.IDLE/16.png",
+        "img/1.Sharkie/1.IDLE/17.png",
+        "img/1.Sharkie/1.IDLE/18.png",
+    ];
+
+    imagesSleep = [
+        "img/1.Sharkie/2.Long_IDLE/i1.png",
+        "img/1.Sharkie/2.Long_IDLE/i2.png",
+        "img/1.Sharkie/2.Long_IDLE/i3.png",
+        "img/1.Sharkie/2.Long_IDLE/i4.png",
+        "img/1.Sharkie/2.Long_IDLE/i5.png",
+        "img/1.Sharkie/2.Long_IDLE/i6.png",
+        "img/1.Sharkie/2.Long_IDLE/i7.png",
+        "img/1.Sharkie/2.Long_IDLE/i8.png",
+        "img/1.Sharkie/2.Long_IDLE/i9.png",
+        "img/1.Sharkie/2.Long_IDLE/i10.png",
+        "img/1.Sharkie/2.Long_IDLE/i11.png",
+        "img/1.Sharkie/2.Long_IDLE/i12.png",
+        "img/1.Sharkie/2.Long_IDLE/i13.png",
+        "img/1.Sharkie/2.Long_IDLE/i14.png",
+    ];
+
     speed = 20;
     levelLimitUp = -150;
     levelLimitDown = 160;
@@ -62,14 +100,11 @@ class Character extends MortalObject {
     poison = 0;
     lastHit;
     animateInterval;
+    inactiveStartTime = Date.now();
     deathRiseLimit = -80;
     deathFallLimit = 110;
-
-    deathState = {
-        started: false,
-        type: null,
-        frame: 0,
-    };
+    waitTime = 5000;
+    sleepTime = 15000;
 
     constructor() {
         super();
@@ -81,6 +116,8 @@ class Character extends MortalObject {
         this.loadImages(this.imagesHurtShock);
         this.loadImages(this.imagesPoisonDeath);
         this.loadImages(this.imagesShockDeath);
+        this.loadImages(this.imagesSleep);
+        this.loadImages(this.imagesWait);
         this.moveCharacter();
         this.animate();
         /*         this.calculateOffset(); */
@@ -88,7 +125,7 @@ class Character extends MortalObject {
 
     moveCharacter() {
         setInterval(() => {
-            if (!this.hasZeroLife() && !this.isHurt()) {
+            if (!this.hasZeroLife()) {
                 if (this.world.keyboard.right && this.x !== this.world.level.levelEnd_x) {
                     this.moveRight();
                     this.otherDirection = false;
@@ -115,21 +152,64 @@ class Character extends MortalObject {
                 this.playDeathTypeAnimation(this.imagesPoisonDeath, "poison");
                 return;
             } else if (this.isHurt()) {
-                this.deathState.started = false;
-                this.deathState.type = null;
-                this.deathState.frame = 0;
                 this.playHurtAnimation(this.imagesHurtPoison);
+                this.startSleepCounter();
             } else if (
                 this.world.keyboard.right ||
                 this.world.keyboard.left ||
                 this.world.keyboard.up ||
                 this.world.keyboard.down
             ) {
+                this.startSleepCounter();
                 this.playSwimmingAnimation();
+            } else if (this.isInactive() >= this.sleepTime) {
+                this.playSleepAnimation();
+            } else if (this.isInactive() >= this.waitTime) {
+                this.playWaitAnimation();
             } else {
                 this.defaultImageShark();
             }
         }, 200);
+    }
+
+    playAnimationWithEnd(images) {
+        if (this.lastAnimation !== images) {
+            this.currentImage = 0;
+        }
+        if (this.currentImage < images.length) {
+            this.playAnimation(images);
+        } else {
+            this.lastFrame(images);
+        }
+    }
+
+    playDeathTypeAnimation(imagesTypeDeath, type) {
+        this.playAnimationWithEnd(imagesTypeDeath);
+
+        if (this.currentImage >= imagesTypeDeath.length) {
+            clearInterval(this.animateInterval);
+            if (type === "poison") {
+                this.riseUp();
+            } else if (type === "shock") {
+                this.fallDown();
+            }
+        }
+    }
+
+    playWaitAnimation() {
+        this.playAnimation(this.imagesWait);
+    }
+
+    playSleepAnimation() {
+        this.playAnimationWithEnd(this.imagesSleep);
+    }
+
+    startSleepCounter() {
+        this.inactiveStartTime = Date.now();
+    }
+
+    isInactive() {
+        return Date.now() - this.inactiveStartTime;
     }
 
     moveCamera() {
@@ -152,31 +232,9 @@ class Character extends MortalObject {
     }
 
     // shock mit anderen counter
-    playDeathTypeAnimation(imagesTypeDeath, type) {
-        if (!this.deathState.started || this.deathState.type !== type) {
-            this.deathState.started = true;
-            this.deathState.type = type;
-            this.deathState.frame = 0;
-        }
 
-        if (this.deathState.frame < imagesTypeDeath.length) {
-            this.playAnimation(imagesTypeDeath);
-            this.deathState.frame += 1;
-        }
-
-        if (this.deathState.frame >= imagesTypeDeath.length) {
-            this.lastDeathFrame(imagesTypeDeath);
-            clearInterval(this.animateInterval);
-            if (this.deathState.type === "poison") {
-                this.riseUp();
-            } else if (this.deathState.type === "shock") {
-                this.fallDown();
-            }
-        }
-    }
-
-    lastDeathFrame(imagesTypeDeath) {
-        return this.loadImage(imagesTypeDeath.at(-1));
+    lastFrame(images) {
+        return this.loadImage(images.at(-1));
     }
 
     riseUp() {
@@ -197,11 +255,5 @@ class Character extends MortalObject {
                 clearInterval(yFallInterval);
             }
         }, 1000 / 60);
-    }
-
-    resetDeathSequence() {
-        this.deathState.started = false;
-        this.deathState.type = null;
-        this.deathState.frame = 0;
     }
 }
