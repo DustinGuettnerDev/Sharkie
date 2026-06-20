@@ -15,15 +15,15 @@ class Character extends MortalObject {
     world;
 
     imagesHurtShock = [
-        "img/1.Sharkie/5.Hurt/2.Electric shock/o1.png",
-        "img/1.Sharkie/5.Hurt/2.Electric shock/o2.png",
+        "img/1.Sharkie/5.Hurt/2.Electric shock/1.png",
+        "img/1.Sharkie/5.Hurt/2.Electric shock/2.png",
     ];
 
     imagesHurtPoison = [
+        "img/1.Sharkie/5.Hurt/1.Poisoned/1.png",
         "img/1.Sharkie/5.Hurt/1.Poisoned/2.png",
         "img/1.Sharkie/5.Hurt/1.Poisoned/3.png",
         "img/1.Sharkie/5.Hurt/1.Poisoned/4.png",
-        "img/1.Sharkie/5.Hurt/1.Poisoned/5.png",
     ];
 
     imagesPoisonDeath = [
@@ -92,6 +92,17 @@ class Character extends MortalObject {
         "img/1.Sharkie/2.Long_IDLE/i14.png",
     ];
 
+    imagesSlap = [
+        "img/1.Sharkie/4.Attack/Fin slap/1.png",
+        "img/1.Sharkie/4.Attack/Fin slap/2.png",
+        "img/1.Sharkie/4.Attack/Fin slap/3.png",
+        "img/1.Sharkie/4.Attack/Fin slap/4.png",
+        "img/1.Sharkie/4.Attack/Fin slap/5.png",
+        "img/1.Sharkie/4.Attack/Fin slap/6.png",
+        "img/1.Sharkie/4.Attack/Fin slap/7.png",
+        "img/1.Sharkie/4.Attack/Fin slap/8.png",
+    ];
+
     speed = 20;
     levelLimitUp = -150;
     levelLimitDown = 160;
@@ -105,6 +116,7 @@ class Character extends MortalObject {
     deathFallLimit = 110;
     waitTime = 5000;
     sleepTime = 15000;
+    sleepAnimationFinished = false;
 
     constructor() {
         super();
@@ -118,6 +130,7 @@ class Character extends MortalObject {
         this.loadImages(this.imagesShockDeath);
         this.loadImages(this.imagesSleep);
         this.loadImages(this.imagesWait);
+        this.loadImages(this.imagesSlap);
         this.moveCharacter();
         this.animate();
         /*         this.calculateOffset(); */
@@ -162,6 +175,9 @@ class Character extends MortalObject {
             ) {
                 this.startSleepCounter();
                 this.playSwimmingAnimation();
+            } else if (this.world.keyboard.slap) {
+                this.startSleepCounter();
+                this.playSlapAnimation();
             } else if (this.isInactive() >= this.sleepTime) {
                 this.playSleepAnimation();
             } else if (this.isInactive() >= this.waitTime) {
@@ -172,21 +188,17 @@ class Character extends MortalObject {
         }, 200);
     }
 
-    playAnimationWithEnd(images) {
-        if (this.lastAnimation !== images) {
-            this.currentImage = 0;
-        }
-        if (this.currentImage < images.length) {
-            this.playAnimation(images);
-        } else {
-            this.lastFrame(images);
+    playSlapAnimation() {
+        let animationEnd = this.playAnimation(this.imagesSlap);
+        if (animationEnd) {
+            this.world.keyboard.slap = false;
         }
     }
 
     playDeathTypeAnimation(imagesTypeDeath, type) {
-        this.playAnimationWithEnd(imagesTypeDeath);
+        let animationEnd = this.playAnimation(imagesTypeDeath);
 
-        if (this.currentImage >= imagesTypeDeath.length) {
+        if (animationEnd) {
             clearInterval(this.animateInterval);
             if (type === "poison") {
                 this.riseUp();
@@ -201,11 +213,21 @@ class Character extends MortalObject {
     }
 
     playSleepAnimation() {
-        this.playAnimationWithEnd(this.imagesSleep);
+        if (this.sleepAnimationFinished) {
+            this.lastFrame(this.imagesSleep);
+            return;
+        }
+
+        let animationEnd = this.playAnimation(this.imagesSleep);
+        if (animationEnd) {
+            this.sleepAnimationFinished = true;
+            this.lastFrame(this.imagesSleep);
+        }
     }
 
     startSleepCounter() {
         this.inactiveStartTime = Date.now();
+        this.sleepAnimationFinished = false;
     }
 
     isInactive() {

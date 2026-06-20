@@ -5,25 +5,19 @@ class MovableObject extends CollidableObject {
     otherDirection = false;
 
     playAnimation(imagesObject) {
-        if (this.lastAnimation !== imagesObject) {
+        if (imagesObject !== this.lastAnimation) {
             this.currentImage = 0;
             this.lastAnimation = imagesObject;
         }
-        let i = this.currentImage % imagesObject.length;
-        /*
-            let i = 0 % 6; 0, Rest 0
-            let i = 7 % 7; 1, Rest 0
-            let i = 8 % 7; 1, Rest 1
-            let i = 15 % 7; 2, Rest 1
-            i = 0, 1, 2, 3, 4, 5, 6, 0 etc.
-            Erklärung :
-            14 / 7 = erster Wert
-            15 - 14 = 1 = zweiter Wert
-            Bei modulo wird der restwert nur ausgegeben
-            */
-        let path = imagesObject[i];
+
+        let path = imagesObject[this.currentImage];
         this.img = this.imageCache[path];
         this.currentImage++;
+
+        if (this.currentImage >= imagesObject.length) {
+            this.currentImage = 0;
+            return true;
+        }
     }
 
     playAnimationAuto() {

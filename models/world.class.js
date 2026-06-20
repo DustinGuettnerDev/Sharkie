@@ -54,6 +54,7 @@ class World {
 
         // alle beweglichen objekte
         this.addObjectsToMap(this.level.backgroundObjects);
+        this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character);
 
@@ -72,16 +73,34 @@ class World {
 
     checkCollisions() {
         setInterval(() => {
-            for (let enemy of this.level.enemies) {
-                if (
-                    this.character.isColliding(enemy) &&
-                    !this.character.hasZeroLife() &&
-                    !this.character.isHurt()
-                ) {
-                    this.character.getHit();
+            this.enemieCollision();
+            this.coinCollision();
+        }, 400);
+    }
+
+    enemieCollision() {
+        for (let enemy of this.level.enemies) {
+            if (
+                this.character.isColliding(enemy) &&
+                !this.character.hasZeroLife() &&
+                !this.character.isHurt()
+            ) {
+                this.character.getHit();
+            }
+        }
+    }
+
+    coinCollision() {
+        for (let coin of this.level.coins) {
+            if (this.character.isColliding(coin)) {
+                this.level.coins = this.level.coins.filter((e) => e !== coin);
+                this.character.coins += 1;
+                if (this.character.coins >= 5) {
+                    this.character.life += 1;
+                    this.character.coins = 0;
                 }
             }
-        }, 400);
+        }
     }
 
     setWorld() {
@@ -140,7 +159,9 @@ class World {
         if (
             drawObject instanceof Character ||
             drawObject instanceof Puffer ||
-            drawObject instanceof Endboss
+            drawObject instanceof JellyFish ||
+            drawObject instanceof Endboss ||
+            drawObject instanceof Coin
         ) {
             this.ctx.beginPath();
             this.ctx.lineWidth = "5";
