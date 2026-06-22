@@ -7,16 +7,14 @@ class MortalObject extends MovableObject {
     }
 
     playHurtAnimation(imagesHurt) {
-        this.playAnimation(imagesHurt);
+        return this.playAnimation(imagesHurt);
     }
 
     playDieAnimation(imagesDeath) {
-        if (this.hasZeroLife()) {
-            this.playAnimation(imagesDeath);
-        }
+        return this.playAnimation(imagesDeath);
     }
 
     playSwimmingAnimation() {
-        this.playAnimation(this.imagesSwimming);
+        return this.playAnimation(this.imagesSwimming);
     }
 }

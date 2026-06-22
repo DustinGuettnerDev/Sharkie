@@ -73,19 +73,23 @@ class World {
 
     checkCollisions() {
         setInterval(() => {
-            this.enemieCollision();
+            this.enemyCollision();
             this.coinCollision();
         }, 400);
     }
 
-    enemieCollision() {
+    enemyCollision() {
         for (let enemy of this.level.enemies) {
             if (
                 this.character.isColliding(enemy) &&
                 !this.character.hasZeroLife() &&
                 !this.character.isHurt()
             ) {
-                this.character.getHit();
+                if (this.character.slap === true) {
+                    enemy.getHit(); // logik passt noch nicht ganz
+                } else {
+                    this.character.getHit(enemy);
+                }
             }
         }
     }

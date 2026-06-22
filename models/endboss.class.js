@@ -26,6 +26,7 @@ class Endboss extends MovableObject {
         right: 45,
     };
     life = 4;
+    damageType = "shock";
 
     // man muss hier die eigenschaften nicht nochmal deklarieren, da sie schon im parent deklariert wurden
     constructor() {

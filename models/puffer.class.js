@@ -16,6 +16,7 @@ class Puffer extends RegularEnemies {
         right: 10,
     };
     life = 1;
+    damageType = "poison";
 
     // man muss hier die eigenschaften nicht nochmal deklarieren, da sie schon im parent deklariert wurden
     constructor(positionOffset = 0, speedOffset = 0) {

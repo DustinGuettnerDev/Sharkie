@@ -37,6 +37,9 @@ class Keyboard {
             if (e.code === "ArrowDown") {
                 this.down = false;
             }
+            if (e.code === "Space") {
+                this.slap = false;
+            }
         });
     }
 }

@@ -3,6 +3,7 @@ class MovableObject extends CollidableObject {
     lastAnimation = null;
     speed = 1;
     otherDirection = false;
+    frameTime = 100;
 
     playAnimation(imagesObject) {
         if (imagesObject !== this.lastAnimation) {
@@ -23,7 +24,7 @@ class MovableObject extends CollidableObject {
     playAnimationAuto() {
         setInterval(() => {
             this.playAnimation(this.imagesSwimming);
-        }, 200);
+        }, this.frameTime);
     }
 
     moveRight() {
