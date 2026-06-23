@@ -3,7 +3,8 @@ class Keyboard {
     left = false;
     up = false;
     down = false;
-    slap = false;
+    spacebar = false;
+    d = false;
 
     constructor() {
         document.addEventListener("keydown", (e) => {
@@ -20,7 +21,10 @@ class Keyboard {
                 this.down = true;
             }
             if (e.code === "Space") {
-                this.slap = true;
+                this.spacebar = true;
+            }
+            if (e.code === "KeyD") {
+                this.d = true;
             }
         });
 
@@ -38,7 +42,10 @@ class Keyboard {
                 this.down = false;
             }
             if (e.code === "Space") {
-                this.slap = false;
+                this.spacebar = false;
+            }
+            if (e.code === "KeyD") {
+                this.d = false;
             }
         });
     }

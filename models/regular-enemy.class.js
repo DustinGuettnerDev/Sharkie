@@ -1,4 +1,4 @@
-class RegularEnemies extends MortalObject {
+class RegularEnemy extends Enemy {
     // man muss hier die eigenschaften nicht nochmal deklarieren, da sie schon im parent deklariert wurden
     constructor(positionOffset = 900, speedOffset = 0.4) {
         super();

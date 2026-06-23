@@ -103,6 +103,28 @@ class Character extends MortalObject {
         "img/1.Sharkie/4.Attack/Fin slap/8.png",
     ];
 
+    imagesCreateBubble = [
+        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/1.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/2.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/3.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/4.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/5.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/6.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/7.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/8.png",
+    ];
+
+    imagesCreateBubblePoison = [
+        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/1.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/2.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/3.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/4.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/5.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/6.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/7.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png",
+    ];
+
     speed = 20;
     levelLimitUp = -150;
     levelLimitDown = 160;
@@ -121,6 +143,12 @@ class Character extends MortalObject {
     lastHit = 0;
     slap = false;
 
+    createBubble = {
+        isActive: false,
+        poison: false,
+        images: null,
+    };
+
     constructor() {
         super();
         /*super() ruft den Konstruktor der Elternklasse auf;
@@ -134,6 +162,8 @@ class Character extends MortalObject {
         this.loadImages(this.imagesSleep);
         this.loadImages(this.imagesWait);
         this.loadImages(this.imagesSlap);
+        this.loadImages(this.imagesCreateBubble);
+        this.loadImages(this.imagesCreateBubblePoison);
         this.moveCharacter();
         this.animate();
         /*         this.calculateOffset(); */
@@ -168,6 +198,7 @@ class Character extends MortalObject {
             if (this.checkHurt()) return;
             if (this.checkSwimming()) return;
             if (this.checkSlap()) return;
+            if (this.checkCreateBubble()) return;
             if (this.checkIdle()) return;
             this.defaultImageShark();
         }, this.frameTime);
@@ -199,6 +230,7 @@ class Character extends MortalObject {
         ) {
             this.startSleepCounter();
             this.slap = false;
+            this.createBubble.isActive = false;
             this.playSwimmingAnimation();
             return true;
         }
@@ -206,7 +238,7 @@ class Character extends MortalObject {
     }
 
     checkSlap() {
-        if (this.world.keyboard.slap) {
+        if (this.world.keyboard.spacebar) {
             this.slap = true;
         }
         if (this.slap) {
@@ -215,6 +247,38 @@ class Character extends MortalObject {
             return true;
         }
         return false;
+    }
+
+    playSlapAnimation() {
+        let animationEnd = this.playAnimation(this.imagesSlap);
+        if (animationEnd) {
+            this.slap = false;
+        }
+    }
+
+    checkCreateBubble() {
+        if (this.world.keyboard.d) {
+            this.createBubble.isActive = true;
+        }
+        if (this.createBubble.isActive) {
+            this.startSleepCounter();
+            this.playCreateBubbleAnimation();
+            return true;
+        }
+        return false;
+    }
+
+    playCreateBubbleAnimation() {
+        if (this.createBubble.poison) {
+            this.createBubble.images = this.imagesCreateBubblePoison;
+        } else {
+            this.createBubble.images = this.imagesCreateBubble;
+        }
+
+        let animationEnd = this.playAnimation(this.createBubble.images);
+        if (animationEnd) {
+            this.createBubble.isActive = false;
+        }
     }
 
     checkIdle() {
@@ -226,13 +290,6 @@ class Character extends MortalObject {
             return true;
         }
         return false;
-    }
-
-    playSlapAnimation() {
-        let animationEnd = this.playAnimation(this.imagesSlap);
-        if (animationEnd) {
-            this.slap = false;
-        }
     }
 
     playDeathTypeAnimation() {

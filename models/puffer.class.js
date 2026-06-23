@@ -1,4 +1,4 @@
-class Puffer extends RegularEnemies {
+class Puffer extends RegularEnemy {
     height = 100;
     width = 100;
     imagesSwimming = [

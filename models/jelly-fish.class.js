@@ -1,4 +1,4 @@
-class JellyFish extends RegularEnemies {
+class JellyFish extends RegularEnemy {
     height = 120;
     width = 120;
     imagesSwimming = [
