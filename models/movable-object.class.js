@@ -3,7 +3,8 @@ class MovableObject extends CollidableObject {
     lastAnimation = null;
     speed = 1;
     otherDirection = false;
-    frameTime = 100;
+    movementTickMs = 1000 / 60;
+    animationTicksMs = 140;
 
     playAnimation(imagesObject) {
         if (imagesObject !== this.lastAnimation) {
@@ -19,12 +20,6 @@ class MovableObject extends CollidableObject {
             this.currentImage = 0;
             return true;
         }
-    }
-
-    playAnimationAuto() {
-        setInterval(() => {
-            this.playAnimation(this.imagesSwimming);
-        }, this.frameTime);
     }
 
     moveRight() {
@@ -43,9 +38,43 @@ class MovableObject extends CollidableObject {
         this.y += this.speed;
     }
 
-    moveLeftAuto() {
-        setInterval(() => {
-            this.moveLeft();
-        }, 1000 / 60); // für 60 Hz 1000 / 60 = 60 mal die sekunde
+    riseUp({ yStepPx, riseLimit }) {
+        let yRiseInterval = setInterval(() => {
+            if (this.y > riseLimit) {
+                this.y -= yStepPx;
+            } else {
+                clearInterval(yRiseInterval);
+            }
+        }, this.movementTickMs);
+    }
+
+    fallDown({ yStepPx, fallLimit }) {
+        let yFallInterval = setInterval(() => {
+            if (this.y < fallLimit) {
+                this.y += yStepPx;
+            } else {
+                clearInterval(yFallInterval);
+            }
+        }, this.movementTickMs);
+    }
+
+    pushLeft({ xStepPx, leftLimit }) {
+        let xLeftInterval = setInterval(() => {
+            if (this.x > leftLimit) {
+                this.x -= xStepPx;
+            } else {
+                clearInterval(xLeftInterval);
+            }
+        }, this.movementTickMs);
+    }
+
+    pushRight({ xStepPx, rightLimit }) {
+        let xRightInterval = setInterval(() => {
+            if (this.x < rightLimit) {
+                this.x += xStepPx;
+            } else {
+                clearInterval(xRightInterval);
+            }
+        }, this.movementTickMs);
     }
 }

@@ -39,6 +39,6 @@ class Endboss extends Enemy {
     animate() {
         setInterval(() => {
             this.playAnimation(this.imagesSwimming);
-        }, 200);
+        }, this.animationTicksMs);
     }
 }

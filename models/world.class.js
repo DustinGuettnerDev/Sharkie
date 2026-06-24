@@ -83,10 +83,14 @@ class World {
             if (
                 this.character.isColliding(enemy) &&
                 !this.character.hasZeroLife() &&
-                !this.character.isHurt()
+                !this.character.isHurt() &&
+                enemy.death !== true
             ) {
                 if (this.character.slap === true) {
                     enemy.getHit(); // logik passt noch nicht ganz
+                    if (enemy.life === 0) {
+                        enemy.death = true;
+                    }
                 } else {
                     this.character.getHit(enemy);
                 }
@@ -112,6 +116,11 @@ class World {
         this.life.world = this;
         this.poison.world = this;
         this.coins.world = this;
+        for (let enemy of this.level.enemies) {
+            if (enemy instanceof Puffer) {
+                enemy.world = this;
+            }
+        }
     }
 
     addObjectsToMap(drawObjects) {

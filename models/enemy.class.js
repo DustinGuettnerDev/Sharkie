@@ -1,1 +1,3 @@
-class Enemy extends MortalObject {}
+class Enemy extends MortalObject {
+    death = false;
+}

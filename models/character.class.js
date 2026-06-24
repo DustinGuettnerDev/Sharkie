@@ -131,11 +131,8 @@ class Character extends MortalObject {
     life = 2;
     coins = 0;
     poison = 0;
-    lastHit;
     animateInterval;
     inactiveStartTime = Date.now();
-    deathRiseLimit = -80;
-    deathFallLimit = 110;
     waitTime = 5000;
     sleepTime = 15000;
     sleepAnimationFinished = false;
@@ -188,7 +185,7 @@ class Character extends MortalObject {
                 // bewegen der kamera anhand der zurückgelegten x-stecke der charackters
                 this.moveCamera();
             }
-        }, 1000 / 60);
+        }, this.movementTickMs);
     }
 
     // hier anknüpfen
@@ -201,7 +198,7 @@ class Character extends MortalObject {
             if (this.checkCreateBubble()) return;
             if (this.checkIdle()) return;
             this.defaultImageShark();
-        }, this.frameTime);
+        }, this.animationTicksMs);
     }
 
     checkDeath() {
@@ -231,7 +228,7 @@ class Character extends MortalObject {
             this.startSleepCounter();
             this.slap = false;
             this.createBubble.isActive = false;
-            this.playSwimmingAnimation();
+            this.playAnimation(this.imagesSwimming);
             return true;
         }
         return false;
@@ -295,14 +292,14 @@ class Character extends MortalObject {
     playDeathTypeAnimation() {
         let animationEnd = false;
         if (this.enemyDamageType === "poison") {
-            animationEnd = this.playDieAnimation(this.imagesPoisonDeath);
+            animationEnd = this.playAnimation(this.imagesPoisonDeath);
             if (animationEnd) {
-                this.riseUp();
+                this.riseUp({ yStepPx: 2, riseLimit: -80 });
             }
         } else if (this.enemyDamageType === "shock") {
-            animationEnd = this.playDieAnimation(this.imagesShockDeath);
+            animationEnd = this.playAnimation(this.imagesShockDeath);
             if (animationEnd) {
-                this.fallDown();
+                this.fallDown({ yStepPx: 2, fallLimit: 110 });
             }
         }
         if (animationEnd) {
@@ -312,9 +309,9 @@ class Character extends MortalObject {
 
     playHurtTypeAnimation() {
         if (this.enemyDamageType === "poison") {
-            this.playHurtAnimation(this.imagesHurtPoison);
+            this.playAnimation(this.imagesHurtPoison);
         } else if (this.enemyDamageType === "shock") {
-            this.playHurtAnimation(this.imagesHurtShock);
+            this.playAnimation(this.imagesHurtShock);
         }
     }
 
@@ -372,25 +369,5 @@ class Character extends MortalObject {
 
     lastFrame(images) {
         return this.loadImage(images.at(-1));
-    }
-
-    riseUp() {
-        let yRiseInterval = setInterval(() => {
-            if (this.y > this.deathRiseLimit) {
-                this.y -= 2;
-            } else {
-                clearInterval(yRiseInterval);
-            }
-        }, 1000 / 60);
-    }
-
-    fallDown() {
-        let yFallInterval = setInterval(() => {
-            if (this.y < this.deathFallLimit) {
-                this.y += 2;
-            } else {
-                clearInterval(yFallInterval);
-            }
-        }, 1000 / 60);
     }
 }

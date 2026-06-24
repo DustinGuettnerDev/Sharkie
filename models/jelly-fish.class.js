@@ -7,6 +7,12 @@ class JellyFish extends RegularEnemy {
         "img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 3.png",
         "img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 4.png",
     ];
+    imagesDeath = [
+        "img/2.Enemy/2 Jelly fish/Dead/Pink/P1.png",
+        "img/2.Enemy/2 Jelly fish/Dead/Pink/P2.png",
+        "img/2.Enemy/2 Jelly fish/Dead/Pink/P3.png",
+        "img/2.Enemy/2 Jelly fish/Dead/Pink/P4.png",
+    ];
     offset = {
         top: 10,
         bottom: 15,
@@ -21,11 +27,19 @@ class JellyFish extends RegularEnemy {
         super(positionOffset, speedOffset);
         this.loadImage(this.imagesSwimming[0]);
         this.loadImages(this.imagesSwimming);
+        this.loadImages(this.imagesDeath);
         this.animate();
+        this.movement();
     }
 
     animate() {
-        this.playAnimationAuto();
-        this.moveLeftAuto();
+        setInterval(() => {
+            if (this.death) {
+                this.playAnimation(this.imagesDeath);
+                this.stopMovement();
+            } else {
+                this.playAnimation(this.imagesSwimming);
+            }
+        }, this.animationTicksMs);
     }
 }
