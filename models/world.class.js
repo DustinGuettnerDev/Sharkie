@@ -32,6 +32,7 @@ class World {
     canvas;
     keyboard;
     camera_x = 0;
+    bubbles = [];
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -55,6 +56,7 @@ class World {
         // alle beweglichen objekte
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.bubbles);
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character);
 
@@ -75,6 +77,7 @@ class World {
         setInterval(() => {
             this.enemyCollision();
             this.coinCollision();
+            this.bubbleCollision();
         }, 400);
     }
 
@@ -87,9 +90,11 @@ class World {
                 enemy.death !== true
             ) {
                 if (this.character.slap === true) {
-                    enemy.getHit(); // logik passt noch nicht ganz
-                    if (enemy.life === 0) {
-                        enemy.death = true;
+                    if (enemy.weakness == "slap") {
+                        enemy.getHit(); // logik passt noch nicht ganz
+                        if (enemy.life === 0) {
+                            enemy.death = true;
+                        }
                     }
                 } else {
                     this.character.getHit(enemy);
@@ -109,6 +114,36 @@ class World {
                 }
             }
         }
+    }
+
+    bubbleCollision() {
+        for (let bubble of this.bubbles)
+            for (let enemy of this.level.enemies) {
+                if (bubble.isColliding(enemy) && enemy.death == false) {
+                    if (enemy.weakness == "bubble") {
+                        enemy.getHit();
+                        if (enemy.life === 0) {
+                            enemy.death = true;
+                        }
+                    }
+                    this.bubbles = this.bubbles.filter((bubbleElement) => bubbleElement !== bubble);
+                }
+            }
+    }
+
+    spawnBubble() {
+        let range = 50;
+        let x;
+        let y = this.character.y + 200;
+        let forward;
+        if (this.character.otherDirection) {
+            x = this.character.x - range;
+            forward = false;
+        } else {
+            x = this.character.x + range + this.character.width - 50;
+            forward = true;
+        }
+        this.bubbles.push(new Bubble(x, y, forward));
     }
 
     setWorld() {
@@ -174,7 +209,8 @@ class World {
             drawObject instanceof Puffer ||
             drawObject instanceof JellyFish ||
             drawObject instanceof Endboss ||
-            drawObject instanceof Coin
+            drawObject instanceof Coin ||
+            drawObject instanceof Bubble
         ) {
             this.ctx.beginPath();
             this.ctx.lineWidth = "5";

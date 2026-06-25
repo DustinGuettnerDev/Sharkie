@@ -23,6 +23,7 @@ class Puffer extends RegularEnemy {
     world;
     rangeAfterSlap = 300;
     deathKnockbackStarted = false;
+    weakness = "slap"; //implementieren
 
     // man muss hier die eigenschaften nicht nochmal deklarieren, da sie schon im parent deklariert wurden
     constructor(positionOffset = 0, speedOffset = 0) {

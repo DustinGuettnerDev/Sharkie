@@ -21,6 +21,7 @@ class JellyFish extends RegularEnemy {
     };
     life = 1;
     damageType = "shock";
+    weakness = "bubble";
 
     // man muss hier die eigenschaften nicht nochmal deklarieren, da sie schon im parent deklariert wurden
     constructor(positionOffset = 0, speedOffset = 0.4) {
@@ -36,7 +37,6 @@ class JellyFish extends RegularEnemy {
         setInterval(() => {
             if (this.death) {
                 this.playAnimation(this.imagesDeath);
-                this.stopMovement();
             } else {
                 this.playAnimation(this.imagesSwimming);
             }

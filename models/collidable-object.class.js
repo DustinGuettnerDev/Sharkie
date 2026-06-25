@@ -1,9 +1,9 @@
 class CollidableObject extends DrawableObject {
     offset = {
-        top: 180,
-        bottom: 100,
-        left: 55,
-        right: 55,
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
     };
 
     isColliding(drawObject) {

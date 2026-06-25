@@ -146,6 +146,13 @@ class Character extends MortalObject {
         images: null,
     };
 
+    offset = {
+        top: 180,
+        bottom: 100,
+        left: 55,
+        right: 55,
+    };
+
     constructor() {
         super();
         /*super() ruft den Konstruktor der Elternklasse auf;
@@ -275,6 +282,7 @@ class Character extends MortalObject {
         let animationEnd = this.playAnimation(this.createBubble.images);
         if (animationEnd) {
             this.createBubble.isActive = false;
+            this.world.spawnBubble();
         }
     }
 

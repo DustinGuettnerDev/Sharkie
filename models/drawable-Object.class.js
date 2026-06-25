@@ -1,6 +1,10 @@
 class DrawableObject {
     img;
     imageCache = {};
+    x = 0;
+    y = 0;
+    width = 0;
+    height = 0;
 
     loadImage(path) {
         this.img = new Image(); // this.img = document.getElementById("image") <img id="image"> (unterschied nur im JS)

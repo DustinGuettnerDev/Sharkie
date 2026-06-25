@@ -1,4 +1,6 @@
 class MortalObject extends MovableObject {
+    life = 1;
+
     hasZeroLife() {
         return this.life <= 0;
     }
