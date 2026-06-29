@@ -1,32 +1,6 @@
 class World {
-    character = new Character();
-    poison = new HudIcon({
-        path: "img/4. Marcadores/HUD-icons/poison.png",
-        x: 30,
-        y: 20,
-        height: 80,
-        width: 80,
-        fontOffsetY: 10,
-        iconValue: this.character.poison,
-        kind: "poison",
-    });
-
-    life = new HudIcon({
-        path: "img/4. Marcadores/HUD-icons/life.png",
-        x: 150,
-        y: 30,
-        iconValue: this.character.life,
-        kind: "life",
-    });
-
-    coins = new HudIcon({
-        path: "img/4. Marcadores/HUD-icons/coins.png",
-        x: 270,
-        y: 35,
-        fontOffsetY: -5,
-        iconValue: this.character.coins,
-        kind: "coins",
-    });
+    character = new Character(this);
+    hudIcons = createHudIcons(this, this.character);
     level = level_1;
     ctx;
     canvas;
@@ -40,7 +14,7 @@ class World {
         this.keyboard = keyboard;
         this.setWorld();
         this.render();
-        this.checkCollisions();
+        this.checkCollisionsOrAggroRange();
     }
 
     render() {
@@ -55,7 +29,7 @@ class World {
 
         // alle beweglichen objekte
         this.addObjectsToMap(this.level.backgroundObjects);
-        this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.collectible);
         this.addObjectsToMap(this.bubbles);
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character);
@@ -73,10 +47,10 @@ class World {
         });
     }
 
-    checkCollisions() {
+    checkCollisionsOrAggroRange() {
         setInterval(() => {
             this.enemyCollision();
-            this.coinCollision();
+            this.collectibleCollision();
             this.bubbleCollision();
         }, 400);
     }
@@ -92,7 +66,7 @@ class World {
                 if (this.character.slap === true) {
                     if (enemy.weakness == "slap") {
                         enemy.getHit(); // logik passt noch nicht ganz
-                        if (enemy.life === 0) {
+                        if (enemy.lifeCount === 0) {
                             enemy.death = true;
                         }
                     }
@@ -103,15 +77,31 @@ class World {
         }
     }
 
-    coinCollision() {
-        for (let coin of this.level.coins) {
-            if (this.character.isColliding(coin)) {
-                this.level.coins = this.level.coins.filter((e) => e !== coin);
-                this.character.coins += 1;
-                if (this.character.coins >= 5) {
-                    this.character.life += 1;
-                    this.character.coins = 0;
+    collectibleCollision() {
+        for (let collectible of this.level.collectible) {
+            this.coinCollision(collectible);
+            this.poisonCollison(collectible);
+        }
+    }
+
+    coinCollision(collectible) {
+        if (collectible instanceof Coin) {
+            if (this.character.isColliding(collectible)) {
+                this.level.collectible = this.level.collectible.filter((e) => e !== collectible);
+                this.character.coinCount += 1;
+                if (this.character.coinCount >= 5) {
+                    this.character.lifeCount += 1;
+                    this.character.coinCount = 0;
                 }
+            }
+        }
+    }
+
+    poisonCollison(collectible) {
+        if (collectible instanceof PoisonBottle) {
+            if (this.character.isColliding(collectible)) {
+                this.level.collectible = this.level.collectible.filter((e) => e !== collectible);
+                this.character.poisonBottleCount += 1;
             }
         }
     }
@@ -122,7 +112,7 @@ class World {
                 if (bubble.isColliding(enemy) && enemy.death == false) {
                     if (enemy.weakness == "bubble") {
                         enemy.getHit();
-                        if (enemy.life === 0) {
+                        if (enemy.lifeCount === 0) {
                             enemy.death = true;
                         }
                     }
@@ -136,6 +126,7 @@ class World {
         let x;
         let y = this.character.y + 200;
         let forward;
+        let isPoisonBubble = this.character.poisonBottleCount > 0;
         if (this.character.otherDirection) {
             x = this.character.x - range;
             forward = false;
@@ -143,14 +134,13 @@ class World {
             x = this.character.x + range + this.character.width - 50;
             forward = true;
         }
-        this.bubbles.push(new Bubble(x, y, forward));
+        if (isPoisonBubble) {
+            this.character.poisonBottleCount = Math.max(0, this.character.poisonBottleCount - 1);
+        }
+        this.bubbles.push(new Bubble(x, y, forward, this, isPoisonBubble));
     }
 
     setWorld() {
-        this.character.world = this;
-        this.life.world = this;
-        this.poison.world = this;
-        this.coins.world = this;
         for (let enemy of this.level.enemies) {
             if (enemy instanceof Puffer) {
                 enemy.world = this;
@@ -174,9 +164,7 @@ class World {
     }
 
     addHudIconsToMap() {
-        const hudIcons = [this.life, this.poison, this.coins];
-
-        for (let icon of hudIcons) {
+        for (let icon of this.hudIcons) {
             this.addToMap(icon);
             icon.updateValue();
             this.drawValue({
@@ -210,18 +198,36 @@ class World {
             drawObject instanceof JellyFish ||
             drawObject instanceof Endboss ||
             drawObject instanceof Coin ||
-            drawObject instanceof Bubble
+            drawObject instanceof Bubble ||
+            drawObject instanceof PoisonBottle
         ) {
             this.ctx.beginPath();
             this.ctx.lineWidth = "5";
-            this.ctx.strokeStyle = "blue";
+            this.ctx.strokeStyle = "red";
             this.ctx.rect(
-                drawObject.x + drawObject.offset.left,
-                drawObject.y + drawObject.offset.top,
-                drawObject.width - drawObject.offset.left - drawObject.offset.right,
-                drawObject.height - drawObject.offset.top - drawObject.offset.bottom,
+                drawObject.x + drawObject.collisionOffset.left,
+                drawObject.y + drawObject.collisionOffset.top,
+                drawObject.width -
+                    drawObject.collisionOffset.left -
+                    drawObject.collisionOffset.right,
+                drawObject.height -
+                    drawObject.collisionOffset.top -
+                    drawObject.collisionOffset.bottom,
             );
             this.ctx.stroke();
+
+            if (drawObject.aggroOffset) {
+                this.ctx.beginPath();
+                this.ctx.lineWidth = "5";
+                this.ctx.strokeStyle = "yellow";
+                this.ctx.rect(
+                    drawObject.x + drawObject.aggroOffset.left,
+                    drawObject.y + drawObject.aggroOffset.top,
+                    drawObject.width - drawObject.aggroOffset.left - drawObject.aggroOffset.right,
+                    drawObject.height - drawObject.aggroOffset.top - drawObject.aggroOffset.bottom,
+                );
+                this.ctx.stroke();
+            }
         }
     }
 

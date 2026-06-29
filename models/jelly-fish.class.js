@@ -13,13 +13,13 @@ class JellyFish extends RegularEnemy {
         "img/2.Enemy/2 Jelly fish/Dead/Pink/P3.png",
         "img/2.Enemy/2 Jelly fish/Dead/Pink/P4.png",
     ];
-    offset = {
+    collisionOffset = {
         top: 10,
         bottom: 15,
         left: 5,
         right: 10,
     };
-    life = 1;
+    lifeCount = 1;
     damageType = "shock";
     weakness = "bubble";
 

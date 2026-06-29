@@ -16,6 +16,8 @@ const level_1 = new Level(
         new Coin(790, 330),
         new Coin(860, 400),
 
+        new PoisonBottle(625, 400, true),
+
         /*         new Coin(930, 30),
         new Coin(1000, 100),
         new Coin(1100, 130),

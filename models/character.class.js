@@ -128,9 +128,9 @@ class Character extends MortalObject {
     speed = 20;
     levelLimitUp = -150;
     levelLimitDown = 160;
-    life = 2;
-    coins = 0;
-    poison = 0;
+    lifeCount = 2;
+    coinCount = 0;
+    poisonBottleCount = 0;
     animateInterval;
     inactiveStartTime = Date.now();
     waitTime = 5000;
@@ -142,19 +142,19 @@ class Character extends MortalObject {
 
     createBubble = {
         isActive: false,
-        poison: false,
         images: null,
     };
 
-    offset = {
+    collisionOffset = {
         top: 180,
         bottom: 100,
         left: 55,
         right: 55,
     };
 
-    constructor() {
+    constructor(world = null) {
         super();
+        this.world = world;
         /*super() ruft den Konstruktor der Elternklasse auf;
         in einer abgeleiteten Klasse muss das vor this passieren.*/
         this.loadImage("img/1.Sharkie/1.IDLE/1.png");
@@ -170,7 +170,7 @@ class Character extends MortalObject {
         this.loadImages(this.imagesCreateBubblePoison);
         this.moveCharacter();
         this.animate();
-        /*         this.calculateOffset(); */
+        /*         this.calculateCollisionOffset(); */
     }
 
     moveCharacter() {
@@ -273,7 +273,7 @@ class Character extends MortalObject {
     }
 
     playCreateBubbleAnimation() {
-        if (this.createBubble.poison) {
+        if (this.poisonBottleCount > 0) {
             this.createBubble.images = this.imagesCreateBubblePoison;
         } else {
             this.createBubble.images = this.imagesCreateBubble;

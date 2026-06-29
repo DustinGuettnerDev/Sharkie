@@ -19,13 +19,13 @@ class Endboss extends Enemy {
         "img/2.Enemy/3 Final Enemy/2.floating/13.png",
     ];
     speed = 1;
-    offset = {
+    collisionOffset = {
         top: 285,
         bottom: 100,
         left: 40,
         right: 45,
     };
-    life = 4;
+    lifeCount = 4;
     damageType = "shock";
 
     // man muss hier die eigenschaften nicht nochmal deklarieren, da sie schon im parent deklariert wurden

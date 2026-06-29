@@ -1,10 +1,10 @@
 class MortalObject extends MovableObject {
-    life = 1;
+    lifeCount = 1;
 
     hasZeroLife() {
-        return this.life <= 0;
+        return this.lifeCount <= 0;
     }
     getHit() {
-        this.life = Math.max(0, this.life - 1);
+        this.lifeCount = Math.max(0, this.lifeCount - 1);
     }
 }
