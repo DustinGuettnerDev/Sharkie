@@ -80,7 +80,7 @@ class World {
     collectibleCollision() {
         for (let collectible of this.level.collectible) {
             this.coinCollision(collectible);
-            this.poisonCollison(collectible);
+            this.poisonBottleCollison(collectible);
         }
     }
 
@@ -97,7 +97,7 @@ class World {
         }
     }
 
-    poisonCollison(collectible) {
+    poisonBottleCollison(collectible) {
         if (collectible instanceof PoisonBottle) {
             if (this.character.isColliding(collectible)) {
                 this.level.collectible = this.level.collectible.filter((e) => e !== collectible);
@@ -110,10 +110,15 @@ class World {
         for (let bubble of this.bubbles)
             for (let enemy of this.level.enemies) {
                 if (bubble.isColliding(enemy) && enemy.death == false) {
-                    if (enemy.weakness == "bubble") {
+                    if (
+                        (enemy.weakness == "bubble" && bubble.isPoisonBubble == false) ||
+                        (enemy.weakness == "poison-bubble" && bubble.isPoisonBubble == true)
+                    ) {
                         enemy.getHit();
                         if (enemy.lifeCount === 0) {
                             enemy.death = true;
+                        } else {
+                            enemy.getHit();
                         }
                     }
                     this.bubbles = this.bubbles.filter((bubbleElement) => bubbleElement !== bubble);
@@ -142,7 +147,7 @@ class World {
 
     setWorld() {
         for (let enemy of this.level.enemies) {
-            if (enemy instanceof Puffer) {
+            if (enemy instanceof Puffer || enemy instanceof Endboss) {
                 enemy.world = this;
             }
         }
@@ -176,13 +181,15 @@ class World {
     }
 
     draw(drawObject) {
-        this.ctx.drawImage(
-            drawObject.img,
-            drawObject.x,
-            drawObject.y,
-            drawObject.width,
-            drawObject.height,
-        );
+        if (drawObject.img) {
+            this.ctx.drawImage(
+                drawObject.img,
+                drawObject.x,
+                drawObject.y,
+                drawObject.width,
+                drawObject.height,
+            );
+        }
     }
 
     drawValue({ text, x, y, font = "24px Arial", fillStyle = "white" }) {

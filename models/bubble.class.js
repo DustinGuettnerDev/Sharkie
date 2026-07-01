@@ -6,15 +6,8 @@ class Bubble extends MovableObject {
     forward;
     speed = 2;
 
-    collisionOffset = {
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-    };
-
     world;
-
+    isPoisonBubble;
     imageBubble = "img/1.Sharkie/4.Attack/Bubble trap/Bubble.png";
     imagePoisonBubble = "img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png";
 
@@ -24,12 +17,13 @@ class Bubble extends MovableObject {
         this.y = y;
         this.forward = forward;
         this.world = world;
+        this.isPoisonBubble = isPoisonBubble;
         this.movement();
         this.setBubbleImage(isPoisonBubble);
     }
 
-    setBubbleImage(isPoisonBubble) {
-        if (isPoisonBubble) {
+    setBubbleImage() {
+        if (this.isPoisonBubble) {
             this.loadImage(this.imagePoisonBubble);
         } else {
             this.loadImage(this.imageBubble);

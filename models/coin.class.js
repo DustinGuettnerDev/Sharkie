@@ -1,4 +1,4 @@
-class Coin extends CollidableObject {
+class Coin extends DrawableObject {
     imageCoins = "img/4. Marcadores/1. Coins/1.png";
     height = 45;
     width = 45;

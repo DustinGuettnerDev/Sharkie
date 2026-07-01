@@ -32,14 +32,4 @@ class RegularEnemy extends Enemy {
     handleDeathMovement() {
         this.stopMovement();
     }
-
-    pushRightTop({ xStepPx, yStepPx, rightLimit, riseLimit }) {
-        this.pushRight({ xStepPx, rightLimit });
-        this.riseUp({ yStepPx, riseLimit });
-    }
-
-    pushLeftTop({ xStepPx, yStepPx, leftLimit, riseLimit }) {
-        this.pushLeft({ xStepPx, leftLimit });
-        this.riseUp({ yStepPx, riseLimit });
-    }
 }

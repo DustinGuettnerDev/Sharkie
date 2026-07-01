@@ -18,6 +18,44 @@ class Endboss extends Enemy {
         "img/2.Enemy/3 Final Enemy/2.floating/12.png",
         "img/2.Enemy/3 Final Enemy/2.floating/13.png",
     ];
+
+    imagesAppear = [
+        "img/2.Enemy/3 Final Enemy/1.Introduce/1.png",
+        "img/2.Enemy/3 Final Enemy/1.Introduce/2.png",
+        "img/2.Enemy/3 Final Enemy/1.Introduce/3.png",
+        "img/2.Enemy/3 Final Enemy/1.Introduce/4.png",
+        "img/2.Enemy/3 Final Enemy/1.Introduce/5.png",
+        "img/2.Enemy/3 Final Enemy/1.Introduce/6.png",
+        "img/2.Enemy/3 Final Enemy/1.Introduce/7.png",
+        "img/2.Enemy/3 Final Enemy/1.Introduce/8.png",
+        "img/2.Enemy/3 Final Enemy/1.Introduce/9.png",
+        "img/2.Enemy/3 Final Enemy/1.Introduce/10.png",
+    ];
+
+    imagesAttack = [
+        "img/2.Enemy/3 Final Enemy/Attack/1.png",
+        "img/2.Enemy/3 Final Enemy/Attack/2.png",
+        "img/2.Enemy/3 Final Enemy/Attack/3.png",
+        "img/2.Enemy/3 Final Enemy/Attack/4.png",
+        "img/2.Enemy/3 Final Enemy/Attack/5.png",
+        "img/2.Enemy/3 Final Enemy/Attack/6.png",
+    ];
+
+    imagesHurt = [
+        "img/2.Enemy/3 Final Enemy/Hurt/1.png",
+        "img/2.Enemy/3 Final Enemy/Hurt/2.png",
+        "img/2.Enemy/3 Final Enemy/Hurt/3.png",
+        "img/2.Enemy/3 Final Enemy/Hurt/4.png",
+    ];
+
+    imagesDeath = [
+        "img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 6.png",
+        "img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 7.png",
+        "img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 8.png",
+        "img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 9.png",
+        "img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 10.png",
+    ];
+
     speed = 1;
     collisionOffset = {
         top: 285,
@@ -25,20 +63,99 @@ class Endboss extends Enemy {
         left: 40,
         right: 45,
     };
-    lifeCount = 4;
+    lifeCount = 1;
     damageType = "shock";
+    weakness = "poison-bubble";
+    deathAnimationEnd = false;
+    attackAnimationEnd = false;
+    hurtTime = 1;
+    world;
+    appearingPosition = 1000;
+    appearAnimationEnd = false;
+    startTime;
+    timeTillAttack = 5;
+    attackMove;
+    speed = 5;
+    offsetYPositionToCharacter = 160;
 
-    // man muss hier die eigenschaften nicht nochmal deklarieren, da sie schon im parent deklariert wurden
     constructor() {
         super();
-        this.loadImage(this.imagesSwimming[0]);
         this.loadImages(this.imagesSwimming);
+        this.loadImages(this.imagesAttack);
+        this.loadImages(this.imagesHurt);
+        this.loadImages(this.imagesDeath);
+        this.loadImages(this.imagesAppear);
         this.animate();
+        this.movement();
     }
-
+    // fehler appearing funktioniert noch nicht richtig
     animate() {
         setInterval(() => {
-            this.playAnimation(this.imagesSwimming);
+            if (!this.appearAnimationEnd) {
+                if (this.isAppearing()) {
+                    this.appearAnimationEnd = this.playAnimation(this.imagesAppear);
+                    this.startTime = Date.now();
+                }
+            } else {
+                if (this.death) {
+                    this.playDeathAnimation(this.imagesDeath);
+                } else if (this.isHurt()) {
+                    this.playAnimation(this.imagesHurt);
+                } else if (this.attackTimer()) {
+                    this.attackAnimationEnd = this.playAnimation(this.imagesAttack);
+                    this.attackMove = true;
+                    if (this.attackAnimationEnd) {
+                        this.startTime = Date.now();
+                        this.attackMove = false;
+                    }
+                } else {
+                    this.playAnimation(this.imagesSwimming);
+                }
+            }
         }, this.animationTicksMs);
+    }
+
+    playDeathAnimation() {
+        if (this.deathAnimationEnd) return;
+        this.deathAnimationEnd = this.playAnimation(this.imagesDeath);
+    }
+
+    movement() {
+        setInterval(() => {
+            if (this.death && this.y > -500) {
+                this.moveUp(1);
+            } else if (this.attackMove) {
+                this.moveLeft();
+                if (this.isAboveCharacter()) {
+                    this.moveDown();
+                } else if (this.isBelowCharacter()) {
+                    this.moveUp();
+                }
+            }
+        }, this.movementTickMs);
+    }
+
+    getHit() {
+        super.getHit();
+        this.lastHit = Date.now();
+    }
+
+    isAppearing() {
+        return this.world.character.x >= this.appearingPosition;
+    }
+
+    attackTimer() {
+        let timepassed = (Date.now() - this.startTime) / 1000;
+        console.log(timepassed);
+
+        return timepassed > this.timeTillAttack;
+    }
+
+    isBelowCharacter() {
+        return this.world.character.y < this.y + this.offsetYPositionToCharacter;
+    }
+
+    isAboveCharacter() {
+        return this.world.character.y > this.y + this.offsetYPositionToCharacter;
     }
 }

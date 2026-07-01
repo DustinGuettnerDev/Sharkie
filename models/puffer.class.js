@@ -46,6 +46,7 @@ class Puffer extends RegularEnemy {
     damageType = "poison";
     world;
     rangeAfterSlap = 300;
+    deathKnockbackDirection = null;
     deathKnockbackStarted = false;
     weakness = "slap"; //implementieren
     transitionAggroEnded = false;
@@ -85,31 +86,20 @@ class Puffer extends RegularEnemy {
     }
 
     handleDeathMovement() {
-        if (this.deathKnockbackStarted) {
-            return;
+        if (!this.deathKnockbackStarted) {
+            this.deathKnockbackDirection = this.world.character.x < this.x ? "left" : "right";
+            this.deathKnockbackStarted = true;
         }
 
-        this.stopMovement();
-
-        const hitFromLeft = this.world.character.x < this.x;
-
-        if (hitFromLeft) {
-            this.pushLeftTop({
-                xStepPx: 10,
-                yStepPx: 10,
-                leftLimit: this.x - this.rangeAfterSlap,
-                riseLimit: this.y - this.rangeAfterSlap,
-            });
-        } else {
-            this.pushRightTop({
-                xStepPx: 10,
-                yStepPx: 10,
-                rightLimit: this.x + this.rangeAfterSlap,
-                riseLimit: this.y - this.rangeAfterSlap,
-            });
+        if (this.y > -500) {
+            if (this.deathKnockbackDirection === "left") {
+                this.moveLeft(this.speed / 10);
+                this.moveUp(this.speed / 10);
+            } else {
+                this.moveRight(this.speed / 10);
+                this.moveUp(this.speed / 10);
+            }
         }
-
-        this.deathKnockbackStarted = true;
     }
 
     isInAggroRange(character) {

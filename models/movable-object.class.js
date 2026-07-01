@@ -1,10 +1,16 @@
-class MovableObject extends CollidableObject {
+class MovableObject extends DrawableObject {
     currentImage = 0;
     lastAnimation = null;
     speed = 1;
     otherDirection = false;
     movementTickMs = 1000 / 60;
     animationTicksMs = 140;
+    collisionOffset = {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    };
 
     playAnimation(imagesObject) {
         if (imagesObject !== this.lastAnimation) {
@@ -22,59 +28,40 @@ class MovableObject extends CollidableObject {
         }
     }
 
-    moveRight() {
-        this.x += this.speed;
+    moveRight(speed = this.speed) {
+        this.x += speed;
     }
 
-    moveLeft() {
-        this.x -= this.speed;
+    moveLeft(speed = this.speed) {
+        this.x -= speed;
     }
 
-    moveUp() {
-        this.y -= this.speed;
+    moveUp(speed = this.speed) {
+        this.y -= speed;
     }
 
-    moveDown() {
-        this.y += this.speed;
+    moveDown(speed = this.speed) {
+        this.y += speed;
     }
 
-    riseUp({ yStepPx, riseLimit }) {
-        let yRiseInterval = setInterval(() => {
-            if (this.y > riseLimit) {
-                this.y -= yStepPx;
-            } else {
-                clearInterval(yRiseInterval);
-            }
-        }, this.movementTickMs);
+    isColliding(drawObject) {
+        return (
+            this.x + this.width - this.collisionOffset.right >
+                drawObject.x + drawObject.collisionOffset.left &&
+            this.y + this.height - this.collisionOffset.bottom >
+                drawObject.y + drawObject.collisionOffset.top &&
+            this.x + this.collisionOffset.left <
+                drawObject.x + drawObject.width - drawObject.collisionOffset.right &&
+            this.y + this.collisionOffset.top <
+                drawObject.y + drawObject.height - drawObject.collisionOffset.bottom
+        );
     }
 
-    fallDown({ yStepPx, fallLimit }) {
-        let yFallInterval = setInterval(() => {
-            if (this.y < fallLimit) {
-                this.y += yStepPx;
-            } else {
-                clearInterval(yFallInterval);
-            }
-        }, this.movementTickMs);
+    yPositionBelow(position) {
+        return this.y < position;
     }
 
-    pushLeft({ xStepPx, leftLimit }) {
-        let xLeftInterval = setInterval(() => {
-            if (this.x > leftLimit) {
-                this.x -= xStepPx;
-            } else {
-                clearInterval(xLeftInterval);
-            }
-        }, this.movementTickMs);
-    }
-
-    pushRight({ xStepPx, rightLimit }) {
-        let xRightInterval = setInterval(() => {
-            if (this.x < rightLimit) {
-                this.x += xStepPx;
-            } else {
-                clearInterval(xRightInterval);
-            }
-        }, this.movementTickMs);
+    yPositionAbove(position) {
+        return this.y > position;
     }
 }
