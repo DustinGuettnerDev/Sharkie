@@ -5,6 +5,7 @@ class Bubble extends MovableObject {
     y;
     forward;
     speed = 2;
+    movementInterval;
 
     world;
     isPoisonBubble;
@@ -18,8 +19,8 @@ class Bubble extends MovableObject {
         this.forward = forward;
         this.world = world;
         this.isPoisonBubble = isPoisonBubble;
-        this.movement();
         this.setBubbleImage(isPoisonBubble);
+        this.movement();
     }
 
     setBubbleImage() {
@@ -31,12 +32,30 @@ class Bubble extends MovableObject {
     }
 
     movement() {
-        setInterval(() => {
+        let bubbleStartPosition = this.world.character.x;
+        this.movementInterval = setInterval(() => {
             if (this.forward) {
                 this.moveRight();
             } else {
                 this.moveLeft();
             }
+
+            if (this.rangeReached(400, bubbleStartPosition)) {
+                this.removeFromWorld();
+            }
         }, this.movementTickMs);
+    }
+
+    removeFromWorld() {
+        if (this.world) {
+            this.world.bubbles = this.world.bubbles.filter((bubble) => bubble !== this);
+        }
+        if (this.movementInterval) {
+            clearInterval(this.movementInterval);
+        }
+    }
+
+    rangeReached(range, bubbleStart) {
+        return Math.abs(bubbleStart - this.x) >= range;
     }
 }

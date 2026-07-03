@@ -7,6 +7,7 @@ class World {
     keyboard;
     camera_x = 0;
     bubbles = [];
+    invincibleMode = true;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -121,7 +122,8 @@ class World {
                             enemy.getHit();
                         }
                     }
-                    this.bubbles = this.bubbles.filter((bubbleElement) => bubbleElement !== bubble);
+                    bubble.removeFromWorld();
+                    break;
                 }
             }
     }

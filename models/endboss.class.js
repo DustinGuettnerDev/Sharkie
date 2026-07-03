@@ -1,6 +1,8 @@
 class Endboss extends Enemy {
     height = 600;
     width = 600;
+    animateInterval;
+    movementInterval;
     x = 1500;
     y = -100;
     imagesSwimming = [
@@ -71,12 +73,15 @@ class Endboss extends Enemy {
     hurtTime = 1;
     world;
     appearingPosition = 1000;
+    appearAnimationStarted = false;
     appearAnimationEnd = false;
     startTime;
-    timeTillAttack = 5;
+    timeTillAttack = 1;
     attackMove;
     speed = 5;
     offsetYPositionToCharacter = 160;
+    offsetRightPositionToCharacter = -80;
+    offsetLeftPostionToCharacter = 400;
 
     constructor() {
         super();
@@ -87,14 +92,18 @@ class Endboss extends Enemy {
         this.loadImages(this.imagesAppear);
         this.animate();
         this.movement();
+        /* this.positionIntervall(); */
     }
     // fehler appearing funktioniert noch nicht richtig
     animate() {
-        setInterval(() => {
+        this.animateInterval = setInterval(() => {
             if (!this.appearAnimationEnd) {
-                if (this.isAppearing()) {
+                if (this.isAppearing() || this.appearAnimationStarted) {
                     this.appearAnimationEnd = this.playAnimation(this.imagesAppear);
-                    this.startTime = Date.now();
+                    this.appearAnimationStarted = !this.appearAnimationEnd;
+                    if (this.appearAnimationEnd) {
+                        this.startTime = Date.now();
+                    }
                 }
             } else {
                 if (this.death) {
@@ -118,18 +127,29 @@ class Endboss extends Enemy {
     playDeathAnimation() {
         if (this.deathAnimationEnd) return;
         this.deathAnimationEnd = this.playAnimation(this.imagesDeath);
+        if (this.deathAnimationEnd) {
+            clearInterval(this.animateInterval);
+        }
     }
 
     movement() {
-        setInterval(() => {
+        this.movementInterval = setInterval(() => {
             if (this.death && this.y > -500) {
                 this.moveUp(1);
+            } else if (this.death) {
+                clearInterval(this.movementInterval);
             } else if (this.attackMove) {
-                this.moveLeft();
                 if (this.isAboveCharacter()) {
                     this.moveDown();
                 } else if (this.isBelowCharacter()) {
                     this.moveUp();
+                }
+                if (this.isRightFromCharacter()) {
+                    this.otherDirection = false;
+                    this.moveLeft();
+                } else if (this.isLeftFromCharacter()) {
+                    this.otherDirection = true;
+                    this.moveRight();
                 }
             }
         }, this.movementTickMs);
@@ -146,8 +166,6 @@ class Endboss extends Enemy {
 
     attackTimer() {
         let timepassed = (Date.now() - this.startTime) / 1000;
-        console.log(timepassed);
-
         return timepassed > this.timeTillAttack;
     }
 
@@ -158,4 +176,19 @@ class Endboss extends Enemy {
     isAboveCharacter() {
         return this.world.character.y > this.y + this.offsetYPositionToCharacter;
     }
+
+    isRightFromCharacter() {
+        return this.world.character.x < this.x + this.offsetRightPositionToCharacter;
+    }
+
+    isLeftFromCharacter() {
+        return this.world.character.x > this.x + this.offsetLeftPostionToCharacter;
+    }
+
+    /* positionIntervall() {
+        setInterval(() => {
+            console.log(`endboss ${this.x}`);
+            console.log(`character ${this.world.character.x}`);
+        }, 1000);
+    } */
 }

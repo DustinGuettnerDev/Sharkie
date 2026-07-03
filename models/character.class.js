@@ -139,8 +139,8 @@ class Character extends MortalObject {
     slap = false;
     hurtTime = 2;
     deathAnimationEnd = false;
-    fallDown = false;
-    riseUp = false;
+    deathFallDown = false;
+    deathRiseUp = false;
 
     createBubble = {
         isActive: false,
@@ -177,7 +177,7 @@ class Character extends MortalObject {
 
     movement() {
         setInterval(() => {
-            if (!this.hasZeroLife()) {
+            if (!this.hasZeroLife() || this.world.invincibleMode) {
                 if (this.world.keyboard.right && this.x !== this.world.level.levelEnd_x) {
                     this.moveRight();
                     this.otherDirection = false;
@@ -194,9 +194,9 @@ class Character extends MortalObject {
                 // bewegen der kamera anhand der zurückgelegten x-stecke der charackters
                 this.moveCamera();
             } else {
-                if (this.fallDown && this.y < 100) {
+                if (this.deathFallDown && this.y < 100) {
                     this.moveDown(1);
-                } else if (this.riseUp && this.y > -500) {
+                } else if (this.deathRiseUp && this.y > -500) {
                     this.moveUp(1);
                 }
             }
@@ -206,8 +206,8 @@ class Character extends MortalObject {
     // hier anknüpfen
     animate() {
         this.animateInterval = setInterval(() => {
-            if (this.checkDeath()) return;
-            if (this.checkHurt()) return;
+            if (this.checkDeath() && !this.world.invincibleMode) return;
+            if (this.checkHurt() && !this.world.invincibleMode) return;
             if (this.checkSwimming()) return;
             if (this.checkSlap()) return;
             if (this.checkCreateBubble()) return;
@@ -309,12 +309,12 @@ class Character extends MortalObject {
         if (this.enemyDamageType === "poison") {
             this.deathAnimationEnd = this.playAnimation(this.imagesPoisonDeath);
             if (this.deathAnimationEnd) {
-                this.riseUp = true;
+                this.deathRiseUp = true;
             }
         } else if (this.enemyDamageType === "shock") {
             this.deathAnimationEnd = this.playAnimation(this.imagesShockDeath);
             if (this.deathAnimationEnd) {
-                this.fallDown = true;
+                this.deathFallDown = true;
             }
         }
         if (this.deathAnimationEnd) {

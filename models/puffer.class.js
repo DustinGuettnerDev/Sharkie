@@ -1,6 +1,7 @@
 class Puffer extends RegularEnemy {
     height = 100;
     width = 100;
+    animateInterval;
     imagesSwimming = [
         "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png",
         "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim2.png",
@@ -64,9 +65,11 @@ class Puffer extends RegularEnemy {
     }
 
     animate() {
-        setInterval(() => {
+        this.animateInterval = setInterval(() => {
             if (this.death) {
                 this.loadImage(this.imageDeath);
+                clearInterval(this.animateInterval);
+                return;
             } else {
                 if (this.isInAggroRange(this.world.character)) {
                     this.aggro = true;

@@ -56,12 +56,4 @@ class MovableObject extends DrawableObject {
                 drawObject.y + drawObject.height - drawObject.collisionOffset.bottom
         );
     }
-
-    yPositionBelow(position) {
-        return this.y < position;
-    }
-
-    yPositionAbove(position) {
-        return this.y > position;
-    }
 }
