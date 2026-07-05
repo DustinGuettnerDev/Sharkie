@@ -177,12 +177,12 @@ class Character extends MortalObject {
 
     movement() {
         setInterval(() => {
-            if (!this.hasZeroLife() || this.world.invincibleMode) {
-                if (this.world.keyboard.right && this.x !== this.world.level.levelEnd_x) {
-                    this.moveRight();
+            if (!this.hasZeroLife()) {
+                if (this.world.keyboard.right && this.x < this.world.level.levelEnd_x) {
+                    this.x = Math.min(this.world.level.levelEnd_x, this.x + this.speed);
                     this.otherDirection = false;
-                } else if (this.world.keyboard.left && this.x > -1) {
-                    this.moveLeft();
+                } else if (this.world.keyboard.left && this.x > this.world.level.levelStart_x) {
+                    this.x = Math.max(0, this.x - this.speed);
                     this.otherDirection = true;
                 }
 
@@ -206,8 +206,8 @@ class Character extends MortalObject {
     // hier anknüpfen
     animate() {
         this.animateInterval = setInterval(() => {
-            if (this.checkDeath() && !this.world.invincibleMode) return;
-            if (this.checkHurt() && !this.world.invincibleMode) return;
+            if (this.checkDeath()) return;
+            if (this.checkHurt()) return;
             if (this.checkSwimming()) return;
             if (this.checkSlap()) return;
             if (this.checkCreateBubble()) return;

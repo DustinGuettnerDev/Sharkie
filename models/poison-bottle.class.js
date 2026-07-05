@@ -4,6 +4,9 @@ class PoisonBottle extends DrawableObject {
     x;
     y;
 
+    isVisible = true;
+    timeTillPBSpawnsAgain = 5000;
+
     collisionOffset = {
         top: 5,
         bottom: 5,
@@ -27,5 +30,12 @@ class PoisonBottle extends DrawableObject {
         } else {
             this.loadImage(this.imagePoisonBottleRight);
         }
+    }
+
+    deactivateForTime() {
+        this.isVisible = false;
+        setTimeout(() => {
+            this.isVisible = true;
+        }, this.timeTillPBSpawnsAgain);
     }
 }

@@ -1,5 +1,5 @@
 class Enemy extends MortalObject {
     death = false;
-    weakness = "slap";
+    weakness = ["slap"];
     damageType = "shock";
 }

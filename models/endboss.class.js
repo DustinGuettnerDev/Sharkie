@@ -3,7 +3,7 @@ class Endboss extends Enemy {
     width = 600;
     animateInterval;
     movementInterval;
-    x = 1500;
+    x = 3400;
     y = -100;
     imagesSwimming = [
         "img/2.Enemy/3 Final Enemy/2.floating/1.png",
@@ -65,14 +65,14 @@ class Endboss extends Enemy {
         left: 40,
         right: 45,
     };
-    lifeCount = 1;
+    lifeCount = 5;
     damageType = "shock";
-    weakness = "poison-bubble";
+    weakness = ["poison-bubble"];
     deathAnimationEnd = false;
     attackAnimationEnd = false;
     hurtTime = 1;
     world;
-    appearingPosition = 1000;
+    appearingPositionTrigger = 3000;
     appearAnimationStarted = false;
     appearAnimationEnd = false;
     startTime;
@@ -161,7 +161,7 @@ class Endboss extends Enemy {
     }
 
     isAppearing() {
-        return this.world.character.x >= this.appearingPosition;
+        return this.world.character.x >= this.appearingPositionTrigger;
     }
 
     attackTimer() {

@@ -8,6 +8,8 @@ class World {
     camera_x = 0;
     bubbles = [];
     invincibleMode = true;
+    coinsTillLife = 7;
+    maxPoisonBottleCollected = 2;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -30,7 +32,7 @@ class World {
 
         // alle beweglichen objekte
         this.addObjectsToMap(this.level.backgroundObjects);
-        this.addObjectsToMap(this.level.collectible);
+        this.addObjectsToMap(this.isVisibleFilter(this.level.collectible));
         this.addObjectsToMap(this.bubbles);
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character);
@@ -65,13 +67,13 @@ class World {
                 enemy.death !== true
             ) {
                 if (this.character.slap === true) {
-                    if (enemy.weakness == "slap") {
+                    if (enemy.weakness.includes("slap")) {
                         enemy.getHit(); // logik passt noch nicht ganz
                         if (enemy.lifeCount === 0) {
                             enemy.death = true;
                         }
                     }
-                } else {
+                } else if (!this.invincibleMode) {
                     this.character.getHit(enemy);
                 }
             }
@@ -90,7 +92,7 @@ class World {
             if (this.character.isColliding(collectible)) {
                 this.level.collectible = this.level.collectible.filter((e) => e !== collectible);
                 this.character.coinCount += 1;
-                if (this.character.coinCount >= 5) {
+                if (this.character.coinCount >= this.coinsTillLife) {
                     this.character.lifeCount += 1;
                     this.character.coinCount = 0;
                 }
@@ -100,8 +102,12 @@ class World {
 
     poisonBottleCollison(collectible) {
         if (collectible instanceof PoisonBottle) {
-            if (this.character.isColliding(collectible)) {
-                this.level.collectible = this.level.collectible.filter((e) => e !== collectible);
+            if (
+                this.character.isColliding(collectible) &&
+                collectible.isVisible &&
+                this.character.poisonBottleCount < this.maxPoisonBottleCollected
+            ) {
+                collectible.deactivateForTime();
                 this.character.poisonBottleCount += 1;
             }
         }
@@ -112,14 +118,12 @@ class World {
             for (let enemy of this.level.enemies) {
                 if (bubble.isColliding(enemy) && enemy.death == false) {
                     if (
-                        (enemy.weakness == "bubble" && bubble.isPoisonBubble == false) ||
-                        (enemy.weakness == "poison-bubble" && bubble.isPoisonBubble == true)
+                        (enemy.weakness.includes("bubble") && bubble.isPoisonBubble == false) ||
+                        (enemy.weakness.includes("poison-bubble") && bubble.isPoisonBubble == true)
                     ) {
                         enemy.getHit();
-                        if (enemy.lifeCount === 0) {
+                        if (enemy.hasZeroLife()) {
                             enemy.death = true;
-                        } else {
-                            enemy.getHit();
                         }
                     }
                     bubble.removeFromWorld();
@@ -153,6 +157,12 @@ class World {
                 enemy.world = this;
             }
         }
+    }
+
+    isVisibleFilter(drawObject) {
+        return drawObject.filter(
+            (collectible) => !(collectible instanceof PoisonBottle) || collectible.isVisible,
+        );
     }
 
     addObjectsToMap(drawObjects) {

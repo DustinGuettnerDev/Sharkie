@@ -49,7 +49,7 @@ class Puffer extends RegularEnemy {
     rangeAfterSlap = 300;
     deathKnockbackDirection = null;
     deathKnockbackStarted = false;
-    weakness = "slap"; //implementieren
+    weakness = ["slap"]; //implementieren
     transitionAggroEnded = false;
     aggro = false;
 
