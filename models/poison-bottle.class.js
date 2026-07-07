@@ -17,7 +17,7 @@ class PoisonBottle extends DrawableObject {
     imagePoisonBottleLeft = "img/4. Marcadores/Posión/Dark - Left.png";
     imagePoisonBottleRight = "img/4. Marcadores/Posión/Dark - Right.png";
 
-    constructor(x, y, left) {
+    constructor(x = 0, y = 0, left = false) {
         super();
         this.x = x;
         this.y = y;

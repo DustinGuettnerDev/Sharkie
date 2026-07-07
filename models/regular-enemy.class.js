@@ -1,5 +1,5 @@
 class RegularEnemy extends Enemy {
-    movementInterval;
+    movementInterval = null;
     // man muss hier die eigenschaften nicht nochmal deklarieren, da sie schon im parent deklariert wurden
     constructor(positionOffset = 900, speedOffset = 0.4) {
         super();
@@ -21,15 +21,11 @@ class RegularEnemy extends Enemy {
         }, this.movementTickMs); // gemeinsamer Bewegungstakt aus MovableObject
     }
 
-    stopMovement() {
-        clearInterval(this.movementInterval);
-    }
-
     handleAliveMovement() {
         this.moveLeft();
     }
 
     handleDeathMovement() {
-        this.stopMovement();
+        this.stopMovementInterval();
     }
 }

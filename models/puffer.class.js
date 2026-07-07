@@ -1,7 +1,7 @@
 class Puffer extends RegularEnemy {
     height = 100;
     width = 100;
-    animateInterval;
+    animateInterval = null;
     imagesSwimming = [
         "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png",
         "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim2.png",
@@ -45,13 +45,14 @@ class Puffer extends RegularEnemy {
 
     lifeCount = 1;
     damageType = "poison";
-    world;
+    world = null;
     rangeAfterSlap = 300;
     deathKnockbackDirection = null;
     deathKnockbackStarted = false;
     weakness = ["slap"]; //implementieren
     transitionAggroEnded = false;
     aggro = false;
+    speedSlap = 10;
 
     // man muss hier die eigenschaften nicht nochmal deklarieren, da sie schon im parent deklariert wurden
     constructor(positionOffset = 0, speedOffset = 0) {
@@ -66,9 +67,10 @@ class Puffer extends RegularEnemy {
 
     animate() {
         this.animateInterval = setInterval(() => {
+            if (!this.world?.character) return;
             if (this.death) {
                 this.loadImage(this.imageDeath);
-                clearInterval(this.animateInterval);
+                this.stopAnimationInterval();
                 return;
             } else {
                 if (this.isInAggroRange(this.world.character)) {
@@ -89,6 +91,7 @@ class Puffer extends RegularEnemy {
     }
 
     handleDeathMovement() {
+        if (!this.world?.character) return;
         if (!this.deathKnockbackStarted) {
             this.deathKnockbackDirection = this.world.character.x < this.x ? "left" : "right";
             this.deathKnockbackStarted = true;
@@ -96,11 +99,11 @@ class Puffer extends RegularEnemy {
 
         if (this.y > -500) {
             if (this.deathKnockbackDirection === "left") {
-                this.moveLeft(this.speed / 10);
-                this.moveUp(this.speed / 10);
+                this.moveLeft(this.speedSlap);
+                this.moveUp(this.speedSlap);
             } else {
-                this.moveRight(this.speed / 10);
-                this.moveUp(this.speed / 10);
+                this.moveRight(this.speedSlap);
+                this.moveUp(this.speedSlap);
             }
         }
     }

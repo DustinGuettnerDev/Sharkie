@@ -5,7 +5,7 @@ class Bubble extends MovableObject {
     y;
     forward;
     speed = 2;
-    movementInterval;
+    movementInterval = null;
 
     world;
     isPoisonBubble;
@@ -32,6 +32,7 @@ class Bubble extends MovableObject {
     }
 
     movement() {
+        if (!this.world?.character) return;
         let bubbleStartPosition = this.world.character.x;
         this.movementInterval = setInterval(() => {
             if (this.forward) {
@@ -50,9 +51,7 @@ class Bubble extends MovableObject {
         if (this.world) {
             this.world.bubbles = this.world.bubbles.filter((bubble) => bubble !== this);
         }
-        if (this.movementInterval) {
-            clearInterval(this.movementInterval);
-        }
+        this.stopMovementInterval();
     }
 
     rangeReached(range, bubbleStart) {

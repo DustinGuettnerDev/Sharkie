@@ -1,7 +1,7 @@
 class MortalObject extends MovableObject {
     lifeCount = 1;
     lastHit = 0;
-    enemyDamageType;
+    enemyDamageType = "shock";
 
     hasZeroLife() {
         return this.lifeCount <= 0;

@@ -11,7 +11,7 @@ class Coin extends DrawableObject {
         right: 5,
     };
 
-    constructor(x, y) {
+    constructor(x = 0, y = 0) {
         super();
         this.loadImage(this.imageCoins);
         this.x = x;

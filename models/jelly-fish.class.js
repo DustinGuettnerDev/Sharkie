@@ -1,7 +1,7 @@
 class JellyFish extends RegularEnemy {
     height = 120;
     width = 120;
-    animateInterval;
+    animateInterval = null;
     imagesSwimming = [
         "img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 1.png",
         "img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 2.png",
@@ -39,7 +39,7 @@ class JellyFish extends RegularEnemy {
             if (this.death) {
                 const deathAnimationEnd = this.playAnimation(this.imagesDeath);
                 if (deathAnimationEnd) {
-                    clearInterval(this.animateInterval);
+                    this.stopAnimationInterval();
                 }
             } else {
                 this.playAnimation(this.imagesSwimming);

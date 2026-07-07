@@ -12,7 +12,7 @@ class Character extends MortalObject {
         "img/1.Sharkie/3.Swim/5.png",
         "img/1.Sharkie/3.Swim/6.png",
     ];
-    world;
+    world = null;
 
     imagesHurtShock = [
         "img/1.Sharkie/5.Hurt/2.Electric shock/1.png",
@@ -131,7 +131,8 @@ class Character extends MortalObject {
     lifeCount = 2;
     coinCount = 0;
     poisonBottleCount = 0;
-    animateInterval;
+    movementInterval = null;
+    animateInterval = null;
     inactiveStartTime = Date.now();
     waitTime = 5000;
     sleepTime = 15000;
@@ -141,6 +142,8 @@ class Character extends MortalObject {
     deathAnimationEnd = false;
     deathFallDown = false;
     deathRiseUp = false;
+    deathRiseUpEnded = false;
+    deathFallDownEnded = false;
 
     createBubble = {
         isActive: false,
@@ -176,7 +179,10 @@ class Character extends MortalObject {
     }
 
     movement() {
-        setInterval(() => {
+        this.stopMovementInterval();
+
+        this.movementInterval = setInterval(() => {
+            if (!this.world?.keyboard || !this.world?.level) return;
             if (!this.hasZeroLife()) {
                 if (this.world.keyboard.right && this.x < this.world.level.levelEnd_x) {
                     this.x = Math.min(this.world.level.levelEnd_x, this.x + this.speed);
@@ -194,10 +200,18 @@ class Character extends MortalObject {
                 // bewegen der kamera anhand der zurückgelegten x-stecke der charackters
                 this.moveCamera();
             } else {
-                if (this.deathFallDown && this.y < 100) {
+                if (this.deathFallDown && !this.deathFallDownEnded) {
                     this.moveDown(1);
-                } else if (this.deathRiseUp && this.y > -500) {
+                    if (this.y >= 100) {
+                        this.deathFallDownEnded = true;
+                    }
+                } else if (this.deathRiseUp && !this.deathRiseUpEnded) {
                     this.moveUp(1);
+                    if (this.y > -500) {
+                        this.deathRiseUpEnded = true;
+                    }
+                } else if (this.deathFallDownEnded || this.deathRiseUpEnded) {
+                    this.stopMovementInterval();
                 }
             }
         }, this.movementTickMs);
@@ -206,6 +220,7 @@ class Character extends MortalObject {
     // hier anknüpfen
     animate() {
         this.animateInterval = setInterval(() => {
+            if (!this.world?.keyboard) return;
             if (this.checkDeath()) return;
             if (this.checkHurt()) return;
             if (this.checkSwimming()) return;
@@ -318,7 +333,7 @@ class Character extends MortalObject {
             }
         }
         if (this.deathAnimationEnd) {
-            clearInterval(this.animateInterval);
+            this.stopAnimationInterval();
         }
     }
 

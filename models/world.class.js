@@ -1,26 +1,44 @@
 class World {
-    character = new Character(this);
-    hudIcons = createHudIcons(this, this.character);
+    character = null;
+    hudIcons = [];
     level = level_1;
-    ctx;
-    canvas;
-    keyboard;
+    ctx = null;
+    canvas = null;
+    keyboard = null;
+    collisionInterval = null;
+    renderFrameId = null;
     camera_x = 0;
     bubbles = [];
     invincibleMode = true;
     coinsTillLife = 7;
     maxPoisonBottleCollected = 2;
+    gameEnd = false;
 
     constructor(canvas, keyboard) {
+        if (!canvas || typeof canvas.getContext !== "function") {
+            throw new Error(
+                "World initialization failed: canvas is missing or does not provide getContext('2d').",
+            );
+        }
+        if (!keyboard) {
+            throw new Error("World initialization failed: keyboard input object is required.");
+        }
+
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d"); // 2d zeichenkontext wird in ctx gespeichert
+        if (!this.ctx) {
+            throw new Error("World initialization failed: could not create 2D rendering context.");
+        }
         this.keyboard = keyboard;
+        this.character = new Character(this);
+        this.hudIcons = createHudIcons(this, this.character);
         this.setWorld();
         this.render();
         this.checkCollisionsOrAggroRange();
     }
 
     render() {
+        if (this.gameEnd) return;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //Inhalt des canvas wird damit gelöscht
 
         this.ctx.translate(this.camera_x, 0);
@@ -43,7 +61,7 @@ class World {
         this.addHudIconsToMap();
 
         // draw() wird immer wieder aufgerufen
-        requestAnimationFrame(() => {
+        this.renderFrameId = requestAnimationFrame(() => {
             // function = eigenes this (sonst müsste man außen = let self = this, drinne = self.draw), => = übernimmt this aus dem äußeren Scope
             // plant den naechsten draw()-Aufruf fuer den naechsten Render-Zyklus; bei zu geringer Leistung sinkt die FPS
             this.render();
@@ -51,11 +69,21 @@ class World {
     }
 
     checkCollisionsOrAggroRange() {
-        setInterval(() => {
+        this.stopCollisionInterval();
+        this.collisionInterval = setInterval(() => {
+            this.checkGameEnd();
+            if (this.gameEnd) return;
             this.enemyCollision();
             this.collectibleCollision();
             this.bubbleCollision();
         }, 400);
+    }
+
+    stopCollisionInterval() {
+        if (this.collisionInterval) {
+            clearInterval(this.collisionInterval);
+            this.collisionInterval = null;
+        }
     }
 
     enemyCollision() {
@@ -277,6 +305,51 @@ class World {
 
             // Zeichenzustand wiederherstellen (macht translate und scale rückgängig).
             this.ctx.restore();
+        }
+    }
+
+    checkGameEnd() {
+        const characterDeadAnimationEnd =
+            this.character.hasZeroLife() &&
+            (this.character.deathRiseUpEnded || this.character.deathFallDownEnded);
+
+        const endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
+        const endbossDeathAnimationEnd = endboss.deathRiseUpEnded;
+        this.gameEnd = characterDeadAnimationEnd || endbossDeathAnimationEnd;
+
+        if (this.gameEnd) {
+            this.stopAllLoops();
+        }
+    }
+
+    stopAllLoops() {
+        this.stopCollisionInterval();
+
+        /* if (this.renderFrameId) {
+            cancelAnimationFrame(this.renderFrameId);
+            this.renderFrameId = null;
+        } */
+
+        if (this.character.stopMovementInterval) {
+            this.character.stopMovementInterval();
+        }
+        if (this.character.stopAnimationInterval) {
+            this.character.stopAnimationInterval();
+        }
+
+        for (const enemy of this.level.enemies) {
+            if (enemy.stopMovementInterval) {
+                enemy.stopMovementInterval();
+            }
+            if (enemy.stopAnimationInterval) {
+                enemy.stopAnimationInterval();
+            }
+        }
+
+        for (const bubble of this.bubbles) {
+            if (bubble.stopMovementInterval) {
+                bubble.stopMovementInterval();
+            }
         }
     }
 }

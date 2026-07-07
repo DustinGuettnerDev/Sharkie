@@ -1,25 +1,15 @@
 class HudIcon extends DrawableObject {
-    path;
-    x;
-    y;
-    height;
-    width;
-    iconValue;
-    fontOffsetY;
-    world;
-    kind;
-
     constructor({
-        path,
-        x,
-        y,
+        path = "",
+        x = 0,
+        y = 0,
         height = 70,
         width = 70,
         fontOffsetY = 0,
         iconValue = 0,
-        kind,
+        kind = "",
         world = null,
-    }) {
+    } = {}) {
         super();
 
         this.path = path;
@@ -28,13 +18,14 @@ class HudIcon extends DrawableObject {
         this.height = height;
         this.width = width;
         this.iconValue = iconValue;
-        this.loadImage(this.path);
+        if (this.path) this.loadImage(this.path);
         this.fontOffsetY = fontOffsetY;
         this.kind = kind;
         this.world = world;
     }
 
     updateValue() {
+        if (!this.world?.character) return;
         if (this.kind === "life") this.iconValue = this.world.character.lifeCount;
         if (this.kind === "coins") this.iconValue = this.world.character.coinCount;
         if (this.kind === "poison") this.iconValue = this.world.character.poisonBottleCount;

@@ -44,6 +44,20 @@ class MovableObject extends DrawableObject {
         this.y += speed;
     }
 
+    stopMovementInterval() {
+        if (this.movementInterval) {
+            clearInterval(this.movementInterval);
+            this.movementInterval = null;
+        }
+    }
+
+    stopAnimationInterval() {
+        if (this.animateInterval) {
+            clearInterval(this.animateInterval);
+            this.animateInterval = null;
+        }
+    }
+
     isColliding(drawObject) {
         return (
             this.x + this.width - this.collisionOffset.right >

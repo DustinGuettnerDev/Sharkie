@@ -6,6 +6,9 @@ class BackgroundObject extends DrawableObject {
 
     constructor(imagePath, x = 0) {
         super();
+        if (!imagePath) {
+            throw new Error("BackgroundObject initialization failed: imagePath is required.");
+        }
         /*this.function() ruft eine Methode auf der aktuellen Instanz auf.
         Wenn die Methode in der Kindklasse existiert, wird die Kind-Methode genutzt (Override).
         Wenn nicht, wird die geerbte Eltern-Methode genutzt.

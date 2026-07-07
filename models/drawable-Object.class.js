@@ -1,5 +1,5 @@
 class DrawableObject {
-    img;
+    img = null;
     imageCache = {};
     x = 0;
     y = 0;

@@ -1,3 +1,9 @@
+/**
+ * Creates the HUD icons for life, poison bottles, and coins using current player values.
+ * @param {World} world Current game world passed to each icon.
+ * @param {Character} character Player character containing the current counters.
+ * @returns {HudIcon[]} List of all initialized HUD icons.
+ */
 function createHudIcons(world, character) {
     return [
         new HudIcon({
