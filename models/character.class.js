@@ -3,127 +3,18 @@ class Character extends MortalObject {
     width = 280;
     x = 0;
     y = 100;
-    imagesSwimming = [
-        "img/1.Sharkie/3.Swim/1.png",
-        "img/1.Sharkie/3.Swim/2.png",
-        "img/1.Sharkie/3.Swim/1.png",
-        "img/1.Sharkie/3.Swim/3.png",
-        "img/1.Sharkie/3.Swim/4.png",
-        "img/1.Sharkie/3.Swim/5.png",
-        "img/1.Sharkie/3.Swim/6.png",
-    ];
     world = null;
 
-    imagesHurtShock = [
-        "img/1.Sharkie/5.Hurt/2.Electric shock/1.png",
-        "img/1.Sharkie/5.Hurt/2.Electric shock/2.png",
-    ];
-
-    imagesHurtPoison = [
-        "img/1.Sharkie/5.Hurt/1.Poisoned/1.png",
-        "img/1.Sharkie/5.Hurt/1.Poisoned/2.png",
-        "img/1.Sharkie/5.Hurt/1.Poisoned/3.png",
-        "img/1.Sharkie/5.Hurt/1.Poisoned/4.png",
-    ];
-
-    imagesPoisonDeath = [
-        "img/1.Sharkie/6.dead/1.Poisoned/1.png",
-        "img/1.Sharkie/6.dead/1.Poisoned/2.png",
-        "img/1.Sharkie/6.dead/1.Poisoned/3.png",
-        "img/1.Sharkie/6.dead/1.Poisoned/4.png",
-        "img/1.Sharkie/6.dead/1.Poisoned/5.png",
-        "img/1.Sharkie/6.dead/1.Poisoned/6.png",
-        "img/1.Sharkie/6.dead/1.Poisoned/7.png",
-        "img/1.Sharkie/6.dead/1.Poisoned/8.png",
-        "img/1.Sharkie/6.dead/1.Poisoned/9.png",
-        "img/1.Sharkie/6.dead/1.Poisoned/10.png",
-        "img/1.Sharkie/6.dead/1.Poisoned/11.png",
-        "img/1.Sharkie/6.dead/1.Poisoned/12.png",
-    ];
-
-    imagesShockDeath = [
-        "img/1.Sharkie/6.dead/2.Electro_shock/1.png",
-        "img/1.Sharkie/6.dead/2.Electro_shock/2.png",
-        "img/1.Sharkie/6.dead/2.Electro_shock/3.png",
-        "img/1.Sharkie/6.dead/2.Electro_shock/4.png",
-        "img/1.Sharkie/6.dead/2.Electro_shock/5.png",
-        "img/1.Sharkie/6.dead/2.Electro_shock/6.png",
-        "img/1.Sharkie/6.dead/2.Electro_shock/7.png",
-        "img/1.Sharkie/6.dead/2.Electro_shock/8.png",
-        "img/1.Sharkie/6.dead/2.Electro_shock/9.png",
-        "img/1.Sharkie/6.dead/2.Electro_shock/10.png",
-    ];
-
-    imagesWait = [
-        "img/1.Sharkie/1.IDLE/1.png",
-        "img/1.Sharkie/1.IDLE/2.png",
-        "img/1.Sharkie/1.IDLE/3.png",
-        "img/1.Sharkie/1.IDLE/4.png",
-        "img/1.Sharkie/1.IDLE/5.png",
-        "img/1.Sharkie/1.IDLE/6.png",
-        "img/1.Sharkie/1.IDLE/7.png",
-        "img/1.Sharkie/1.IDLE/8.png",
-        "img/1.Sharkie/1.IDLE/9.png",
-        "img/1.Sharkie/1.IDLE/10.png",
-        "img/1.Sharkie/1.IDLE/11.png",
-        "img/1.Sharkie/1.IDLE/12.png",
-        "img/1.Sharkie/1.IDLE/13.png",
-        "img/1.Sharkie/1.IDLE/14.png",
-        "img/1.Sharkie/1.IDLE/15.png",
-        "img/1.Sharkie/1.IDLE/16.png",
-        "img/1.Sharkie/1.IDLE/17.png",
-        "img/1.Sharkie/1.IDLE/18.png",
-    ];
-
-    imagesSleep = [
-        "img/1.Sharkie/2.Long_IDLE/i1.png",
-        "img/1.Sharkie/2.Long_IDLE/i2.png",
-        "img/1.Sharkie/2.Long_IDLE/i3.png",
-        "img/1.Sharkie/2.Long_IDLE/i4.png",
-        "img/1.Sharkie/2.Long_IDLE/i5.png",
-        "img/1.Sharkie/2.Long_IDLE/i6.png",
-        "img/1.Sharkie/2.Long_IDLE/i7.png",
-        "img/1.Sharkie/2.Long_IDLE/i8.png",
-        "img/1.Sharkie/2.Long_IDLE/i9.png",
-        "img/1.Sharkie/2.Long_IDLE/i10.png",
-        "img/1.Sharkie/2.Long_IDLE/i11.png",
-        "img/1.Sharkie/2.Long_IDLE/i12.png",
-        "img/1.Sharkie/2.Long_IDLE/i13.png",
-        "img/1.Sharkie/2.Long_IDLE/i14.png",
-    ];
-
-    imagesSlap = [
-        "img/1.Sharkie/4.Attack/Fin slap/1.png",
-        "img/1.Sharkie/4.Attack/Fin slap/2.png",
-        "img/1.Sharkie/4.Attack/Fin slap/3.png",
-        "img/1.Sharkie/4.Attack/Fin slap/4.png",
-        "img/1.Sharkie/4.Attack/Fin slap/5.png",
-        "img/1.Sharkie/4.Attack/Fin slap/6.png",
-        "img/1.Sharkie/4.Attack/Fin slap/7.png",
-        "img/1.Sharkie/4.Attack/Fin slap/8.png",
-    ];
-
-    imagesCreateBubble = [
-        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/1.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/2.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/3.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/4.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/5.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/6.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/7.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/8.png",
-    ];
-
-    imagesCreateBubblePoison = [
-        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/1.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/2.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/3.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/4.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/5.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/6.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/7.png",
-        "img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png",
-    ];
+    imagesSwimming = IMG_PATHS.character.swimming;
+    imagesHurtShock = IMG_PATHS.character.hurtShock;
+    imagesHurtPoison = IMG_PATHS.character.hurtPoison;
+    imagesPoisonDeath = IMG_PATHS.character.poisonDeath;
+    imagesShockDeath = IMG_PATHS.character.shockDeath;
+    imagesWait = IMG_PATHS.character.wait;
+    imagesSleep = IMG_PATHS.character.sleep;
+    imagesSlap = IMG_PATHS.character.slap;
+    imagesCreateBubble = IMG_PATHS.character.createBubble;
+    imagesCreateBubblePoison = IMG_PATHS.character.createBubblePoison;
 
     speed = 20;
     levelLimitUp = -150;
@@ -162,7 +53,7 @@ class Character extends MortalObject {
         this.world = world;
         /*super() ruft den Konstruktor der Elternklasse auf;
         in einer abgeleiteten Klasse muss das vor this passieren.*/
-        this.loadImage("img/1.Sharkie/1.IDLE/1.png");
+        this.loadImage(this.imagesWait[0]);
         this.loadImages(this.imagesSwimming);
         this.loadImages(this.imagesHurtPoison);
         this.loadImages(this.imagesHurtShock);
@@ -178,46 +69,86 @@ class Character extends MortalObject {
         /*         this.calculateCollisionOffset(); */
     }
 
+    /**
+     * Handles the movement of the character based on keyboard input.
+     */
     movement() {
-        this.stopMovementInterval();
-
         this.movementInterval = setInterval(() => {
             if (!this.world?.keyboard || !this.world?.level) return;
-            if (!this.hasZeroLife()) {
-                if (this.world.keyboard.right && this.x < this.world.level.levelEnd_x) {
-                    this.x = Math.min(this.world.level.levelEnd_x, this.x + this.speed);
-                    this.otherDirection = false;
-                } else if (this.world.keyboard.left && this.x > this.world.level.levelStart_x) {
-                    this.x = Math.max(0, this.x - this.speed);
-                    this.otherDirection = true;
-                }
-
-                if (this.world.keyboard.up && this.y >= this.levelLimitUp) {
-                    this.moveUp();
-                } else if (this.world.keyboard.down && this.y <= this.levelLimitDown) {
-                    this.moveDown();
-                }
-                // bewegen der kamera anhand der zurückgelegten x-stecke der charackters
-                this.moveCamera();
-            } else {
-                if (this.deathFallDown && !this.deathFallDownEnded) {
-                    this.moveDown(1);
-                    if (this.y >= 100) {
-                        this.deathFallDownEnded = true;
-                    }
-                } else if (this.deathRiseUp && !this.deathRiseUpEnded) {
-                    this.moveUp(1);
-                    if (this.y > -500) {
-                        this.deathRiseUpEnded = true;
-                    }
-                } else if (this.deathFallDownEnded || this.deathRiseUpEnded) {
-                    this.stopMovementInterval();
-                }
-            }
+            if (this.checkPlayerMovement()) return;
+            if (this.checkDeathFallDownMovement()) return;
+            if (this.checkDeathRiseUpMovement()) return;
+            this.checkDeathStopMovement();
         }, this.movementTickMs);
     }
 
-    // hier anknüpfen
+    /**
+     * Checks and handles the character's movement based on keyboard input.
+     * @returns {boolean} True if the character moved, otherwise false.
+     */
+    checkPlayerMovement() {
+        if (this.hasZeroLife()) return false;
+        if (this.world.keyboard.right && this.x < this.world.level.levelEnd_x) {
+            this.x = Math.min(this.world.level.levelEnd_x, this.x + this.speed);
+            this.otherDirection = false;
+        } else if (this.world.keyboard.left && this.x > this.world.level.levelStart_x) {
+            this.x = Math.max(0, this.x - this.speed);
+            this.otherDirection = true;
+        }
+        if (this.world.keyboard.up && this.y >= this.levelLimitUp) {
+            this.moveUp();
+        } else if (this.world.keyboard.down && this.y <= this.levelLimitDown) {
+            this.moveDown();
+        }
+        this.moveCamera();
+        return true;
+    }
+
+    /**
+     * Checks and handles the character's death movement when falling down.
+     * @returns {boolean} True if the character is in death fall down movement, otherwise false.
+     */
+    checkDeathFallDownMovement() {
+        if (this.deathFallDown && !this.deathFallDownEnded) {
+            this.moveDown(1);
+            if (this.y >= 100) {
+                this.deathFallDownEnded = true;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks and handles the character's death movement when rising up.
+     * @returns {boolean} True if the character is in death rise up movement, otherwise false.
+     */
+    checkDeathRiseUpMovement() {
+        if (this.deathRiseUp && !this.deathRiseUpEnded) {
+            this.moveUp(1);
+            if (this.y > -500) {
+                this.deathRiseUpEnded = true;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks and handles if the character's death movement should stop.
+     * @returns {boolean} True if the character's death movement has ended, otherwise false.
+     */
+    checkDeathStopMovement() {
+        if (this.deathFallDownEnded || this.deathRiseUpEnded) {
+            this.stopMovementInterval();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Handles the animation of the character based on its current state (e.g., swimming, hurt, creating bubble, etc.).
+     */
     animate() {
         this.animateInterval = setInterval(() => {
             if (!this.world?.keyboard) return;
@@ -231,6 +162,10 @@ class Character extends MortalObject {
         }, this.animationTicksMs);
     }
 
+    /**
+     * Checks and handles the animation state for the character's death.
+     * @returns {boolean} True if the character is in death state, otherwise false.
+     */
     checkDeath() {
         if (this.hasZeroLife()) {
             this.playDeathTypeAnimation();
@@ -239,6 +174,10 @@ class Character extends MortalObject {
         return false;
     }
 
+    /**
+     * Checks and handles the animation state for the character's hurt state.
+     * @returns {boolean} True if the character is hurt, otherwise false.
+     */
     checkHurt() {
         if (this.isHurt()) {
             this.playHurtTypeAnimation();
@@ -248,6 +187,10 @@ class Character extends MortalObject {
         return false;
     }
 
+    /**
+     * Checks and handles the animation state for the character's swimming state
+     * @returns {boolean} True if the character is swimming, otherwise false.
+     */
     checkSwimming() {
         if (
             this.world.keyboard.right ||
@@ -264,6 +207,10 @@ class Character extends MortalObject {
         return false;
     }
 
+    /**
+     * Checks and handles the animation state for the character's slap action.
+     * @returns {boolean} True if the character is performing a slap action, otherwise false.
+     */
     checkSlap() {
         if (this.world.keyboard.spacebar) {
             this.slap = true;
@@ -276,6 +223,9 @@ class Character extends MortalObject {
         return false;
     }
 
+    /**
+     * Plays the slap animation for the character and resets the slap state when the animation ends.
+     */
     playSlapAnimation() {
         let animationEnd = this.playAnimation(this.imagesSlap);
         if (animationEnd) {
@@ -283,6 +233,10 @@ class Character extends MortalObject {
         }
     }
 
+    /**
+     * Checks and handles the animation state for the character's bubble creation action.
+     * @returns {boolean} True if the character is creating a bubble, otherwise false.
+     */
     checkCreateBubble() {
         if (this.world.keyboard.d) {
             this.createBubble.isActive = true;
@@ -295,6 +249,9 @@ class Character extends MortalObject {
         return false;
     }
 
+    /**
+     * Plays the animation for creating a bubble and spawns a bubble when the animation ends.
+     */
     playCreateBubbleAnimation() {
         if (this.poisonBottleCount > 0) {
             this.createBubble.images = this.imagesCreateBubblePoison;
@@ -309,6 +266,10 @@ class Character extends MortalObject {
         }
     }
 
+    /**
+     * Checks and handles the animation state for the character's idle state (waiting or sleeping).
+     * @returns {boolean} True if the character is idle, otherwise false.
+     */
     checkIdle() {
         if (this.isInactive() >= this.sleepTime) {
             this.playSleepAnimation();
@@ -320,6 +281,9 @@ class Character extends MortalObject {
         return false;
     }
 
+    /**
+     * Plays the death animation based on the type of damage that caused the character's death (poison or shock).
+     */
     playDeathTypeAnimation() {
         if (this.enemyDamageType === "poison") {
             this.deathAnimationEnd = this.playAnimation(this.imagesPoisonDeath);
@@ -337,6 +301,9 @@ class Character extends MortalObject {
         }
     }
 
+    /**
+     * Plays the hurt animation based on the type of damage that caused the character's hurt state (poison or shock).
+     */
     playHurtTypeAnimation() {
         if (this.enemyDamageType === "poison") {
             this.playAnimation(this.imagesHurtPoison);
@@ -345,10 +312,16 @@ class Character extends MortalObject {
         }
     }
 
+    /**
+     * Plays the Wait animation for the character when it is idle.
+     */
     playWaitAnimation() {
         this.playAnimation(this.imagesWait);
     }
 
+    /**
+     * Plays the Sleep animation for the character when it is idle for an extended period.
+     */
     playSleepAnimation() {
         if (this.sleepAnimationFinished) {
             this.lastFrame(this.imagesSleep);
@@ -362,29 +335,48 @@ class Character extends MortalObject {
         }
     }
 
+    /**
+     * Starts the sleep counter for the character, marking the time when it became inactive.
+     */
     startSleepCounter() {
         this.inactiveStartTime = Date.now();
         this.sleepAnimationFinished = false;
     }
 
+    /**
+     * Checks if the character is inactive based on the difference between the current time and the last inactive start time.
+     * @returns {number} The time in milliseconds since the character became inactive.
+     */
     isInactive() {
         return Date.now() - this.inactiveStartTime;
     }
 
+    /**
+     * Moves the camera based on the character's position, keeping the character centered in the viewport.
+     */
     moveCamera() {
         this.world.camera_x = -this.x + 20;
     }
 
+    /**
+     * Plays the default image for the character when no other state has priority.
+     */
     defaultImageShark() {
-        this.loadImage("img/1.Sharkie/1.IDLE/1.png");
+        this.loadImage(this.imagesWait[0]);
     }
 
-    // shock mit anderen counter
-
+    /**
+     * Displays the last frame of the given animation sequence.
+     * @param {string[]} images Animation frame paths.
+     */
     lastFrame(images) {
-        return this.loadImage(images.at(-1));
+        this.loadImage(images.at(-1));
     }
 
+    /**
+     * Handles the character getting hit by an enemy.
+     * @param {Enemy} enemy Enemy instance that hit the character.
+     */
     getHit(enemy) {
         super.getHit();
         this.lastHit = Date.now();

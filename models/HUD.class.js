@@ -1,3 +1,6 @@
+/**
+ * Represents a HUD (Heads-Up Display) icon in the game, extending the DrawableObject class.
+ */
 class HudIcon extends DrawableObject {
     constructor({
         path = "",
@@ -24,6 +27,9 @@ class HudIcon extends DrawableObject {
         this.world = world;
     }
 
+    /**
+     * Updates the icon value based on the current state of the world and character.
+     */
     updateValue() {
         if (!this.world?.character) return;
         if (this.kind === "life") this.iconValue = this.world.character.lifeCount;

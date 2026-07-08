@@ -1,3 +1,6 @@
+/**
+ * Represents a bubble in the game, extending the MovableObject class.
+ */
 class Bubble extends MovableObject {
     height = 60;
     width = 60;
@@ -6,11 +9,11 @@ class Bubble extends MovableObject {
     forward;
     speed = 2;
     movementInterval = null;
-
     world;
     isPoisonBubble;
-    imageBubble = "img/1.Sharkie/4.Attack/Bubble trap/Bubble.png";
-    imagePoisonBubble = "img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png";
+
+    imageBubble = IMG_PATHS.bubble.normal;
+    imagePoisonBubble = IMG_PATHS.bubble.poison;
 
     constructor(x = 0, y = 0, forward = true, world = null, isPoisonBubble = false) {
         super();
@@ -23,6 +26,9 @@ class Bubble extends MovableObject {
         this.movement();
     }
 
+    /**
+     * Sets the image of the bubble based on whether it is a poison bubble or not.
+     */
     setBubbleImage() {
         if (this.isPoisonBubble) {
             this.loadImage(this.imagePoisonBubble);
@@ -31,6 +37,9 @@ class Bubble extends MovableObject {
         }
     }
 
+    /**
+     * Moves the bubble in the current direction at the set speed.
+     */
     movement() {
         if (!this.world?.character) return;
         let bubbleStartPosition = this.world.character.x;
@@ -47,6 +56,9 @@ class Bubble extends MovableObject {
         }, this.movementTickMs);
     }
 
+    /**
+     * Removes the bubble from the world and stops its movement interval.
+     */
     removeFromWorld() {
         if (this.world) {
             this.world.bubbles = this.world.bubbles.filter((bubble) => bubble !== this);
@@ -54,6 +66,12 @@ class Bubble extends MovableObject {
         this.stopMovementInterval();
     }
 
+    /**
+     * Check if the bubble has reached its max range from its starting position.
+     * @param {number} range The maximum distance the bubble can travel.
+     * @param {number} bubbleStart The starting x-coordinate of the bubble.
+     * @returns {boolean} True if the bubble has reached the specified range, false otherwise.
+     */
     rangeReached(range, bubbleStart) {
         return Math.abs(bubbleStart - this.x) >= range;
     }

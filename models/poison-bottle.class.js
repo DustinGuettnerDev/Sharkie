@@ -1,3 +1,6 @@
+/**
+ * Class representing a Poison Bottle in the game.
+ */
 class PoisonBottle extends DrawableObject {
     height = 70;
     width = 70;
@@ -14,8 +17,8 @@ class PoisonBottle extends DrawableObject {
         right: 5,
     };
 
-    imagePoisonBottleLeft = "img/4. Marcadores/Posión/Dark - Left.png";
-    imagePoisonBottleRight = "img/4. Marcadores/Posión/Dark - Right.png";
+    imagePoisonBottleLeft = IMG_PATHS.poisonBottle.left;
+    imagePoisonBottleRight = IMG_PATHS.poisonBottle.right;
 
     constructor(x = 0, y = 0, left = false) {
         super();
@@ -24,6 +27,10 @@ class PoisonBottle extends DrawableObject {
         this.setPoisonBottleCollectible(left);
     }
 
+    /**
+     * Checks if the poison bottle should be display to the left or to the right
+     * @param {boolean} left True if the poison bottle should be displayed to the left, false for right.
+     */
     setPoisonBottleCollectible(left) {
         if (left) {
             this.loadImage(this.imagePoisonBottleLeft);
@@ -32,6 +39,9 @@ class PoisonBottle extends DrawableObject {
         }
     }
 
+    /**
+     * Deactivates the poison bottle for a set amount of time, making it invisible and then visible again after the specified duration.
+     */
     deactivateForTime() {
         this.isVisible = false;
         setTimeout(() => {

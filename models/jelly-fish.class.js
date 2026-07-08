@@ -1,19 +1,12 @@
+/**
+ * Represents a jelleyfish enemy in the game, extending the RegularEnemy class.
+ */
 class JellyFish extends RegularEnemy {
     height = 120;
     width = 120;
     animateInterval = null;
-    imagesSwimming = [
-        "img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 1.png",
-        "img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 2.png",
-        "img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 3.png",
-        "img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 4.png",
-    ];
-    imagesDeath = [
-        "img/2.Enemy/2 Jelly fish/Dead/Pink/P1.png",
-        "img/2.Enemy/2 Jelly fish/Dead/Pink/P2.png",
-        "img/2.Enemy/2 Jelly fish/Dead/Pink/P3.png",
-        "img/2.Enemy/2 Jelly fish/Dead/Pink/P4.png",
-    ];
+    imagesSwimming = IMG_PATHS.jellyFish.swimming;
+    imagesDeath = IMG_PATHS.jellyFish.death;
     collisionOffset = {
         top: 10,
         bottom: 15,
@@ -24,7 +17,6 @@ class JellyFish extends RegularEnemy {
     damageType = "shock";
     weakness = ["bubble", "poison-bubble"];
 
-    // man muss hier die eigenschaften nicht nochmal deklarieren, da sie schon im parent deklariert wurden
     constructor(positionOffset = 0, speedOffset = 0.4) {
         super(positionOffset, speedOffset);
         this.loadImage(this.imagesSwimming[0]);
@@ -34,6 +26,9 @@ class JellyFish extends RegularEnemy {
         this.movement();
     }
 
+    /**
+     * Animates the jellyfish by cycling through its swimming or death images based on its current state.
+     */
     animate() {
         this.animateInterval = setInterval(() => {
             if (this.death) {

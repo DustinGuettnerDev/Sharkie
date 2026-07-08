@@ -2,33 +2,6 @@ class Puffer extends RegularEnemy {
     height = 100;
     width = 100;
     animateInterval = null;
-    imagesSwimming = [
-        "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png",
-        "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim2.png",
-        "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim2.png",
-        "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim3.png",
-        "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim4.png",
-    ];
-
-    imageDeath =
-        "img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png";
-
-    imagesAggroTransition = [
-        "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/1.transition1.png",
-        "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/1.transition2.png",
-        "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/1.transition3.png",
-        "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/1.transition4.png",
-        "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/1.transition5.png",
-    ];
-
-    imagesAggro = [
-        "img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim1.png",
-        "img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim2.png",
-        "img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim3.png",
-        "img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim4.png",
-        "img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim5.png",
-    ];
-
     collisionOffset = {
         top: 10,
         bottom: 10,
@@ -42,19 +15,22 @@ class Puffer extends RegularEnemy {
         left: -100,
         right: -100,
     };
-
     lifeCount = 1;
     damageType = "poison";
     world = null;
     rangeAfterSlap = 300;
     deathKnockbackDirection = null;
     deathKnockbackStarted = false;
-    weakness = ["slap"]; //implementieren
+    weakness = ["slap"];
     transitionAggroEnded = false;
     aggro = false;
     speedSlap = 10;
 
-    // man muss hier die eigenschaften nicht nochmal deklarieren, da sie schon im parent deklariert wurden
+    imagesSwimming = IMG_PATHS.puffer.swimming;
+    imageDeath = IMG_PATHS.puffer.death;
+    imagesAggroTransition = IMG_PATHS.puffer.aggroTransition;
+    imagesAggro = IMG_PATHS.puffer.aggro;
+
     constructor(positionOffset = 0, speedOffset = 0) {
         super(positionOffset, speedOffset);
         this.loadImage(this.imagesSwimming[0]);
@@ -65,31 +41,72 @@ class Puffer extends RegularEnemy {
         this.movement();
     }
 
+    /**
+     * Animates the puffer by cycling through its swimming, aggro transition, or aggro images based on its current state.
+     */
     animate() {
         this.animateInterval = setInterval(() => {
             if (!this.world?.character) return;
-            if (this.death) {
-                this.loadImage(this.imageDeath);
-                this.stopAnimationInterval();
-                return;
-            } else {
-                if (this.isInAggroRange(this.world.character)) {
-                    this.aggro = true;
-                }
-                if (this.aggro) {
-                    if (this.transitionAggroEnded) {
-                        this.playAnimation(this.imagesAggro);
-                        return;
-                    }
-                    this.transitionAggroEnded = this.playAnimation(this.imagesAggroTransition);
-                    return;
-                }
-                this.playAnimation(this.imagesSwimming);
-                this.transitionAggroEnded = false;
-            }
+            if (this.checkDeath()) return;
+            this.checkAggroRange();
+            if (this.checkAggro()) return;
+            this.checkSwimming();
         }, this.animationTicksMs);
     }
 
+    /**
+     * Checks if the puffer is dead and handles its death animation and movement.
+     * @returns {boolean} True if the puffer is dead, false otherwise.
+     */
+    checkDeath() {
+        if (this.death) {
+            this.loadImage(this.imageDeath);
+            this.stopAnimationInterval();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the Character is within the aggro range of the puffer and sets the aggro state accordingly.
+     * @returns {boolean} True if the character is within the aggro range, false otherwise.
+     */
+    checkAggroRange() {
+        if (this.isInAggroRange(this.world.character)) {
+            this.aggro = true;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the puffer is in aggro state and handles its aggro animations.
+     * @returns {boolean} True if the puffer is in aggro state, false otherwise.
+     */
+    checkAggro() {
+        if (!this.aggro) return false;
+
+        if (this.transitionAggroEnded) {
+            this.playAnimation(this.imagesAggro);
+            return true;
+        }
+        this.transitionAggroEnded = this.playAnimation(this.imagesAggroTransition);
+        return true;
+    }
+
+    /**
+     * Checks if the puffer is in swimming state and handles its swimming animations.
+     * @returns {boolean} True if the puffer is in swimming state, false otherwise.
+     */
+    checkSwimming() {
+        this.playAnimation(this.imagesSwimming);
+        this.transitionAggroEnded = false;
+        return true;
+    }
+
+    /**
+     * Handles the puffer's movement when it is dead, applying knockback and upward movement.
+     */
     handleDeathMovement() {
         if (!this.world?.character) return;
         if (!this.deathKnockbackStarted) {
@@ -108,6 +125,11 @@ class Puffer extends RegularEnemy {
         }
     }
 
+    /**
+     * Checks if the character is within the aggro range of the puffer based on their positions and collision offsets.
+     * @param {Character} character The character to check against.
+     * @returns {boolean} True if the character is within the aggro range, false otherwise.
+     */
     isInAggroRange(character) {
         return (
             this.x + this.width - this.aggroOffset.right >

@@ -1,3 +1,6 @@
+/**
+ * Represents a drawable object in the game, providing basic properties and methods for image handling.
+ */
 class DrawableObject {
     img = null;
     imageCache = {};

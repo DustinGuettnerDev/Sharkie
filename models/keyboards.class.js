@@ -1,3 +1,6 @@
+/**
+ * Represents the keyboard input state for controlling the game character.
+ */
 class Keyboard {
     right = false;
     left = false;

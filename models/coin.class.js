@@ -1,5 +1,8 @@
+/**
+ * Represents a coin in the game, which can be collected by the character.
+ */
 class Coin extends DrawableObject {
-    imageCoins = "img/4. Marcadores/1. Coins/1.png";
+    imageCoins = IMG_PATHS.coin.normal;
     height = 45;
     width = 45;
     x;

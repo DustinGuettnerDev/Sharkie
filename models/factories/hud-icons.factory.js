@@ -7,7 +7,7 @@
 function createHudIcons(world, character) {
     return [
         new HudIcon({
-            path: "img/4. Marcadores/HUD-icons/life.png",
+            path: IMG_PATHS.hudIcons.life,
             x: 150,
             y: 30,
             iconValue: character.lifeCount,
@@ -16,7 +16,7 @@ function createHudIcons(world, character) {
         }),
 
         new HudIcon({
-            path: "img/4. Marcadores/HUD-icons/poison.png",
+            path: IMG_PATHS.hudIcons.poison,
             x: 30,
             y: 20,
             height: 80,
@@ -28,7 +28,7 @@ function createHudIcons(world, character) {
         }),
 
         new HudIcon({
-            path: "img/4. Marcadores/HUD-icons/coins.png",
+            path: IMG_PATHS.hudIcons.coins,
             x: 270,
             y: 35,
             fontOffsetY: -5,
