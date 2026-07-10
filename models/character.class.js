@@ -10,6 +10,8 @@ class Character extends MortalObject {
     imagesCreateBubble = IMG_PATHS.character.createBubble;
     imagesCreateBubblePoison = IMG_PATHS.character.createBubblePoison;
 
+    const;
+
     height = 380;
     width = 280;
     x = 0;

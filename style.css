@@ -3,8 +3,28 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    font-family: "LuckiestGuy", sans-serif;
+}
+
+h1 {
+    color: white;
+    font-size: 48px;
+    margin-bottom: 32px;
 }
 
 canvas {
     background-color: black;
+}
+
+.background {
+    background-image: url("img/background.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+@font-face {
+    font-family: "LuckiestGuy";
+    src: url("fonts/LuckiestGuy-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
 }

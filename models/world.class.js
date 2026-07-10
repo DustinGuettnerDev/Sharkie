@@ -35,6 +35,7 @@ class World {
         this.keyboard = keyboard;
         this.character = new Character(this);
         this.hudIcons = createHudIcons(this, this.character);
+        this.overlayObjects = createOverlayObjects();
         this.setWorld();
         this.render();
         this.checkCollisionsOrAggroRange();
@@ -63,6 +64,7 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
 
         // Renders the HUD icons on the canvas without any translation, keeping them fixed on the screen.
+        this.addOverlayObjectsToMap();
         this.addHudIconsToMap();
         this.renderFrameId = requestAnimationFrame(() => {
             this.render();
@@ -269,6 +271,14 @@ class World {
                 x: icon.x + 70,
                 y: icon.y + 50 + icon.fontOffsetY,
             });
+        }
+    }
+
+    addOverlayObjectsToMap() {
+        for (let overlayObject of this.overlayObjects) {
+            if (overlayObject.isVisible === true) {
+                this.addToMap(overlayObject);
+            }
         }
     }
 
