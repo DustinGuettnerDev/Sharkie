@@ -24,4 +24,8 @@ class Level {
         this.levelStart_x = levelStart_x;
         this.levelEnd_x = levelEnd_x;
     }
+
+    get enemies() {
+        return [...this.regularEnemies, this.endboss];
+    }
 }
