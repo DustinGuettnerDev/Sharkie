@@ -2,6 +2,9 @@
  * Represents a bubble in the game, extending the MovableObject class.
  */
 class Bubble extends MovableObject {
+    imageBubble = IMG_PATHS.bubble.normal;
+    imagePoisonBubble = IMG_PATHS.bubble.poison;
+
     height = 60;
     width = 60;
     x;
@@ -11,9 +14,6 @@ class Bubble extends MovableObject {
     movementInterval = null;
     world;
     isPoisonBubble;
-
-    imageBubble = IMG_PATHS.bubble.normal;
-    imagePoisonBubble = IMG_PATHS.bubble.poison;
 
     constructor(x = 0, y = 0, forward = true, world = null, isPoisonBubble = false) {
         super();

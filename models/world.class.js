@@ -47,16 +47,22 @@ class World {
         if (this.gameEnd) return;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        // Shift the entire canvas context to the left by camera_x pixels to simulate camera movement
         this.ctx.translate(this.camera_x, 0);
 
+        // Renders the background objects, collectibles, bubbles, enemies, and character in the correct order on the shifted canvas context.
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.isVisibleFilterPB(this.level.collectible));
         this.addObjectsToMap(this.bubbles);
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character);
 
+        // Reset the translation for the next frame
+        // If not it would accumulate and the world would move faster and faster to the left.
+        // translate(-100) = moves the camera -100 to the left; the next time translate(-100) would move it -200 to the left, and so on.
         this.ctx.translate(-this.camera_x, 0);
 
+        // Renders the HUD icons on the canvas without any translation, keeping them fixed on the screen.
         this.addHudIconsToMap();
         this.renderFrameId = requestAnimationFrame(() => {
             this.render();
@@ -209,11 +215,12 @@ class World {
      * Sets the world reference for all enemies in the level, allowing them to access the world context.
      */
     setWorld() {
-        for (let enemy of this.level.enemies) {
-            if (enemy instanceof Puffer || enemy instanceof Endboss) {
+        for (let enemy of this.level.regularEnemies) {
+            if (enemy instanceof Puffer) {
                 enemy.world = this;
             }
         }
+        this.level.endboss.world = this;
     }
 
     /**
@@ -379,8 +386,8 @@ class World {
             this.character.hasZeroLife() &&
             (this.character.deathRiseUpEnded || this.character.deathFallDownEnded);
 
-        const endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
-        const endbossDeathAnimationEnd = endboss.deathRiseUpEnded;
+        const endboss = this.level.endboss;
+        const endbossDeathAnimationEnd = endboss ? endboss.deathRiseUpEnded : false;
         this.gameEnd = characterDeadAnimationEnd || endbossDeathAnimationEnd;
 
         if (this.gameEnd) {

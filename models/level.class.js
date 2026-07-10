@@ -2,20 +2,23 @@
  * Represents a level in the game, containing enemies, collectibles, background objects, and level boundaries.
  */
 class Level {
-    enemies;
+    regularEnemies;
+    endboss;
     collectible;
     backgroundObjects;
     levelStart_x;
     levelEnd_x;
 
     constructor(
-        enemies = [],
+        regularEnemies = [],
+        endboss = null,
         collectible = [],
         backgroundObjects = [],
         levelStart_x = -1,
         levelEnd_x = 4000,
     ) {
-        this.enemies = enemies;
+        this.regularEnemies = regularEnemies;
+        this.endboss = endboss;
         this.collectible = collectible;
         this.backgroundObjects = backgroundObjects;
         this.levelStart_x = levelStart_x;

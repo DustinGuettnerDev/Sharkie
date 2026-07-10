@@ -3,13 +3,9 @@
  */
 class Endboss extends Enemy {
     imagesSwimming = IMG_PATHS.endboss.swimming;
-
     imagesAppear = IMG_PATHS.endboss.appear;
-
     imagesAttack = IMG_PATHS.endboss.attack;
-
     imagesHurt = IMG_PATHS.endboss.hurt;
-
     imagesDeath = IMG_PATHS.endboss.death;
 
     height = 600;
@@ -42,6 +38,7 @@ class Endboss extends Enemy {
     offsetRightPositionToCharacter = -80;
     offsetLeftPostionToCharacter = 400;
     deathRiseUpEnded = false;
+    resetAttackTimer = false;
 
     /**
      * Constructor for the Endboss class.
@@ -67,6 +64,7 @@ class Endboss extends Enemy {
             if (!this.world?.character) return;
             if (this.checkDeathMovement()) return;
             if (this.checkDeathEndMovement()) return;
+            if (this.checkHurtMovementStop()) return;
             if (this.checkAttackMovement()) return;
         }, this.movementTickMs);
     }
@@ -100,7 +98,19 @@ class Endboss extends Enemy {
     }
 
     /**
-     * Moves the boss toward the character while an attack movement is active.
+     * Stops attack movement while the boss is in hurt state.
+     * @returns {boolean} True if hurt-state movement blocking is active, otherwise false.
+     */
+    checkHurtMovementStop() {
+        if (this.isHurt()) {
+            this.attackMove = false;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Moves the boss toward the character while attack movement is active.
      * @returns {boolean} True while attack movement is active, otherwise false.
      */
     checkAttackMovement() {
@@ -171,7 +181,10 @@ class Endboss extends Enemy {
      */
     checkHurt() {
         if (this.isHurt()) {
-            this.playAnimation(this.imagesHurt);
+            let animationEnd = this.playAnimation(this.imagesHurt);
+            if (animationEnd) {
+                this.resetAttackTimer = true;
+            }
             return true;
         }
         return false;
@@ -234,6 +247,10 @@ class Endboss extends Enemy {
      * @returns {boolean} True when attack cooldown has elapsed, otherwise false.
      */
     attackTimer() {
+        if (this.resetAttackTimer) {
+            this.startTime = Date.now();
+            this.resetAttackTimer = false;
+        }
         let timepassed = (Date.now() - this.startTime) / 1000;
         return timepassed > this.timeTillAttack;
     }

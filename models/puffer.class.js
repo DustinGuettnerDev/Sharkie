@@ -1,4 +1,9 @@
 class Puffer extends RegularEnemy {
+    imagesSwimming = IMG_PATHS.puffer.swimming;
+    imageDeath = IMG_PATHS.puffer.death;
+    imagesAggroTransition = IMG_PATHS.puffer.aggroTransition;
+    imagesAggro = IMG_PATHS.puffer.aggro;
+
     height = 100;
     width = 100;
     animateInterval = null;
@@ -25,11 +30,6 @@ class Puffer extends RegularEnemy {
     transitionAggroEnded = false;
     aggro = false;
     speedSlap = 10;
-
-    imagesSwimming = IMG_PATHS.puffer.swimming;
-    imageDeath = IMG_PATHS.puffer.death;
-    imagesAggroTransition = IMG_PATHS.puffer.aggroTransition;
-    imagesAggro = IMG_PATHS.puffer.aggro;
 
     constructor(positionOffset = 0, speedOffset = 0) {
         super(positionOffset, speedOffset);

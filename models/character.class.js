@@ -1,10 +1,4 @@
 class Character extends MortalObject {
-    height = 380;
-    width = 280;
-    x = 0;
-    y = 100;
-    world = null;
-
     imagesSwimming = IMG_PATHS.character.swimming;
     imagesHurtShock = IMG_PATHS.character.hurtShock;
     imagesHurtPoison = IMG_PATHS.character.hurtPoison;
@@ -15,6 +9,12 @@ class Character extends MortalObject {
     imagesSlap = IMG_PATHS.character.slap;
     imagesCreateBubble = IMG_PATHS.character.createBubble;
     imagesCreateBubblePoison = IMG_PATHS.character.createBubblePoison;
+
+    height = 380;
+    width = 280;
+    x = 0;
+    y = 100;
+    world = null;
 
     speed = 20;
     levelLimitUp = -150;
@@ -352,10 +352,22 @@ class Character extends MortalObject {
     }
 
     /**
-     * Moves the camera based on the character's position, keeping the character centered in the viewport.
+     * Moves the camera based on the character's position relative to the endboss's position in the level.
      */
     moveCamera() {
-        this.world.camera_x = -this.x + 20;
+        const endboss = this.world.level.endboss;
+        const bossFightCameraOffset = 380;
+        // If the charater is <= the position of the endboss, move the camera with value -this.x to the left.
+        if (this.x <= endboss.x) {
+            this.world.camera_x = -this.x;
+            // If the character is >= the position of the endboss + offset, move the camera to the right with a the same offset.
+        } else if (this.x >= endboss.x + bossFightCameraOffset) {
+            this.world.camera_x = -this.x + bossFightCameraOffset;
+            // If the character is between the first two conditions, do not move the camera, keeping it fixed at the endboss position.
+            // this.world.camera_x = -endboss.x;
+        } else {
+            return;
+        }
     }
 
     /**

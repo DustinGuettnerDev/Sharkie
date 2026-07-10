@@ -2,6 +2,9 @@
  * Class representing a Poison Bottle in the game.
  */
 class PoisonBottle extends DrawableObject {
+    imagePoisonBottleLeft = IMG_PATHS.poisonBottle.left;
+    imagePoisonBottleRight = IMG_PATHS.poisonBottle.right;
+
     height = 70;
     width = 70;
     x;
@@ -16,9 +19,6 @@ class PoisonBottle extends DrawableObject {
         left: 5,
         right: 5,
     };
-
-    imagePoisonBottleLeft = IMG_PATHS.poisonBottle.left;
-    imagePoisonBottleRight = IMG_PATHS.poisonBottle.right;
 
     constructor(x = 0, y = 0, left = false) {
         super();

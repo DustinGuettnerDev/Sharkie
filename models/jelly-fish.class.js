@@ -2,11 +2,12 @@
  * Represents a jelleyfish enemy in the game, extending the RegularEnemy class.
  */
 class JellyFish extends RegularEnemy {
+    imagesSwimming = IMG_PATHS.jellyFish.swimming;
+    imagesDeath = IMG_PATHS.jellyFish.death;
+
     height = 120;
     width = 120;
     animateInterval = null;
-    imagesSwimming = IMG_PATHS.jellyFish.swimming;
-    imagesDeath = IMG_PATHS.jellyFish.death;
     collisionOffset = {
         top: 10,
         bottom: 15,

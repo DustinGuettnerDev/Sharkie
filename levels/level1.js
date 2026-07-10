@@ -10,8 +10,9 @@ const level_1 = new Level(
         new Puffer(2700, 1.8),
         new Puffer(2900, 1.3),
         new JellyFish(3000, 0.9),
-        new Endboss(),
     ],
+
+    new Endboss(),
 
     [
         new Coin(420, 400),
