@@ -12,12 +12,14 @@ class World {
     renderFrameId = null;
     camera_x = 0;
     bubbles = [];
-    invincibleMode = true;
+    testMode = false;
     coinsTillLife = 7;
     maxPoisonBottleCollected = 2;
     gameEnd = false;
+    uiController = null;
 
-    constructor(canvas, keyboard) {
+    constructor(canvas, keyboard, uiController) {
+        this.uiController = uiController;
         if (!canvas || typeof canvas.getContext !== "function") {
             throw new Error(
                 "World initialization failed: canvas is missing or does not provide getContext('2d').",
@@ -35,7 +37,6 @@ class World {
         this.keyboard = keyboard;
         this.character = new Character(this);
         this.hudIcons = createHudIcons(this, this.character);
-        this.overlayObjects = createOverlayObjects();
         this.setWorld();
         this.render();
         this.checkCollisionsOrAggroRange();
@@ -45,7 +46,6 @@ class World {
      * Renders the game world, including the character, enemies, collectibles, and HUD icons.
      */
     render() {
-        if (this.gameEnd) return;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         // Shift the entire canvas context to the left by camera_x pixels to simulate camera movement
@@ -64,7 +64,6 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
 
         // Renders the HUD icons on the canvas without any translation, keeping them fixed on the screen.
-        this.addOverlayObjectsToMap();
         this.addHudIconsToMap();
         this.renderFrameId = requestAnimationFrame(() => {
             this.render();
@@ -108,7 +107,7 @@ class World {
             ) {
                 if (this.character.slap === true) {
                     this.enemySlapCollision(enemy);
-                } else if (!this.invincibleMode) {
+                } else if (!this.uiController.invincibleMode && !this.testMode) {
                     this.character.getHit(enemy);
                 }
             }
@@ -271,14 +270,6 @@ class World {
                 x: icon.x + 70,
                 y: icon.y + 50 + icon.fontOffsetY,
             });
-        }
-    }
-
-    addOverlayObjectsToMap() {
-        for (let overlayObject of this.overlayObjects) {
-            if (overlayObject.isVisible === true) {
-                this.addToMap(overlayObject);
-            }
         }
     }
 

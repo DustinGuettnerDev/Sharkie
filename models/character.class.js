@@ -77,6 +77,7 @@ class Character extends MortalObject {
     movement() {
         this.movementInterval = setInterval(() => {
             if (!this.world?.keyboard || !this.world?.level) return;
+            if (this.checkGameStart()) return;
             if (this.checkPlayerMovement()) return;
             if (this.checkDeathFallDownMovement()) return;
             if (this.checkDeathRiseUpMovement()) return;
@@ -104,6 +105,17 @@ class Character extends MortalObject {
         }
         this.moveCamera();
         return true;
+    }
+
+    /**
+     * Checks if the game has started.
+     * @returns {boolean} True if the game has not started, otherwise false.
+     */
+    checkGameStart() {
+        if (!this.world.uiController.start) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -154,6 +166,7 @@ class Character extends MortalObject {
     animate() {
         this.animateInterval = setInterval(() => {
             if (!this.world?.keyboard) return;
+            if (this.checkGameStart()) return;
             if (this.checkDeath()) return;
             if (this.checkHurt()) return;
             if (this.checkSwimming()) return;
