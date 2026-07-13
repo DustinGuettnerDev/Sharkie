@@ -28,4 +28,11 @@ class Level {
     get enemies() {
         return [...this.regularEnemies, this.endboss];
     }
+
+    createLevel(level) {
+        if (level instanceof Level) {
+            return level;
+        }
+        return null;
+    }
 }

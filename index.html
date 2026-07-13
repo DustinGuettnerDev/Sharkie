@@ -35,10 +35,29 @@
         <div class="game-container">
             <canvas id="canvas" width="720" height="480"></canvas>
             <button
-                id="start-button"
+                id="start-button-id"
                 class="start-button"
                 onclick="uiController.startGame()"
             ></button>
+            <div id="game-over-container-id" class="game-over-container hidden">
+                <img
+                    id="game-over-id"
+                    class="game-over hidden"
+                    src="img/6.Botones/Tittles/Game Over/Recurso 12.png"
+                    alt="Game Over"
+                />
+                <img
+                    id="you-win-id"
+                    class="you-win hidden"
+                    src="img/6.Botones/Tittles/You win/Recurso 21.png"
+                    alt="You Win"
+                />
+                <button
+                    id="restart-button-id"
+                    class="restart-button"
+                    onclick="uiController.restartGame()"
+                ></button>
+            </div>
         </div>
     </body>
 </html>

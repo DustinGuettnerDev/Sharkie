@@ -9,5 +9,4 @@ let uiController;
 function init() {
     canvas = document.getElementById("canvas");
     uiController = new UIController();
-    world = new World(canvas, keyboard, uiController);
 }

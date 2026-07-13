@@ -37,6 +37,7 @@ class Character extends MortalObject {
     deathRiseUp = false;
     deathRiseUpEnded = false;
     deathFallDownEnded = false;
+    uiController;
 
     createBubble = {
         isActive: false,
@@ -50,11 +51,11 @@ class Character extends MortalObject {
         right: 55,
     };
 
-    constructor(world = null) {
+    constructor(world = null, uiController = null) {
         super();
         this.world = world;
-        /*super() ruft den Konstruktor der Elternklasse auf;
-        in einer abgeleiteten Klasse muss das vor this passieren.*/
+        // Store UIController reference to check if game has started
+        this.uiController = uiController;
         this.loadImage(this.imagesWait[0]);
         this.loadImages(this.imagesSwimming);
         this.loadImages(this.imagesHurtPoison);
@@ -68,7 +69,7 @@ class Character extends MortalObject {
         this.loadImages(this.imagesCreateBubblePoison);
         this.movement();
         this.animate();
-        /*         this.calculateCollisionOffset(); */
+        /* this.calculateCollisionOffset(); */
     }
 
     /**
@@ -77,7 +78,6 @@ class Character extends MortalObject {
     movement() {
         this.movementInterval = setInterval(() => {
             if (!this.world?.keyboard || !this.world?.level) return;
-            if (this.checkGameStart()) return;
             if (this.checkPlayerMovement()) return;
             if (this.checkDeathFallDownMovement()) return;
             if (this.checkDeathRiseUpMovement()) return;
@@ -90,7 +90,8 @@ class Character extends MortalObject {
      * @returns {boolean} True if the character moved, otherwise false.
      */
     checkPlayerMovement() {
-        if (this.hasZeroLife()) return false;
+        if (this.hasZeroLife()) return;
+        if (this.checkGameStarted()) return;
         if (this.world.keyboard.right && this.x < this.world.level.levelEnd_x) {
             this.x = Math.min(this.world.level.levelEnd_x, this.x + this.speed);
             this.otherDirection = false;
@@ -108,14 +109,11 @@ class Character extends MortalObject {
     }
 
     /**
-     * Checks if the game has started.
-     * @returns {boolean} True if the game has not started, otherwise false.
+     * Checks if the game has not started yet, blocking character movement.
+     * @returns {boolean} True if game has not started (movement should be blocked), false if game is active.
      */
-    checkGameStart() {
-        if (!this.world.uiController.start) {
-            return true;
-        }
-        return false;
+    checkGameStarted() {
+        return !this.uiController.gameStarted;
     }
 
     /**
@@ -140,7 +138,7 @@ class Character extends MortalObject {
     checkDeathRiseUpMovement() {
         if (this.deathRiseUp && !this.deathRiseUpEnded) {
             this.moveUp(1);
-            if (this.y > -500) {
+            if (this.y <= -500) {
                 this.deathRiseUpEnded = true;
             }
             return true;
@@ -166,7 +164,7 @@ class Character extends MortalObject {
     animate() {
         this.animateInterval = setInterval(() => {
             if (!this.world?.keyboard) return;
-            if (this.checkGameStart()) return;
+            if (this.checkGameStarted()) return;
             if (this.checkDeath()) return;
             if (this.checkHurt()) return;
             if (this.checkSwimming()) return;

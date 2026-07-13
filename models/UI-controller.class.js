@@ -2,13 +2,23 @@
  * UIController class manages the user interface elements and game state related to starting the game and invincibility mode.
  */
 class UIController {
-    start = false;
-    invincibleMode = true;
-    startButtonRef = document.getElementById("start-button");
+    gameStarted = false;
 
     startGame() {
-        this.start = true;
-        this.invincibleMode = false;
-        this.startButtonRef.style.display = "none";
+        this.gameStarted = true;
+        world = new World(canvas, keyboard, uiController);
+        document.getElementById("start-button-id").classList.add("hidden");
+    }
+
+    /**
+     * Restarts the game and reveals the game over or victory screen based on the game state.
+     */
+    restartGame() {
+        this.gameStarted = true;
+        document.getElementById("game-over-container-id").classList.add("hidden");
+        document.getElementById("game-over-id").classList.add("hidden");
+        document.getElementById("you-win-id").classList.add("hidden");
+        world.stopAllLoops();
+        world = new World(canvas, keyboard, uiController);
     }
 }

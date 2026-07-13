@@ -4,7 +4,7 @@
 class World {
     character = null;
     hudIcons = [];
-    level = level_1;
+
     ctx = null;
     canvas = null;
     keyboard = null;
@@ -17,6 +17,7 @@ class World {
     maxPoisonBottleCollected = 2;
     gameEnd = false;
     uiController = null;
+    level = null;
 
     constructor(canvas, keyboard, uiController) {
         this.uiController = uiController;
@@ -34,8 +35,9 @@ class World {
         if (!this.ctx) {
             throw new Error("World initialization failed: could not create 2D rendering context.");
         }
+        this.level = createLevel_1();
         this.keyboard = keyboard;
-        this.character = new Character(this);
+        this.character = new Character(this, this.uiController);
         this.hudIcons = createHudIcons(this, this.character);
         this.setWorld();
         this.render();
@@ -47,6 +49,7 @@ class World {
      */
     render() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.checkGameEnd();
 
         // Shift the entire canvas context to the left by camera_x pixels to simulate camera movement
         this.ctx.translate(this.camera_x, 0);
@@ -76,8 +79,6 @@ class World {
     checkCollisionsOrAggroRange() {
         this.stopCollisionInterval();
         this.collisionInterval = setInterval(() => {
-            this.checkGameEnd();
-            if (this.gameEnd) return;
             this.enemyCollision();
             this.collectibleCollision();
             this.bubbleCollision();
@@ -107,7 +108,7 @@ class World {
             ) {
                 if (this.character.slap === true) {
                     this.enemySlapCollision(enemy);
-                } else if (!this.uiController.invincibleMode && !this.testMode) {
+                } else if (!this.testMode) {
                     this.character.getHit(enemy);
                 }
             }
@@ -380,7 +381,7 @@ class World {
     }
 
     /**
-     * Checks if the game has ended based on the character's life and the endboss's death animation, stopping all loops if the game has ended.
+     * Checks if the game has ended based on the character's life and the endboss's death animation and updates the game state accordingly.
      */
     checkGameEnd() {
         const characterDeadAnimationEnd =
@@ -392,7 +393,13 @@ class World {
         this.gameEnd = characterDeadAnimationEnd || endbossDeathAnimationEnd;
 
         if (this.gameEnd) {
-            this.stopAllLoops();
+            document.getElementById("game-over-container-id").classList.remove("hidden");
+            if (characterDeadAnimationEnd) {
+                document.getElementById("game-over-id").classList.remove("hidden");
+            } else if (endbossDeathAnimationEnd) {
+                document.getElementById("you-win-id").classList.remove("hidden");
+            }
+            this.uiController.gameStarted = false;
         }
     }
 
@@ -402,10 +409,10 @@ class World {
     stopAllLoops() {
         this.stopCollisionInterval();
 
-        /* if (this.renderFrameId) {
+        if (this.renderFrameId) {
             cancelAnimationFrame(this.renderFrameId);
             this.renderFrameId = null;
-        } */
+        }
 
         if (this.character.stopMovementInterval) {
             this.character.stopMovementInterval();
