@@ -24,6 +24,7 @@ button {
     cursor: pointer;
     z-index: 1;
     padding: 0;
+    border-radius: 15px;
 }
 
 .game-container {
@@ -92,4 +93,54 @@ button {
 
 .hidden {
     display: none;
+}
+
+.instructions {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: auto;
+    z-index: 2;
+}
+
+.instructions-button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    padding: 10px;
+    background-color: #531a82;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+.instructions-button:hover {
+    background-color: #7fffe0;
+    color: #531a82;
+}
+
+/* Das Raster-Layout definieren */
+.instruction-container {
+    display: grid;
+    grid-template-columns: 150px 1fr; /* Links fixe Bildbreite, rechts dynamischer Restplatz */
+    gap: 20px; /* Abstand zwischen den Zeilen und Spalten */
+    align-items: center; /* Zentriert Text vertikal passend zum Bild */
+    max-width: 800px; /* Maximale Gesamtbreite der Liste */
+    margin: 0 auto; /* Zentriert die gesamte Tabelle auf der Seite */
+}
+
+/* Bilder responsive machen */
+.instruction-container .grid-item-img img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px; /* Optionale abgerundete Ecken für die Bilder */
+}
+
+/* Styling für den Textbereich */
+.instruction-container .grid-item-text p {
+    margin: 0;
+    font-family: sans-serif;
+    color: #333;
 }

@@ -21,4 +21,10 @@ class UIController {
         world.stopAllLoops();
         world = new World(canvas, keyboard, uiController);
     }
+
+    showInstructions() {
+        document.getElementById("instructions-id").classList.toggle("hidden");
+        if (this.gameStarted) return;
+        document.getElementById("start-button-id").classList.toggle("hidden");
+    }
 }
