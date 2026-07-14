@@ -39,7 +39,7 @@
                 class="start-button"
                 onclick="uiController.startGame()"
             ></button>
-            <div id="game-over-container-id" class="game-over-container hidden">
+            <div id="game-end-container-id" class="game-over-container hidden">
                 <img
                     id="game-over-id"
                     class="game-over hidden"
@@ -65,24 +65,27 @@
             >
                 help
             </button>
-            <div class="instruction-container">
-                <!-- Zeile 1 -->
-                <div class="grid-item-img">
-                    <img src="img/6.Botones/Key/arrow keys.png" alt="Beschreibung 1" />
+            <div id="instructions-id" class="instruction-container hidden">
+                <div>
+                    <img
+                        class="move-button"
+                        src="img/6.Botones/Key/arrow keys.png"
+                        alt="Beschreibung 1"
+                    />
                 </div>
-                <div class="grid-item-text"><p>Hier steht der Text für die erste Zeile.</p></div>
-
-                <!-- Zeile 2 -->
-                <div class="grid-item-img">
-                    <img src="img/6.Botones/Key/D key.png" alt="Beschreibung 2" />
+                <div><p class="grid-item-text">MOVE SHARK</p></div>
+                <div>
+                    <img class="d-button" src="img/6.Botones/Key/D key.png" alt="Beschreibung 2" />
                 </div>
-                <div class="grid-item-text"><p>Hier steht der Text für die zweite Zeile.</p></div>
-
-                <!-- Zeile 3 -->
-                <div class="grid-item-img">
-                    <img src="img/6.Botones/Key/Space Bar key.png" alt="Beschreibung 3" />
+                <div><p class="grid-item-text">BUBBLE</p></div>
+                <div>
+                    <img
+                        class="spacebar-button"
+                        src="img/6.Botones/Key/Space Bar key.png"
+                        alt="Beschreibung 3"
+                    />
                 </div>
-                <div class="grid-item-text"><p>Hier steht der Text für die dritte Zeile.</p></div>
+                <div><p class="grid-item-text">ATTACK</p></div>
             </div>
         </div>
     </body>

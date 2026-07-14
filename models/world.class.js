@@ -301,7 +301,7 @@ class World {
     }
 
     /**
-     * draws a red and yellow frame around the given drawable object to visualize its collision and aggro areas.
+     * Draws debug frames around supported objects to visualize collision and aggro areas.
      * @param {DrawableObject} drawObject The drawable object for which to draw the collision frame.
      */
     drawFrame(drawObject) {
@@ -323,7 +323,7 @@ class World {
     }
 
     /**
-     * Rendering a red frame around the given drawable object to visualize its collision area.
+     * Renders a red frame around the given drawable object to visualize its collision area.
      * @param {DrawableObject} drawObject The drawable object for which to draw the red collision frame.
      */
     renderingRedCollisonFrame(drawObject) {
@@ -340,7 +340,7 @@ class World {
     }
 
     /**
-     * Rendering the yellow aggro frame around the given drawable object to visualize its aggro area.
+     * Renders the yellow aggro frame around the given drawable object to visualize its aggro area.
      * @param {DrawableObject} drawObject The drawable object for which to draw the yellow aggro frame.
      */
     renderingYellowAggroFrame(drawObject) {
@@ -393,11 +393,11 @@ class World {
         this.gameEnd = characterDeadAnimationEnd || endbossDeathAnimationEnd;
 
         if (this.gameEnd) {
-            document.getElementById("game-over-container-id").classList.remove("hidden");
+            this.uiController.gameEndContainer.classList.remove("hidden");
             if (characterDeadAnimationEnd) {
-                document.getElementById("game-over-id").classList.remove("hidden");
+                this.uiController.gameOverImage.classList.remove("hidden");
             } else if (endbossDeathAnimationEnd) {
-                document.getElementById("you-win-id").classList.remove("hidden");
+                this.uiController.youWinImage.classList.remove("hidden");
             }
             this.uiController.gameStarted = false;
         }

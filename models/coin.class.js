@@ -5,8 +5,8 @@ class Coin extends DrawableObject {
     imageCoins = IMG_PATHS.coin.normal;
     height = 45;
     width = 45;
-    x;
-    y;
+    x = null;
+    y = null;
     collisionOffset = {
         top: 5,
         bottom: 5,

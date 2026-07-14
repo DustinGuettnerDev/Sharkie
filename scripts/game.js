@@ -1,7 +1,7 @@
-let canvas;
-let world;
+let canvas = null;
+let world = null;
 let keyboard = new Keyboard();
-let uiController;
+let uiController = null;
 
 /**
  * Initializes the game by setting up the canvas and creating a new World instance with the provided keyboard input.

@@ -1,30 +1,54 @@
 /**
- * UIController class manages the user interface elements and game state related to starting the game and invincibility mode.
+ * Manages game UI elements and basic UI state transitions (start, restart, and instructions).
  */
 class UIController {
     gameStarted = false;
+    startButton = null;
+    gameEndContainer = null;
+    gameOverImage = null;
+    youWinImage = null;
+    instructionsContainer = null;
 
-    startGame() {
-        this.gameStarted = true;
-        world = new World(canvas, keyboard, uiController);
-        document.getElementById("start-button-id").classList.add("hidden");
+    /**
+     * Caches frequently used DOM elements to avoid repeated document lookups.
+     */
+    constructor() {
+        this.startButton = document.getElementById("start-button-id");
+        this.gameEndContainer = document.getElementById("game-end-container-id");
+        this.gameOverImage = document.getElementById("game-over-id");
+        this.youWinImage = document.getElementById("you-win-id");
+        this.instructionsContainer = document.getElementById("instructions-id");
     }
 
     /**
-     * Restarts the game and reveals the game over or victory screen based on the game state.
+     * Starts a new game world and hides the start button.
+     */
+    startGame() {
+        this.gameStarted = true;
+        world = new World(canvas, keyboard, uiController);
+        this.startButton.classList.add("hidden");
+    }
+
+    /**
+     * Restarts the game by hiding end-game UI and creating a fresh world instance.
      */
     restartGame() {
         this.gameStarted = true;
-        document.getElementById("game-over-container-id").classList.add("hidden");
-        document.getElementById("game-over-id").classList.add("hidden");
-        document.getElementById("you-win-id").classList.add("hidden");
+        this.gameEndContainer.classList.add("hidden");
+        this.gameOverImage.classList.add("hidden");
+        this.youWinImage.classList.add("hidden");
         world.stopAllLoops();
         world = new World(canvas, keyboard, uiController);
     }
 
+    /**
+     * Toggles the instructions overlay and updates start button visibility before the game starts.
+     */
     showInstructions() {
-        document.getElementById("instructions-id").classList.toggle("hidden");
+        this.instructionsContainer.classList.toggle("hidden");
         if (this.gameStarted) return;
-        document.getElementById("start-button-id").classList.toggle("hidden");
+
+        const gameEndIsHidden = this.gameEndContainer.classList.contains("hidden");
+        this.startButton.classList.toggle("hidden", !gameEndIsHidden);
     }
 }

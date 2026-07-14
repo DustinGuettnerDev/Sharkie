@@ -7,13 +7,13 @@ class Bubble extends MovableObject {
 
     height = 60;
     width = 60;
-    x;
-    y;
-    forward;
+    x = null;
+    y = null;
+    forward = null;
     speed = 2;
     movementInterval = null;
-    world;
-    isPoisonBubble;
+    world = null;
+    isPoisonBubble = null;
 
     constructor(x = 0, y = 0, forward = true, world = null, isPoisonBubble = false) {
         super();

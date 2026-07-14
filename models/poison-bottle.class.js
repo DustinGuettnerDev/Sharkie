@@ -7,8 +7,8 @@ class PoisonBottle extends DrawableObject {
 
     height = 70;
     width = 70;
-    x;
-    y;
+    x = null;
+    y = null;
 
     isVisible = true;
     timeTillPBSpawnsAgain = 5000;

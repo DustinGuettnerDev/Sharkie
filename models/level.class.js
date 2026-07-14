@@ -2,12 +2,12 @@
  * Represents a level in the game, containing enemies, collectibles, background objects, and level boundaries.
  */
 class Level {
-    regularEnemies;
-    endboss;
-    collectible;
-    backgroundObjects;
-    levelStart_x;
-    levelEnd_x;
+    regularEnemies = [];
+    endboss = null;
+    collectible = [];
+    backgroundObjects = [];
+    levelStart_x = -1;
+    levelEnd_x = 4000;
 
     constructor(
         regularEnemies = [],

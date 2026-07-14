@@ -37,7 +37,7 @@ class Character extends MortalObject {
     deathRiseUp = false;
     deathRiseUpEnded = false;
     deathFallDownEnded = false;
-    uiController;
+    uiController = null;
 
     createBubble = {
         isActive: false,
