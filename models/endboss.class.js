@@ -114,7 +114,7 @@ class Endboss extends Enemy {
      * @returns {boolean} True while attack movement is active, otherwise false.
      */
     checkAttackMovement() {
-        if (this.attackMove) {
+        if (this.attackMove && !this.world.character.hasZeroLife()) {
             if (this.isAboveCharacter()) {
                 this.moveDown();
             } else if (this.isBelowCharacter()) {

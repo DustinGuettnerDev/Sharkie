@@ -46,9 +46,5 @@ class UIController {
      */
     showInstructions() {
         this.instructionsContainer.classList.toggle("hidden");
-        if (this.gameStarted) return;
-
-        const gameEndIsHidden = this.gameEndContainer.classList.contains("hidden");
-        this.startButton.classList.toggle("hidden", !gameEndIsHidden);
     }
 }
