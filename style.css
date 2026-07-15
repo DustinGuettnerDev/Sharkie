@@ -34,7 +34,7 @@ button {
 }
 
 .background {
-    background-image: url("img/background.jpg");
+    background-image: url("assets/img/background.jpg");
     background-size: cover;
     background-position: center;
 }
@@ -44,7 +44,7 @@ button {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background-image: url("img/6.Botones/Start/1.png");
+    background-image: url("assets/img/6.Botones/Start/1.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -53,7 +53,7 @@ button {
 }
 
 .start-button:hover {
-    background-image: url("img/6.Botones/Start/2.png");
+    background-image: url("assets/img/6.Botones/Start/2.png");
 }
 
 .game-over-container {
@@ -74,7 +74,7 @@ button {
 }
 
 .restart-button {
-    background-image: url("img/6.Botones/Try again/Recurso 16.png");
+    background-image: url("assets/img/6.Botones/Try again/Recurso 16.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -83,7 +83,7 @@ button {
 }
 
 .restart-button:hover {
-    background-image: url("img/6.Botones/Try again/Recurso 17.png");
+    background-image: url("assets/img/6.Botones/Try again/Recurso 17.png");
 }
 
 .you-win {
