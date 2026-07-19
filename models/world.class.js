@@ -116,10 +116,12 @@ class World {
     }
 
     /**
-     * Handles the collision between the character's slap and the specified enemy.
+     * Handles the collision between the character's slap and the specified enemy,
+     * including the slap sound effect.
      * @param {Enemy} enemy The enemy object being slapped.
      */
     enemySlapCollision(enemy) {
+        AUDIO_PATHS.character.slap.play();
         if (enemy.weakness.includes("slap")) {
             enemy.getHit();
             if (enemy.lifeCount === 0) {
@@ -139,7 +141,8 @@ class World {
     }
 
     /**
-     * Handles the collision between the character and a coin collectible.
+     * Handles the collision between the character and a coin collectible,
+     * including coin pickup and life-up sound effects.
      * @param {Coin} collectible The coin collectible being checked for collision.
      */
     coinCollision(collectible) {
@@ -147,8 +150,12 @@ class World {
             if (this.character.isColliding(collectible)) {
                 this.level.collectible = this.level.collectible.filter((e) => e !== collectible);
                 this.character.coinCount += 1;
+                AUDIO_PATHS.collectibles.coin.currentTime = 0;
+                AUDIO_PATHS.collectibles.coin.play();
                 if (this.character.coinCount >= this.coinsTillLife) {
                     this.character.lifeCount += 1;
+                    AUDIO_PATHS.collectibles.hpUp.currentTime = 0;
+                    AUDIO_PATHS.collectibles.hpUp.play();
                     this.character.coinCount = 0;
                 }
             }

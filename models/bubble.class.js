@@ -2,18 +2,15 @@
  * Represents a bubble in the game, extending the MovableObject class.
  */
 class Bubble extends MovableObject {
-    imageBubble = IMG_PATHS.bubble.normal;
-    imagePoisonBubble = IMG_PATHS.bubble.poison;
-
     height = 60;
     width = 60;
-    x = null;
-    y = null;
-    forward = null;
+    x;
+    y;
+    forward;
     speed = 2;
     movementInterval = null;
-    world = null;
-    isPoisonBubble = null;
+    world;
+    isPoisonBubble;
 
     constructor(x = 0, y = 0, forward = true, world = null, isPoisonBubble = false) {
         super();
@@ -31,9 +28,9 @@ class Bubble extends MovableObject {
      */
     setBubbleImage() {
         if (this.isPoisonBubble) {
-            this.loadImage(this.imagePoisonBubble);
+            this.loadImage(IMG_PATHS.bubble.poison);
         } else {
-            this.loadImage(this.imageBubble);
+            this.loadImage(IMG_PATHS.bubble.normal);
         }
     }
 
@@ -57,9 +54,10 @@ class Bubble extends MovableObject {
     }
 
     /**
-     * Removes the bubble from the world and stops its movement interval.
+     * Plays the bubble sound, removes the bubble from the world, and stops its movement interval.
      */
     removeFromWorld() {
+        AUDIO_PATHS.character.bubble.play();
         if (this.world) {
             this.world.bubbles = this.world.bubbles.filter((bubble) => bubble !== this);
         }

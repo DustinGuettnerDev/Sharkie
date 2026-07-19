@@ -1,22 +1,11 @@
 class Character extends MortalObject {
-    imagesSwimming = IMG_PATHS.character.swimming;
-    imagesHurtShock = IMG_PATHS.character.hurtShock;
-    imagesHurtPoison = IMG_PATHS.character.hurtPoison;
-    imagesPoisonDeath = IMG_PATHS.character.poisonDeath;
-    imagesShockDeath = IMG_PATHS.character.shockDeath;
-    imagesWait = IMG_PATHS.character.wait;
-    imagesSleep = IMG_PATHS.character.sleep;
-    imagesSlap = IMG_PATHS.character.slap;
-    imagesCreateBubble = IMG_PATHS.character.createBubble;
-    imagesCreateBubblePoison = IMG_PATHS.character.createBubblePoison;
-
     const;
 
     height = 380;
     width = 280;
     x = 0;
     y = 100;
-    world = null;
+    world;
 
     speed = 20;
     levelLimitUp = -150;
@@ -37,7 +26,7 @@ class Character extends MortalObject {
     deathRiseUp = false;
     deathRiseUpEnded = false;
     deathFallDownEnded = false;
-    uiController = null;
+    uiController;
 
     createBubble = {
         isActive: false,
@@ -54,22 +43,20 @@ class Character extends MortalObject {
     constructor(world = null, uiController = null) {
         super();
         this.world = world;
-        // Store UIController reference to check if game has started
         this.uiController = uiController;
-        this.loadImage(this.imagesWait[0]);
-        this.loadImages(this.imagesSwimming);
-        this.loadImages(this.imagesHurtPoison);
-        this.loadImages(this.imagesHurtShock);
-        this.loadImages(this.imagesPoisonDeath);
-        this.loadImages(this.imagesShockDeath);
-        this.loadImages(this.imagesSleep);
-        this.loadImages(this.imagesWait);
-        this.loadImages(this.imagesSlap);
-        this.loadImages(this.imagesCreateBubble);
-        this.loadImages(this.imagesCreateBubblePoison);
+        this.loadImage(IMG_PATHS.character.wait[0]);
+        this.loadImages(IMG_PATHS.character.swimming);
+        this.loadImages(IMG_PATHS.character.hurtPoison);
+        this.loadImages(IMG_PATHS.character.hurtShock);
+        this.loadImages(IMG_PATHS.character.poisonDeath);
+        this.loadImages(IMG_PATHS.character.shockDeath);
+        this.loadImages(IMG_PATHS.character.sleep);
+        this.loadImages(IMG_PATHS.character.wait);
+        this.loadImages(IMG_PATHS.character.slap);
+        this.loadImages(IMG_PATHS.character.createBubble);
+        this.loadImages(IMG_PATHS.character.createBubblePoison);
         this.movement();
         this.animate();
-        /* this.calculateCollisionOffset(); */
     }
 
     /**
@@ -214,7 +201,7 @@ class Character extends MortalObject {
             this.startSleepCounter();
             this.slap = false;
             this.createBubble.isActive = false;
-            this.playAnimation(this.imagesSwimming);
+            this.playAnimation(IMG_PATHS.character.swimming);
             return true;
         }
         return false;
@@ -240,7 +227,7 @@ class Character extends MortalObject {
      * Plays the slap animation for the character and resets the slap state when the animation ends.
      */
     playSlapAnimation() {
-        let animationEnd = this.playAnimation(this.imagesSlap);
+        let animationEnd = this.playAnimation(IMG_PATHS.character.slap);
         if (animationEnd) {
             this.slap = false;
         }
@@ -267,9 +254,9 @@ class Character extends MortalObject {
      */
     playCreateBubbleAnimation() {
         if (this.poisonBottleCount > 0) {
-            this.createBubble.images = this.imagesCreateBubblePoison;
+            this.createBubble.images = IMG_PATHS.character.createBubblePoison;
         } else {
-            this.createBubble.images = this.imagesCreateBubble;
+            this.createBubble.images = IMG_PATHS.character.createBubble;
         }
 
         let animationEnd = this.playAnimation(this.createBubble.images);
@@ -299,12 +286,12 @@ class Character extends MortalObject {
      */
     playDeathTypeAnimation() {
         if (this.enemyDamageType === "poison") {
-            this.deathAnimationEnd = this.playAnimation(this.imagesPoisonDeath);
+            this.deathAnimationEnd = this.playAnimation(IMG_PATHS.character.poisonDeath);
             if (this.deathAnimationEnd) {
                 this.deathRiseUp = true;
             }
         } else if (this.enemyDamageType === "shock") {
-            this.deathAnimationEnd = this.playAnimation(this.imagesShockDeath);
+            this.deathAnimationEnd = this.playAnimation(IMG_PATHS.character.shockDeath);
             if (this.deathAnimationEnd) {
                 this.deathFallDown = true;
             }
@@ -319,9 +306,9 @@ class Character extends MortalObject {
      */
     playHurtTypeAnimation() {
         if (this.enemyDamageType === "poison") {
-            this.playAnimation(this.imagesHurtPoison);
+            this.playAnimation(IMG_PATHS.character.hurtPoison);
         } else if (this.enemyDamageType === "shock") {
-            this.playAnimation(this.imagesHurtShock);
+            this.playAnimation(IMG_PATHS.character.hurtShock);
         }
     }
 
@@ -329,7 +316,7 @@ class Character extends MortalObject {
      * Plays the Wait animation for the character when it is idle.
      */
     playWaitAnimation() {
-        this.playAnimation(this.imagesWait);
+        this.playAnimation(IMG_PATHS.character.wait);
     }
 
     /**
@@ -337,14 +324,14 @@ class Character extends MortalObject {
      */
     playSleepAnimation() {
         if (this.sleepAnimationFinished) {
-            this.lastFrame(this.imagesSleep);
+            this.lastFrame(IMG_PATHS.character.sleep);
             return;
         }
 
-        let animationEnd = this.playAnimation(this.imagesSleep);
+        let animationEnd = this.playAnimation(IMG_PATHS.character.sleep);
         if (animationEnd) {
             this.sleepAnimationFinished = true;
-            this.lastFrame(this.imagesSleep);
+            this.lastFrame(IMG_PATHS.character.sleep);
         }
     }
 
@@ -387,7 +374,7 @@ class Character extends MortalObject {
      * Plays the default image for the character when no other state has priority.
      */
     defaultImageShark() {
-        this.loadImage(this.imagesWait[0]);
+        this.loadImage(IMG_PATHS.character.wait[0]);
     }
 
     /**

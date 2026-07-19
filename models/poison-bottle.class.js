@@ -2,13 +2,10 @@
  * Class representing a Poison Bottle in the game.
  */
 class PoisonBottle extends DrawableObject {
-    imagePoisonBottleLeft = IMG_PATHS.poisonBottle.left;
-    imagePoisonBottleRight = IMG_PATHS.poisonBottle.right;
-
     height = 70;
     width = 70;
-    x = null;
-    y = null;
+    x;
+    y;
 
     isVisible = true;
     timeTillPBSpawnsAgain = 5000;
@@ -33,9 +30,9 @@ class PoisonBottle extends DrawableObject {
      */
     setPoisonBottleCollectible(left) {
         if (left) {
-            this.loadImage(this.imagePoisonBottleLeft);
+            this.loadImage(IMG_PATHS.poisonBottle.left);
         } else {
-            this.loadImage(this.imagePoisonBottleRight);
+            this.loadImage(IMG_PATHS.poisonBottle.right);
         }
     }
 

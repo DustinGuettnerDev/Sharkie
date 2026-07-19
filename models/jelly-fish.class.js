@@ -2,9 +2,6 @@
  * Represents a jelleyfish enemy in the game, extending the RegularEnemy class.
  */
 class JellyFish extends RegularEnemy {
-    imagesSwimming = IMG_PATHS.jellyFish.swimming;
-    imagesDeath = IMG_PATHS.jellyFish.death;
-
     height = 120;
     width = 120;
     animateInterval = null;
@@ -20,9 +17,9 @@ class JellyFish extends RegularEnemy {
 
     constructor(positionOffset = 0, speedOffset = 0.4) {
         super(positionOffset, speedOffset);
-        this.loadImage(this.imagesSwimming[0]);
-        this.loadImages(this.imagesSwimming);
-        this.loadImages(this.imagesDeath);
+        this.loadImage(IMG_PATHS.jellyFish.swimming[0]);
+        this.loadImages(IMG_PATHS.jellyFish.swimming);
+        this.loadImages(IMG_PATHS.jellyFish.death);
         this.animate();
         this.movement();
     }
@@ -33,9 +30,9 @@ class JellyFish extends RegularEnemy {
     animate() {
         this.animateInterval = setInterval(() => {
             if (this.death) {
-                const deathAnimationEnd = this.playAnimation(this.imagesDeath);
+                const deathAnimationEnd = this.playAnimation(IMG_PATHS.jellyFish.death);
             } else {
-                this.playAnimation(this.imagesSwimming);
+                this.playAnimation(IMG_PATHS.jellyFish.swimming);
             }
         }, this.animationTicksMs);
     }

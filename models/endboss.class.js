@@ -2,12 +2,6 @@
  * Class representing the endboss enemy in the game.
  */
 class Endboss extends Enemy {
-    imagesSwimming = IMG_PATHS.endboss.swimming;
-    imagesAppear = IMG_PATHS.endboss.appear;
-    imagesAttack = IMG_PATHS.endboss.attack;
-    imagesHurt = IMG_PATHS.endboss.hurt;
-    imagesDeath = IMG_PATHS.endboss.death;
-
     height = 600;
     width = 600;
     animateInterval = null;
@@ -46,11 +40,11 @@ class Endboss extends Enemy {
      */
     constructor() {
         super();
-        this.loadImages(this.imagesSwimming);
-        this.loadImages(this.imagesAttack);
-        this.loadImages(this.imagesHurt);
-        this.loadImages(this.imagesDeath);
-        this.loadImages(this.imagesAppear);
+        this.loadImages(IMG_PATHS.endboss.swimming);
+        this.loadImages(IMG_PATHS.endboss.attack);
+        this.loadImages(IMG_PATHS.endboss.hurt);
+        this.loadImages(IMG_PATHS.endboss.death);
+        this.loadImages(IMG_PATHS.endboss.appear);
         this.animate();
         this.movement();
     }
@@ -152,7 +146,7 @@ class Endboss extends Enemy {
     checkAppearing() {
         if (!this.appearAnimationEnd) {
             if (this.isAppearing() || this.appearAnimationStarted) {
-                this.appearAnimationEnd = this.playAnimation(this.imagesAppear);
+                this.appearAnimationEnd = this.playAnimation(IMG_PATHS.endboss.appear);
                 this.appearAnimationStarted = !this.appearAnimationEnd;
                 if (this.appearAnimationEnd) {
                     this.startTime = Date.now();
@@ -169,7 +163,7 @@ class Endboss extends Enemy {
      */
     checkDeath() {
         if (this.death) {
-            this.playDeathAnimation(this.imagesDeath);
+            this.playDeathAnimation(IMG_PATHS.endboss.death);
             return true;
         }
         return false;
@@ -181,7 +175,7 @@ class Endboss extends Enemy {
      */
     checkHurt() {
         if (this.isHurt()) {
-            let animationEnd = this.playAnimation(this.imagesHurt);
+            let animationEnd = this.playAnimation(IMG_PATHS.endboss.hurt);
             if (animationEnd) {
                 this.resetAttackTimer = true;
             }
@@ -196,7 +190,7 @@ class Endboss extends Enemy {
      */
     checkAttackTimer() {
         if (this.attackTimer()) {
-            this.attackAnimationEnd = this.playAnimation(this.imagesAttack);
+            this.attackAnimationEnd = this.playAnimation(IMG_PATHS.endboss.attack);
             this.attackMove = true;
             if (this.attackAnimationEnd) {
                 this.startTime = Date.now();
@@ -211,7 +205,7 @@ class Endboss extends Enemy {
      * Plays the default swimming loop when no other state has priority.
      */
     defaultImageEndboss() {
-        this.playAnimation(this.imagesSwimming);
+        this.playAnimation(IMG_PATHS.endboss.swimming);
     }
 
     /**
@@ -219,7 +213,7 @@ class Endboss extends Enemy {
      */
     playDeathAnimation() {
         if (this.deathAnimationEnd) return;
-        this.deathAnimationEnd = this.playAnimation(this.imagesDeath);
+        this.deathAnimationEnd = this.playAnimation(IMG_PATHS.endboss.death);
         if (this.deathAnimationEnd) {
             this.stopAnimationInterval();
         }

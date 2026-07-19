@@ -1,9 +1,4 @@
 class Puffer extends RegularEnemy {
-    imagesSwimming = IMG_PATHS.puffer.swimming;
-    imageDeath = IMG_PATHS.puffer.death;
-    imagesAggroTransition = IMG_PATHS.puffer.aggroTransition;
-    imagesAggro = IMG_PATHS.puffer.aggro;
-
     height = 100;
     width = 100;
     animateInterval = null;
@@ -33,10 +28,10 @@ class Puffer extends RegularEnemy {
 
     constructor(positionOffset = 0, speedOffset = 0) {
         super(positionOffset, speedOffset);
-        this.loadImage(this.imagesSwimming[0]);
-        this.loadImages(this.imagesSwimming);
-        this.loadImages(this.imagesAggroTransition);
-        this.loadImages(this.imagesAggro);
+        this.loadImage(IMG_PATHS.puffer.swimming[0]);
+        this.loadImages(IMG_PATHS.puffer.swimming);
+        this.loadImages(IMG_PATHS.puffer.aggroTransition);
+        this.loadImages(IMG_PATHS.puffer.aggro);
         this.animate();
         this.movement();
     }
@@ -60,7 +55,7 @@ class Puffer extends RegularEnemy {
      */
     checkDeath() {
         if (this.death) {
-            this.loadImage(this.imageDeath);
+            this.loadImage(IMG_PATHS.puffer.death);
             this.stopAnimationInterval();
             return true;
         }
@@ -87,10 +82,10 @@ class Puffer extends RegularEnemy {
         if (!this.aggro) return false;
 
         if (this.transitionAggroEnded) {
-            this.playAnimation(this.imagesAggro);
+            this.playAnimation(IMG_PATHS.puffer.aggro);
             return true;
         }
-        this.transitionAggroEnded = this.playAnimation(this.imagesAggroTransition);
+        this.transitionAggroEnded = this.playAnimation(IMG_PATHS.puffer.aggroTransition);
         return true;
     }
 
@@ -99,7 +94,7 @@ class Puffer extends RegularEnemy {
      * @returns {boolean} True if the puffer is in swimming state, false otherwise.
      */
     checkSwimming() {
-        this.playAnimation(this.imagesSwimming);
+        this.playAnimation(IMG_PATHS.puffer.swimming);
         this.transitionAggroEnded = false;
         return true;
     }

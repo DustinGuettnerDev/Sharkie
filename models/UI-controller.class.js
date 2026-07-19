@@ -1,5 +1,5 @@
 /**
- * Manages game UI elements and basic UI state transitions (start, restart, and instructions).
+ * Manages game UI elements, game state transitions, and display/audio controls.
  */
 class UIController {
     gameStarted = false;
@@ -7,7 +7,10 @@ class UIController {
     gameEndContainer = null;
     gameOverImage = null;
     youWinImage = null;
-    instructionsContainer = null;
+    helpContainer = null;
+    gameContainer = null;
+    world = null;
+    isMuted = false;
 
     /**
      * Caches frequently used DOM elements to avoid repeated document lookups.
@@ -17,7 +20,10 @@ class UIController {
         this.gameEndContainer = document.getElementById("game-end-container-id");
         this.gameOverImage = document.getElementById("game-over-id");
         this.youWinImage = document.getElementById("you-win-id");
-        this.instructionsContainer = document.getElementById("instructions-id");
+        this.helpButton = document.getElementById("help-id");
+        this.gameContainer = document.querySelector(".game-container");
+        this.muteButton = document.getElementById("mute-button-id");
+        this.world = world;
     }
 
     /**
@@ -25,7 +31,7 @@ class UIController {
      */
     startGame() {
         this.gameStarted = true;
-        world = new World(canvas, keyboard, uiController);
+        this.world = new World(canvas, keyboard, uiController);
         this.startButton.classList.add("hidden");
     }
 
@@ -37,14 +43,54 @@ class UIController {
         this.gameEndContainer.classList.add("hidden");
         this.gameOverImage.classList.add("hidden");
         this.youWinImage.classList.add("hidden");
-        world.stopAllLoops();
-        world = new World(canvas, keyboard, uiController);
+        this.world.stopAllLoops();
+        this.world = new World(canvas, keyboard, uiController);
     }
 
     /**
-     * Toggles the instructions overlay and updates start button visibility before the game starts.
+     * Toggles visibility of the help overlay.
      */
-    showInstructions() {
-        this.instructionsContainer.classList.toggle("hidden");
+    showHelp() {
+        this.helpButton.classList.toggle("hidden");
+    }
+
+    /**
+     * Toggles fullscreen mode for the game container.
+     */
+    toggleFullscreen() {
+        if (!document.fullscreenElement && this.gameContainer) {
+            this.gameContainer.requestFullscreen();
+        } else if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+
+    /**
+     * Toggles mute state and updates the button label.
+     */
+    toggleMute() {
+        this.isMuted = !this.isMuted;
+        this.setMuteState(AUDIO_PATHS, this.isMuted);
+
+        if (this.isMuted) {
+            this.muteButton.innerText = "AUDIO OFF";
+        } else {
+            this.muteButton.innerHTML = "AUDIO";
+        }
+    }
+
+    /**
+     * Applies mute state to all configured AudioTrack instances.
+     * @param {object} node Audio tree object.
+     * @param {boolean} muted Target mute state.
+     */
+    setMuteState(node, muted) {
+        for (const value of Object.values(node)) {
+            for (const nestedValue of Object.values(value)) {
+                if (nestedValue instanceof AudioTrack) {
+                    nestedValue.setMuted(muted);
+                }
+            }
+        }
     }
 }

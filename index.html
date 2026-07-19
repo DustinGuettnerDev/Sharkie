@@ -4,10 +4,16 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="styles/overlay.css" />
         <link rel="stylesheet" href="styles/fonts.css" />
+        <link rel="stylesheet" href="styles/fullscreen.css" />
+        <link rel="stylesheet" href="styles/responsive.css" />
+
+        <script src="models/audio-track.class.js"></script>
         <script src="models/UI-controller.class.js"></script>
         <script src="models/drawable-object.class.js"></script>
-        <script src="models/imgs-paths/imgs-paths.js"></script>
+        <script src="models/img-paths/img-paths.js"></script>
+        <script src="models/audio-paths/audio-paths.js"></script>
         <script src="models/poison-bottle.class.js"></script>
         <script src="models/HUD.class.js"></script>
         <script src="models/factories/hud-icons.factory.js"></script>
@@ -58,14 +64,10 @@
                     onclick="uiController.restartGame()"
                 ></button>
             </div>
-            <button
-                id="instructions-button-id"
-                class="instructions-button"
-                onclick="uiController.showInstructions()"
-            >
+            <button id="help-button-id" class="help-button" onclick="uiController.showHelp()">
                 help
             </button>
-            <div id="instructions-id" class="instruction-container hidden">
+            <div id="help-id" class="help-container hidden">
                 <div>
                     <img
                         class="move-button"
@@ -75,7 +77,11 @@
                 </div>
                 <div><p class="grid-item-text">MOVE SHARK</p></div>
                 <div>
-                    <img class="d-button" src="assets/img/6.Botones/Key/D key.png" alt="Beschreibung 2" />
+                    <img
+                        class="d-button"
+                        src="assets/img/6.Botones/Key/D key.png"
+                        alt="Beschreibung 2"
+                    />
                 </div>
                 <div><p class="grid-item-text">BUBBLE</p></div>
                 <div>
@@ -87,6 +93,16 @@
                 </div>
                 <div><p class="grid-item-text">ATTACK</p></div>
             </div>
+
+            <button
+                id="fullscreen-button-id"
+                class="fullscreen-button"
+                onclick="uiController.toggleFullscreen()"
+            ></button>
+
+            <button id="mute-button-id" class="mute-button" onclick="uiController.toggleMute()">
+                AUDIO
+            </button>
         </div>
     </body>
 </html>

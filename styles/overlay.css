@@ -1,0 +1,146 @@
+.start-button {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-image: url("../assets/img/6.Botones/Start/1.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100px;
+    width: 200px;
+}
+
+.start-button:hover {
+    background-image: url("../assets/img/6.Botones/Start/2.png");
+}
+
+.game-over-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.game-over {
+    width: 400px;
+    height: auto;
+}
+
+.restart-button {
+    background-image: url("../assets/img/6.Botones/Try again/Recurso 16.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100px;
+    width: 200px;
+}
+
+.restart-button:hover {
+    background-image: url("../assets/img/6.Botones/Try again/Recurso 17.png");
+}
+
+.you-win {
+    width: 400px;
+    height: auto;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.help-button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    padding: 10px;
+    background-color: #531a82;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+.help-button:hover {
+    background-color: #7fffe0;
+    color: #531a82;
+}
+
+.help-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 50% 1fr;
+    gap: 20px;
+    align-items: center;
+    margin: 0 auto;
+    width: 420px;
+    background-color: rgba(39, 38, 71, 0.8);
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.help-container div {
+    display: flex;
+    justify-content: center;
+}
+
+.grid-item-text {
+    margin: 0;
+    color: white;
+    text-align: center;
+}
+
+.d-button {
+    height: 40px;
+    width: 40px;
+}
+
+.move-button {
+    height: auto;
+    width: 120px;
+}
+
+.spacebar-button {
+    height: auto;
+    width: 200px;
+}
+
+.fullscreen-button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background-image: url("../assets/img/6.Botones/Full Screen/Mesa de trabajo 9.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 140px;
+    height: 40px;
+}
+
+.fullscreen-button:hover {
+    background-image: url("../assets/img/6.Botones/Full Screen/Mesa de trabajo 7.png");
+}
+
+.mute-button {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    padding: 10px;
+    background-color: #531a82;
+    border: 2px solid #fff;
+    color: #fff;
+    text-align: center;
+    width: 90px;
+}
+
+.mute-button:hover {
+    background-color: #7fffe0;
+    color: #531a82;
+}
