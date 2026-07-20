@@ -134,11 +134,12 @@ class Character extends MortalObject {
     }
 
     /**
-     * Checks and handles if the character's death movement should stop.
+     * Finalizes character death movement by disabling game input/state and stopping movement updates.
      * @returns {boolean} True if the character's death movement has ended, otherwise false.
      */
     checkDeathStopMovement() {
         if (this.deathFallDownEnded || this.deathRiseUpEnded) {
+            this.world.uiController.gameStarted = false;
             this.stopMovementInterval();
             return true;
         }
@@ -168,6 +169,7 @@ class Character extends MortalObject {
      */
     checkDeath() {
         if (this.hasZeroLife()) {
+            AUDIO_PATHS.character.hurt.play();
             this.playDeathTypeAnimation();
             return true;
         }
@@ -180,6 +182,7 @@ class Character extends MortalObject {
      */
     checkHurt() {
         if (this.isHurt()) {
+            AUDIO_PATHS.character.hurt.play();
             this.playHurtTypeAnimation();
             this.startSleepCounter();
             return true;
@@ -227,6 +230,7 @@ class Character extends MortalObject {
      * Plays the slap animation for the character and resets the slap state when the animation ends.
      */
     playSlapAnimation() {
+        AUDIO_PATHS.character.slap.play();
         let animationEnd = this.playAnimation(IMG_PATHS.character.slap);
         if (animationEnd) {
             this.slap = false;
@@ -357,14 +361,10 @@ class Character extends MortalObject {
     moveCamera() {
         const endboss = this.world.level.endboss;
         const bossFightCameraOffset = 380;
-        // If the charater is <= the position of the endboss, move the camera with value -this.x to the left.
         if (this.x <= endboss.x) {
             this.world.camera_x = -this.x;
-            // If the character is >= the position of the endboss + offset, move the camera to the right with a the same offset.
         } else if (this.x >= endboss.x + bossFightCameraOffset) {
             this.world.camera_x = -this.x + bossFightCameraOffset;
-            // If the character is between the first two conditions, do not move the camera, keeping it fixed at the endboss position.
-            // this.world.camera_x = -endboss.x;
         } else {
             return;
         }

@@ -15,7 +15,7 @@ class Endboss extends Enemy {
         left: 40,
         right: 45,
     };
-    lifeCount = 5;
+    lifeCount = 2;
     damageType = "shock";
     weakness = ["poison-bubble"];
     deathAnimationEnd = false;
@@ -64,7 +64,8 @@ class Endboss extends Enemy {
     }
 
     /**
-     * Moves the boss upward during the death sequence until it leaves the screen.
+     * Moves the boss upward during the death sequence, marks the rise-up as finished,
+     * and disables game state once the boss is fully off-screen.
      * @returns {boolean} True while death movement is applied, otherwise false.
      */
     checkDeathMovement() {
@@ -72,6 +73,7 @@ class Endboss extends Enemy {
             this.moveUp(1);
             if (this.y <= -500) {
                 this.deathRiseUpEnded = true;
+                this.world.uiController.gameStarted = false;
             }
             return true;
         }
@@ -163,6 +165,7 @@ class Endboss extends Enemy {
      */
     checkDeath() {
         if (this.death) {
+            AUDIO_PATHS.enemies.endboss.hurt.play();
             this.playDeathAnimation(IMG_PATHS.endboss.death);
             return true;
         }
@@ -175,6 +178,8 @@ class Endboss extends Enemy {
      */
     checkHurt() {
         if (this.isHurt()) {
+            AUDIO_PATHS.enemies.endboss.attack.stop();
+            AUDIO_PATHS.enemies.endboss.hurt.play();
             let animationEnd = this.playAnimation(IMG_PATHS.endboss.hurt);
             if (animationEnd) {
                 this.resetAttackTimer = true;
@@ -191,6 +196,7 @@ class Endboss extends Enemy {
     checkAttackTimer() {
         if (this.attackTimer()) {
             this.attackAnimationEnd = this.playAnimation(IMG_PATHS.endboss.attack);
+            AUDIO_PATHS.enemies.endboss.attack.play();
             this.attackMove = true;
             if (this.attackAnimationEnd) {
                 this.startTime = Date.now();

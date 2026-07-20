@@ -4,34 +4,29 @@
 class AudioTrack {
     audio = null;
     timeDelayMs;
-    timeAudioCutMs;
+    isPlaying = false;
 
     /**
      * @param {string} audioPath Relative path to the audio file.
-     * @param {number} timeDelay Delay before playback starts, in seconds.
-     * @param {?number} timeAudioCut Optional cut-off duration after start, in seconds.
+     * @param {number} volume Volume level for the audio track, from 0.0 (silent) to 1.0 (full volume). (default: 1)
+     * @param {number} timeDelay Delay before playback starts, in seconds. (default: 0)
      */
-    constructor(audioPath, timeDelay = 0, timeAudioCut = null) {
+    constructor(audioPath, volume = 1, timeDelay = 0) {
         this.audio = new Audio(audioPath);
+        this.audio.volume = volume;
         this.timeDelayMs = timeDelay * 1000;
-        this.timeAudioCutMs = timeAudioCut ? timeAudioCut * 1000 : null;
     }
 
     /**
      * Plays the sound after the configured delay and optionally pauses it after cut time.
      */
     play() {
-        if (!this.audio) return;
-
+        if (!this.audio || this.isPlaying) return;
+        this.isPlaying = true;
+        this.audio.play();
         setTimeout(() => {
-            this.audio.play();
+            this.isPlaying = false;
         }, this.timeDelayMs);
-
-        if (this.timeAudioCutMs) {
-            setTimeout(() => {
-                this.audio.pause();
-            }, this.timeDelayMs + this.timeAudioCutMs);
-        }
     }
 
     /**
@@ -40,5 +35,12 @@ class AudioTrack {
      */
     setMuted(muted) {
         this.audio.muted = muted;
+    }
+
+    stop() {
+        if (!this.audio) return;
+        this.audio.pause();
+        this.audio.currentTime = 0;
+        this.isPlaying = false;
     }
 }

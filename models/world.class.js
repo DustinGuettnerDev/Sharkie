@@ -173,6 +173,7 @@ class World {
                 collectible.isVisible &&
                 this.character.poisonBottleCount < this.maxPoisonBottleCollected
             ) {
+                AUDIO_PATHS.collectibles.poison.play();
                 collectible.deactivateForTime();
                 this.character.poisonBottleCount += 1;
             }
@@ -388,25 +389,27 @@ class World {
     }
 
     /**
-     * Checks if the game has ended based on the character's life and the endboss's death animation and updates the game state accordingly.
+     * Detects character death or finished endboss death animation, stops background audio,
+     * and shows the corresponding end-game overlay exactly once.
      */
     checkGameEnd() {
-        const characterDeadAnimationEnd =
-            this.character.hasZeroLife() &&
-            (this.character.deathRiseUpEnded || this.character.deathFallDownEnded);
+        if (this.gameEnd) return;
 
-        const endboss = this.level.endboss;
-        const endbossDeathAnimationEnd = endboss ? endboss.deathRiseUpEnded : false;
-        this.gameEnd = characterDeadAnimationEnd || endbossDeathAnimationEnd;
+        const characterDead = this.character.hasZeroLife();
+        const endbossDead = this.level.endboss.deathAnimationEnd;
 
-        if (this.gameEnd) {
-            this.uiController.gameEndContainer.classList.remove("hidden");
-            if (characterDeadAnimationEnd) {
-                this.uiController.gameOverImage.classList.remove("hidden");
-            } else if (endbossDeathAnimationEnd) {
-                this.uiController.youWinImage.classList.remove("hidden");
-            }
-            this.uiController.gameStarted = false;
+        if (!characterDead && !endbossDead) return;
+
+        this.gameEnd = true;
+        AUDIO_PATHS.background.main.stop();
+
+        this.uiController.gameEndContainer.classList.remove("hidden");
+        if (characterDead) {
+            AUDIO_PATHS.overlay.gameOver.play();
+            this.uiController.gameOverImage.classList.remove("hidden");
+        } else if (endbossDead) {
+            AUDIO_PATHS.overlay.youWin.play();
+            this.uiController.youWinImage.classList.remove("hidden");
         }
     }
 

@@ -30,6 +30,7 @@ class UIController {
      * Starts a new game world and hides the start button.
      */
     startGame() {
+        AUDIO_PATHS.background.main.play();
         this.gameStarted = true;
         this.world = new World(canvas, keyboard, uiController);
         this.startButton.classList.add("hidden");
@@ -39,6 +40,7 @@ class UIController {
      * Restarts the game by hiding end-game UI and creating a fresh world instance.
      */
     restartGame() {
+        AUDIO_PATHS.background.main.play();
         this.gameStarted = true;
         this.gameEndContainer.classList.add("hidden");
         this.gameOverImage.classList.add("hidden");
@@ -86,10 +88,10 @@ class UIController {
      */
     setMuteState(node, muted) {
         for (const value of Object.values(node)) {
-            for (const nestedValue of Object.values(value)) {
-                if (nestedValue instanceof AudioTrack) {
-                    nestedValue.setMuted(muted);
-                }
+            if (!(value instanceof AudioTrack)) {
+                this.setMuteState(value, muted);
+            } else {
+                value.setMuted(muted);
             }
         }
     }
