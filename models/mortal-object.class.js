@@ -7,10 +7,10 @@ class MortalObject extends MovableObject {
     enemyDamageType = "shock";
 
     /**
-     * Checks if the mortal object has zero life.
+     * Returns whether the mortal object has no remaining life.
      * @returns {boolean} True if the life count is zero or less, false otherwise.
      */
-    hasZeroLife() {
+    get hasZeroLife() {
         return this.lifeCount <= 0;
     }
 
@@ -31,10 +31,10 @@ class MortalObject extends MovableObject {
     }
 
     /**
-     * Checks if the mortal object is currently in a hurt state based on the last hit timestamp and the defined hurt time.
+     * Returns whether the mortal object is currently in its hurt window after the last hit.
      * @returns {boolean} True if the mortal object is hurt, false otherwise.
      */
-    isHurt() {
+    get isHurt() {
         let timepassed = Date.now() - this.lastHit;
         timepassed = timepassed / 1000;
         return timepassed < this.hurtTime;

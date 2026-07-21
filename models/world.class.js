@@ -102,8 +102,8 @@ class World {
         for (let enemy of this.level.enemies) {
             if (
                 this.character.isColliding(enemy) &&
-                !this.character.hasZeroLife() &&
-                !this.character.isHurt() &&
+                !this.character.hasZeroLife &&
+                !this.character.isHurt &&
                 enemy.death !== true
             ) {
                 if (this.character.slap === true) {
@@ -192,7 +192,7 @@ class World {
                         (enemy.weakness.includes("poison-bubble") && bubble.isPoisonBubble == true)
                     ) {
                         enemy.getHit();
-                        if (enemy.hasZeroLife()) {
+                        if (enemy.hasZeroLife) {
                             enemy.death = true;
                         }
                     }
@@ -395,7 +395,7 @@ class World {
     checkGameEnd() {
         if (this.gameEnd) return;
 
-        const characterDead = this.character.hasZeroLife();
+        const characterDead = this.character.hasZeroLife;
         const endbossDead = this.level.endboss.deathAnimationEnd;
 
         if (!characterDead && !endbossDead) return;

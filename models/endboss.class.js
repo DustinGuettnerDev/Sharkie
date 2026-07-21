@@ -98,7 +98,7 @@ class Endboss extends Enemy {
      * @returns {boolean} True if hurt-state movement blocking is active, otherwise false.
      */
     checkHurtMovementStop() {
-        if (this.isHurt()) {
+        if (this.isHurt) {
             this.attackMove = false;
             return true;
         }
@@ -177,7 +177,7 @@ class Endboss extends Enemy {
      * @returns {boolean} True when hurt animation is active, otherwise false.
      */
     checkHurt() {
-        if (this.isHurt()) {
+        if (this.isHurt) {
             AUDIO_PATHS.enemies.endboss.attack.stop();
             AUDIO_PATHS.enemies.endboss.hurt.play();
             let animationEnd = this.playAnimation(IMG_PATHS.endboss.hurt);
@@ -247,7 +247,7 @@ class Endboss extends Enemy {
      * @returns {boolean} True when attack cooldown has elapsed, otherwise false.
      */
     attackTimer() {
-        if (!this.world.character.hasZeroLife()) {
+        if (!this.world.character.hasZeroLife) {
             if (this.resetAttackTimer) {
                 this.startTime = Date.now();
                 this.resetAttackTimer = false;

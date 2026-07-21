@@ -77,8 +77,8 @@ class Character extends MortalObject {
      * @returns {boolean} True if the character moved, otherwise false.
      */
     checkPlayerMovement() {
-        if (this.hasZeroLife()) return;
-        if (this.checkGameStarted()) return;
+        if (this.hasZeroLife) return;
+        if (this.isGameStarted) return;
         if (this.world.keyboard.right && this.x < this.world.level.levelEnd_x) {
             this.x = Math.min(this.world.level.levelEnd_x, this.x + this.speed);
             this.otherDirection = false;
@@ -96,10 +96,10 @@ class Character extends MortalObject {
     }
 
     /**
-     * Checks if the game has not started yet, blocking character movement.
-     * @returns {boolean} True if game has not started (movement should be blocked), false if game is active.
+     * Returns whether gameplay is currently inactive and movement/animation should be blocked.
+     * @returns {boolean} True while the game is not active, false once gameplay has started.
      */
-    checkGameStarted() {
+    get isGameStarted() {
         return !this.uiController.gameStarted;
     }
 
@@ -152,7 +152,7 @@ class Character extends MortalObject {
     animate() {
         this.animateInterval = setInterval(() => {
             if (!this.world?.keyboard) return;
-            if (this.checkGameStarted()) return;
+            if (this.isGameStarted) return;
             if (this.checkDeath()) return;
             if (this.checkHurt()) return;
             if (this.checkSwimming()) return;
@@ -168,7 +168,7 @@ class Character extends MortalObject {
      * @returns {boolean} True if the character is in death state, otherwise false.
      */
     checkDeath() {
-        if (this.hasZeroLife()) {
+        if (this.hasZeroLife) {
             AUDIO_PATHS.character.hurt.play();
             this.playDeathTypeAnimation();
             return true;
@@ -181,7 +181,7 @@ class Character extends MortalObject {
      * @returns {boolean} True if the character is hurt, otherwise false.
      */
     checkHurt() {
-        if (this.isHurt()) {
+        if (this.isHurt) {
             AUDIO_PATHS.character.hurt.play();
             this.playHurtTypeAnimation();
             this.startSleepCounter();
