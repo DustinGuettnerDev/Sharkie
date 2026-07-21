@@ -23,6 +23,7 @@ const AUDIO_PATHS = Object.freeze({
         youWin: new AudioTrack("assets/audio/overlay/you-win.mp3"),
     },
     background: {
-        main: new AudioTrack("assets/audio/background/main.mp3", 0.2),
+        // Starts at 1.75s and loops at the 8:18 mark to skip trailing silence.
+        main: new AudioTrack("assets/audio/background/main.mp3", 0.2, 1.75, 498, true),
     },
 });
