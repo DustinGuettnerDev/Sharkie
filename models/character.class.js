@@ -5,8 +5,8 @@ class Character extends MortalObject {
     width = 280;
     x = 0;
     y = 100;
+    cameraOffset = 50;
     world;
-
     speed = 20;
     levelLimitUp = -150;
     levelLimitDown = 160;
@@ -362,7 +362,7 @@ class Character extends MortalObject {
         const endboss = this.world.level.endboss;
         const bossFightCameraOffset = 380;
         if (this.x <= endboss.x) {
-            this.world.camera_x = -this.x;
+            this.world.camera_x = -this.x + this.cameraOffset;
         } else if (this.x >= endboss.x + bossFightCameraOffset) {
             this.world.camera_x = -this.x + bossFightCameraOffset;
         } else {
