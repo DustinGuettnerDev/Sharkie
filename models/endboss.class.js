@@ -110,7 +110,7 @@ class Endboss extends Enemy {
      * @returns {boolean} True while attack movement is active, otherwise false.
      */
     checkAttackMovement() {
-        if (this.attackMove && !this.world.character.hasZeroLife()) {
+        if (this.attackMove) {
             if (this.isAboveCharacter()) {
                 this.moveDown();
             } else if (this.isBelowCharacter()) {
@@ -247,12 +247,15 @@ class Endboss extends Enemy {
      * @returns {boolean} True when attack cooldown has elapsed, otherwise false.
      */
     attackTimer() {
-        if (this.resetAttackTimer) {
-            this.startTime = Date.now();
-            this.resetAttackTimer = false;
+        if (!this.world.character.hasZeroLife()) {
+            if (this.resetAttackTimer) {
+                this.startTime = Date.now();
+                this.resetAttackTimer = false;
+            }
+            let timepassed = (Date.now() - this.startTime) / 1000;
+            return timepassed > this.timeTillAttack;
         }
-        let timepassed = (Date.now() - this.startTime) / 1000;
-        return timepassed > this.timeTillAttack;
+        return false;
     }
 
     /**
