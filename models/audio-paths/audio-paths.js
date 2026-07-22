@@ -16,6 +16,7 @@ const AUDIO_PATHS = Object.freeze({
         endboss: {
             attack: new AudioTrack("assets/audio/enemies/endboss/attack.mp3"),
             hurt: new AudioTrack("assets/audio/enemies/endboss/hurt.mp3", 1, 2),
+            appear: new AudioTrack("assets/audio/enemies/endboss/appear.mp3", 0.6, 0, 5.3),
         },
     },
     overlay: {

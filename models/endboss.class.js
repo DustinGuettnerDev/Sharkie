@@ -6,7 +6,7 @@ class Endboss extends Enemy {
     width = 600;
     animateInterval = null;
     movementInterval = null;
-    x = 3400;
+    x = 8000;
     y = -100;
     speed = 5;
     collisionOffset = {
@@ -22,7 +22,7 @@ class Endboss extends Enemy {
     attackAnimationEnd = false;
     hurtTime = 1;
     world = null;
-    appearingPositionTrigger = 3000;
+    appearingPositionTrigger = 7200;
     appearAnimationStarted = false;
     appearAnimationEnd = false;
     startTime = Date.now();
@@ -33,6 +33,8 @@ class Endboss extends Enemy {
     offsetLeftPostionToCharacter = 400;
     deathRiseUpEnded = false;
     resetAttackTimer = false;
+    roarSoundAlreayPlayed = false;
+    roarCharacterPosition = 800;
 
     /**
      * Constructor for the Endboss class.
@@ -111,15 +113,15 @@ class Endboss extends Enemy {
      */
     checkAttackMovement() {
         if (this.attackMove) {
-            if (this.isAboveCharacter()) {
+            if (this.isAboveCharacter) {
                 this.moveDown();
-            } else if (this.isBelowCharacter()) {
+            } else if (this.isBelowCharacter) {
                 this.moveUp();
             }
-            if (this.isRightFromCharacter()) {
+            if (this.isRightFromCharacter) {
                 this.otherDirection = false;
                 this.moveLeft();
-            } else if (this.isLeftFromCharacter()) {
+            } else if (this.isLeftFromCharacter) {
                 this.otherDirection = true;
                 this.moveRight();
             }
@@ -133,6 +135,7 @@ class Endboss extends Enemy {
      */
     animate() {
         this.animateInterval = setInterval(() => {
+            this.checkPositionCharacter();
             if (this.checkAppearing()) return;
             if (this.checkDeath()) return;
             if (this.checkHurt()) return;
@@ -142,12 +145,22 @@ class Endboss extends Enemy {
     }
 
     /**
+        * Plays the endboss intro roar once when the character reaches the trigger position.
+     */
+    checkPositionCharacter() {
+        if (!this.roarSoundAlreayPlayed && this.world.character.x >= this.roarCharacterPosition) {
+            this.roarSoundAlreayPlayed = true;
+            AUDIO_PATHS.enemies.endboss.appear.play();
+        }
+    }
+
+    /**
      * Plays the intro animation until it is completed once.
      * @returns {boolean} True while intro handling blocks other animations, otherwise false.
      */
     checkAppearing() {
         if (!this.appearAnimationEnd) {
-            if (this.isAppearing() || this.appearAnimationStarted) {
+            if (this.isAppearing || this.appearAnimationStarted) {
                 this.appearAnimationEnd = this.playAnimation(IMG_PATHS.endboss.appear);
                 this.appearAnimationStarted = !this.appearAnimationEnd;
                 if (this.appearAnimationEnd) {
@@ -237,13 +250,14 @@ class Endboss extends Enemy {
      * Returns true once the character reached the trigger position for intro.
      * @returns {boolean} True when the intro trigger position is reached, otherwise false.
      */
-    isAppearing() {
+    get isAppearing() {
         if (!this.world?.character) return false;
         return this.world.character.x >= this.appearingPositionTrigger;
     }
 
     /**
-     * Returns true when enough time passed to start the next attack.
+        * Returns true when enough time passed to start the next attack.
+        * Attack timing is paused while the character has zero life.
      * @returns {boolean} True when attack cooldown has elapsed, otherwise false.
      */
     attackTimer() {
@@ -262,7 +276,7 @@ class Endboss extends Enemy {
      * Checks if the character is above the boss to attack.
      * @returns {boolean} True when the character is above the boss, otherwise false.
      */
-    isBelowCharacter() {
+    get isBelowCharacter() {
         if (!this.world?.character) return false;
         return this.world.character.y < this.y + this.offsetYPositionToCharacter;
     }
@@ -271,7 +285,7 @@ class Endboss extends Enemy {
      * Checks if the character is below the boss to attack.
      * @returns {boolean} True when the character is below the boss, otherwise false.
      */
-    isAboveCharacter() {
+    get isAboveCharacter() {
         if (!this.world?.character) return false;
         return this.world.character.y > this.y + this.offsetYPositionToCharacter;
     }
@@ -280,7 +294,7 @@ class Endboss extends Enemy {
      * Checks if the character is to the left of the boss attack corridor.
      * @returns {boolean} True when the character is left of the boss corridor, otherwise false.
      */
-    isRightFromCharacter() {
+    get isRightFromCharacter() {
         if (!this.world?.character) return false;
         return this.world.character.x < this.x + this.offsetRightPositionToCharacter;
     }
@@ -289,7 +303,7 @@ class Endboss extends Enemy {
      * Checks if the character is to the right of the boss attack corridor.
      * @returns {boolean} True when the character is right of the boss corridor, otherwise false.
      */
-    isLeftFromCharacter() {
+    get isLeftFromCharacter() {
         if (!this.world?.character) return false;
         return this.world.character.x > this.x + this.offsetLeftPostionToCharacter;
     }

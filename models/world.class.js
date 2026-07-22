@@ -74,11 +74,13 @@ class World {
     }
 
     /**
-     * Checks for collisions and aggro range between the character, enemies, collectibles, and bubbles at regular intervals.
+        * Checks collisions and aggro range at regular intervals.
+        * Skips all checks while the character has zero life.
      */
     checkCollisionsOrAggroRange() {
         this.stopCollisionInterval();
         this.collisionInterval = setInterval(() => {
+            if (this.character.hasZeroLife) return;
             this.enemyCollision();
             this.collectibleCollision();
             this.bubbleCollision();
