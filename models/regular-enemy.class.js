@@ -14,11 +14,11 @@ class RegularEnemy extends Enemy {
     }
 
     /**
-     * Starts the movement of the regular enemy, moving it left until it is dead, at which point it stops moving.
+     * Starts the movement of the regular enemy, moving it left until it is dead, at which point death movement takes over.
      */
     movement() {
         this.movementInterval = setInterval(() => {
-            if (this.death) {
+            if (this.dead) {
                 this.handleDeathMovement();
             } else {
                 this.handleAliveMovement();
@@ -34,7 +34,7 @@ class RegularEnemy extends Enemy {
     }
 
     /**
-     * Handles the movement of the regular enemy when it is dead, stopping its movement interval.
+     * Handles death movement for the regular enemy by stopping its movement interval.
      */
     handleDeathMovement() {
         this.stopMovementInterval();

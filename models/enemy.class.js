@@ -2,7 +2,7 @@
  * Represents an enemy in the game, extending the MortalObject class.
  */
 class Enemy extends MortalObject {
-    death = false;
+    dead = false;
     weakness = ["slap"];
     damageType = "shock";
 }

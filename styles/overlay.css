@@ -3,7 +3,7 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background-image: url("../assets/img/6.Botones/Start/1.png");
+    background-image: url("../assets/img/overlay/start/1.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -12,7 +12,7 @@
 }
 
 .start-button:hover {
-    background-image: url("../assets/img/6.Botones/Start/2.png");
+    background-image: url("../assets/img/overlay/start/2.png");
 }
 
 .game-over-container {
@@ -33,7 +33,7 @@
 }
 
 .restart-button {
-    background-image: url("../assets/img/6.Botones/Try again/Recurso 16.png");
+    background-image: url("../assets/img/overlay/try-again/1.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -42,7 +42,7 @@
 }
 
 .restart-button:hover {
-    background-image: url("../assets/img/6.Botones/Try again/Recurso 17.png");
+    background-image: url("../assets/img/overlay/try-again/2.png");
 }
 
 .you-win {
@@ -116,7 +116,7 @@
     position: absolute;
     right: 10px;
     bottom: 10px;
-    background-image: url("../assets/img/6.Botones/Full Screen/Mesa de trabajo 9.png");
+    background-image: url("../assets/img/overlay/full-screen/1.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -125,7 +125,7 @@
 }
 
 .fullscreen-button:hover {
-    background-image: url("../assets/img/6.Botones/Full Screen/Mesa de trabajo 7.png");
+    background-image: url("../assets/img/overlay/full-screen/2.png");
 }
 
 .mute-button {

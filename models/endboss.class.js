@@ -1,5 +1,5 @@
 /**
- * Class representing the endboss enemy in the game.
+ * Class representing the end boss enemy in the game.
  */
 class Endboss extends Enemy {
     height = 600;
@@ -42,18 +42,18 @@ class Endboss extends Enemy {
      */
     constructor() {
         super();
-        this.loadImages(IMG_PATHS.endboss.swimming);
-        this.loadImages(IMG_PATHS.endboss.attack);
-        this.loadImages(IMG_PATHS.endboss.hurt);
-        this.loadImages(IMG_PATHS.endboss.death);
-        this.loadImages(IMG_PATHS.endboss.appear);
+        this.loadImages(IMG_PATHS.endboss.orca.swim);
+        this.loadImages(IMG_PATHS.endboss.orca.attack);
+        this.loadImages(IMG_PATHS.endboss.orca.hurt);
+        this.loadImages(IMG_PATHS.endboss.orca.dead);
+        this.loadImages(IMG_PATHS.endboss.orca.apear);
         this.animate();
         this.movement();
     }
 
     /**
      * Handles the movement of the endboss.
-     * Checks for death, attack, and character position to determine movement direction.
+     * Checks for death sequence, attack, and character position to determine movement direction.
      */
     movement() {
         this.movementInterval = setInterval(() => {
@@ -71,7 +71,7 @@ class Endboss extends Enemy {
      * @returns {boolean} True while death movement is applied, otherwise false.
      */
     checkDeathMovement() {
-        if (this.death && !this.deathRiseUpEnded) {
+        if (this.dead && !this.deathRiseUpEnded) {
             this.moveUp(1);
             if (this.y <= -500) {
                 this.deathRiseUpEnded = true;
@@ -87,7 +87,7 @@ class Endboss extends Enemy {
      * @returns {boolean} True when death state interrupts movement logic, otherwise false.
      */
     checkDeathEndMovement() {
-        if (this.death) {
+        if (this.dead) {
             this.attackMove = false;
             this.stopMovementInterval();
             return true;
@@ -145,7 +145,7 @@ class Endboss extends Enemy {
     }
 
     /**
-        * Plays the endboss intro roar once when the character reaches the trigger position.
+     * Plays the end boss intro roar once when the character reaches the trigger position.
      */
     checkPositionCharacter() {
         if (!this.roarSoundAlreayPlayed && this.world.character.x >= this.roarCharacterPosition) {
@@ -161,7 +161,7 @@ class Endboss extends Enemy {
     checkAppearing() {
         if (!this.appearAnimationEnd) {
             if (this.isAppearing || this.appearAnimationStarted) {
-                this.appearAnimationEnd = this.playAnimation(IMG_PATHS.endboss.appear);
+                this.appearAnimationEnd = this.playAnimation(IMG_PATHS.endboss.orca.apear);
                 this.appearAnimationStarted = !this.appearAnimationEnd;
                 if (this.appearAnimationEnd) {
                     this.startTime = Date.now();
@@ -177,9 +177,9 @@ class Endboss extends Enemy {
      * @returns {boolean} True when death animation is active, otherwise false.
      */
     checkDeath() {
-        if (this.death) {
+        if (this.dead) {
             AUDIO_PATHS.enemies.endboss.hurt.play();
-            this.playDeathAnimation(IMG_PATHS.endboss.death);
+            this.playDeathAnimation(IMG_PATHS.endboss.orca.dead);
             return true;
         }
         return false;
@@ -193,7 +193,7 @@ class Endboss extends Enemy {
         if (this.isHurt) {
             AUDIO_PATHS.enemies.endboss.attack.stop();
             AUDIO_PATHS.enemies.endboss.hurt.play();
-            let animationEnd = this.playAnimation(IMG_PATHS.endboss.hurt);
+            let animationEnd = this.playAnimation(IMG_PATHS.endboss.orca.hurt);
             if (animationEnd) {
                 this.resetAttackTimer = true;
             }
@@ -208,7 +208,7 @@ class Endboss extends Enemy {
      */
     checkAttackTimer() {
         if (this.attackTimer()) {
-            this.attackAnimationEnd = this.playAnimation(IMG_PATHS.endboss.attack);
+            this.attackAnimationEnd = this.playAnimation(IMG_PATHS.endboss.orca.attack);
             AUDIO_PATHS.enemies.endboss.attack.play();
             this.attackMove = true;
             if (this.attackAnimationEnd) {
@@ -224,7 +224,7 @@ class Endboss extends Enemy {
      * Plays the default swimming loop when no other state has priority.
      */
     defaultImageEndboss() {
-        this.playAnimation(IMG_PATHS.endboss.swimming);
+        this.playAnimation(IMG_PATHS.endboss.orca.swim);
     }
 
     /**
@@ -232,7 +232,7 @@ class Endboss extends Enemy {
      */
     playDeathAnimation() {
         if (this.deathAnimationEnd) return;
-        this.deathAnimationEnd = this.playAnimation(IMG_PATHS.endboss.death);
+        this.deathAnimationEnd = this.playAnimation(IMG_PATHS.endboss.orca.dead);
         if (this.deathAnimationEnd) {
             this.stopAnimationInterval();
         }
@@ -247,7 +247,7 @@ class Endboss extends Enemy {
     }
 
     /**
-     * Returns true once the character reached the trigger position for intro.
+     * Returns true once the character reaches the intro trigger position.
      * @returns {boolean} True when the intro trigger position is reached, otherwise false.
      */
     get isAppearing() {
@@ -256,8 +256,8 @@ class Endboss extends Enemy {
     }
 
     /**
-        * Returns true when enough time passed to start the next attack.
-        * Attack timing is paused while the character has zero life.
+     * Returns true when enough time passed to start the next attack.
+     * Attack timing is paused while the character has zero life.
      * @returns {boolean} True when attack cooldown has elapsed, otherwise false.
      */
     attackTimer() {
@@ -273,7 +273,7 @@ class Endboss extends Enemy {
     }
 
     /**
-     * Checks if the character is above the boss to attack.
+     * Checks if the character is above the boss on the Y axis (smaller Y value).
      * @returns {boolean} True when the character is above the boss, otherwise false.
      */
     get isBelowCharacter() {
@@ -282,7 +282,7 @@ class Endboss extends Enemy {
     }
 
     /**
-     * Checks if the character is below the boss to attack.
+     * Checks if the character is below the boss on the Y axis (greater Y value).
      * @returns {boolean} True when the character is below the boss, otherwise false.
      */
     get isAboveCharacter() {
@@ -291,7 +291,7 @@ class Endboss extends Enemy {
     }
 
     /**
-     * Checks if the character is to the left of the boss attack corridor.
+     * Checks whether the boss is right of the character's horizontal attack corridor.
      * @returns {boolean} True when the character is left of the boss corridor, otherwise false.
      */
     get isRightFromCharacter() {
@@ -300,7 +300,7 @@ class Endboss extends Enemy {
     }
 
     /**
-     * Checks if the character is to the right of the boss attack corridor.
+     * Checks whether the boss is left of the character's horizontal attack corridor.
      * @returns {boolean} True when the character is right of the boss corridor, otherwise false.
      */
     get isLeftFromCharacter() {

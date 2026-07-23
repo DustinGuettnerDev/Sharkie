@@ -28,10 +28,10 @@ class Puffer extends RegularEnemy {
 
     constructor(positionOffset = 0, speedOffset = 0) {
         super(positionOffset, speedOffset);
-        this.loadImage(IMG_PATHS.puffer.swimming[0]);
-        this.loadImages(IMG_PATHS.puffer.swimming);
-        this.loadImages(IMG_PATHS.puffer.aggroTransition);
-        this.loadImages(IMG_PATHS.puffer.aggro);
+        this.loadImage(IMG_PATHS.puffer.swim[0]);
+        this.loadImages(IMG_PATHS.puffer.swim);
+        this.loadImages(IMG_PATHS.puffer.transition);
+        this.loadImages(IMG_PATHS.puffer.bubbleSwim);
         this.animate();
         this.movement();
     }
@@ -54,8 +54,8 @@ class Puffer extends RegularEnemy {
      * @returns {boolean} True if the puffer is dead, false otherwise.
      */
     checkDeath() {
-        if (this.death) {
-            this.loadImage(IMG_PATHS.puffer.death);
+        if (this.dead) {
+            this.loadImage(IMG_PATHS.puffer.dead);
             this.stopAnimationInterval();
             return true;
         }
@@ -82,10 +82,10 @@ class Puffer extends RegularEnemy {
         if (!this.aggro) return false;
 
         if (this.transitionAggroEnded) {
-            this.playAnimation(IMG_PATHS.puffer.aggro);
+            this.playAnimation(IMG_PATHS.puffer.bubbleSwim);
             return true;
         }
-        this.transitionAggroEnded = this.playAnimation(IMG_PATHS.puffer.aggroTransition);
+        this.transitionAggroEnded = this.playAnimation(IMG_PATHS.puffer.transition);
         return true;
     }
 
@@ -94,13 +94,13 @@ class Puffer extends RegularEnemy {
      * @returns {boolean} True if the puffer is in swimming state, false otherwise.
      */
     checkSwimming() {
-        this.playAnimation(IMG_PATHS.puffer.swimming);
+        this.playAnimation(IMG_PATHS.puffer.swim);
         this.transitionAggroEnded = false;
         return true;
     }
 
     /**
-     * Handles the puffer's movement when it is dead, applying knockback and upward movement.
+     * Handles the puffer's death movement by applying knockback and upward movement.
      */
     handleDeathMovement() {
         if (!this.world?.character) return;

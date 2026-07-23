@@ -44,17 +44,17 @@ class Character extends MortalObject {
         super();
         this.world = world;
         this.uiController = uiController;
-        this.loadImage(IMG_PATHS.character.wait[0]);
-        this.loadImages(IMG_PATHS.character.swimming);
-        this.loadImages(IMG_PATHS.character.hurtPoison);
-        this.loadImages(IMG_PATHS.character.hurtShock);
-        this.loadImages(IMG_PATHS.character.poisonDeath);
-        this.loadImages(IMG_PATHS.character.shockDeath);
+        this.loadImage(IMG_PATHS.character.idle[0]);
+        this.loadImages(IMG_PATHS.character.swim);
+        this.loadImages(IMG_PATHS.character.hurt.poison);
+        this.loadImages(IMG_PATHS.character.hurt.shock);
+        this.loadImages(IMG_PATHS.character.dead.poison);
+        this.loadImages(IMG_PATHS.character.dead.shock);
         this.loadImages(IMG_PATHS.character.sleep);
-        this.loadImages(IMG_PATHS.character.wait);
-        this.loadImages(IMG_PATHS.character.slap);
-        this.loadImages(IMG_PATHS.character.createBubble);
-        this.loadImages(IMG_PATHS.character.createBubblePoison);
+        this.loadImages(IMG_PATHS.character.idle);
+        this.loadImages(IMG_PATHS.character.attack.slap);
+        this.loadImages(IMG_PATHS.character.attack.bubble.normal);
+        this.loadImages(IMG_PATHS.character.attack.bubble.poison);
         this.movement();
         this.animate();
     }
@@ -104,8 +104,8 @@ class Character extends MortalObject {
     }
 
     /**
-     * Checks and handles the character's death movement when falling down.
-     * @returns {boolean} True if the character is in death fall down movement, otherwise false.
+     * Checks and handles the character's death movement while falling down.
+     * @returns {boolean} True if the character is currently in the death fall-down movement, otherwise false.
      */
     checkDeathFallDownMovement() {
         if (this.deathFallDown && !this.deathFallDownEnded) {
@@ -119,8 +119,8 @@ class Character extends MortalObject {
     }
 
     /**
-     * Checks and handles the character's death movement when rising up.
-     * @returns {boolean} True if the character is in death rise up movement, otherwise false.
+     * Checks and handles the character's death movement while rising up.
+     * @returns {boolean} True if the character is currently in the death rise-up movement, otherwise false.
      */
     checkDeathRiseUpMovement() {
         if (this.deathRiseUp && !this.deathRiseUpEnded) {
@@ -164,8 +164,8 @@ class Character extends MortalObject {
     }
 
     /**
-     * Checks and handles the animation state for the character's death.
-     * @returns {boolean} True if the character is in death state, otherwise false.
+     * Checks and handles the animation state for the character's death sequence.
+     * @returns {boolean} True if the death sequence is active, otherwise false.
      */
     checkDeath() {
         if (this.hasZeroLife) {
@@ -204,7 +204,7 @@ class Character extends MortalObject {
             this.startSleepCounter();
             this.slap = false;
             this.createBubble.isActive = false;
-            this.playAnimation(IMG_PATHS.character.swimming);
+            this.playAnimation(IMG_PATHS.character.swim);
             return true;
         }
         return false;
@@ -231,7 +231,7 @@ class Character extends MortalObject {
      */
     playSlapAnimation() {
         AUDIO_PATHS.character.slap.play();
-        let animationEnd = this.playAnimation(IMG_PATHS.character.slap);
+        let animationEnd = this.playAnimation(IMG_PATHS.character.attack.slap);
         if (animationEnd) {
             this.slap = false;
         }
@@ -258,9 +258,9 @@ class Character extends MortalObject {
      */
     playCreateBubbleAnimation() {
         if (this.poisonBottleCount > 0) {
-            this.createBubble.images = IMG_PATHS.character.createBubblePoison;
+            this.createBubble.images = IMG_PATHS.character.attack.bubble.poison;
         } else {
-            this.createBubble.images = IMG_PATHS.character.createBubble;
+            this.createBubble.images = IMG_PATHS.character.attack.bubble.normal;
         }
 
         let animationEnd = this.playAnimation(this.createBubble.images);
@@ -290,12 +290,12 @@ class Character extends MortalObject {
      */
     playDeathTypeAnimation() {
         if (this.enemyDamageType === "poison") {
-            this.deathAnimationEnd = this.playAnimation(IMG_PATHS.character.poisonDeath);
+            this.deathAnimationEnd = this.playAnimation(IMG_PATHS.character.dead.poison);
             if (this.deathAnimationEnd) {
                 this.deathRiseUp = true;
             }
         } else if (this.enemyDamageType === "shock") {
-            this.deathAnimationEnd = this.playAnimation(IMG_PATHS.character.shockDeath);
+            this.deathAnimationEnd = this.playAnimation(IMG_PATHS.character.dead.shock);
             if (this.deathAnimationEnd) {
                 this.deathFallDown = true;
             }
@@ -310,21 +310,21 @@ class Character extends MortalObject {
      */
     playHurtTypeAnimation() {
         if (this.enemyDamageType === "poison") {
-            this.playAnimation(IMG_PATHS.character.hurtPoison);
+            this.playAnimation(IMG_PATHS.character.hurt.poison);
         } else if (this.enemyDamageType === "shock") {
-            this.playAnimation(IMG_PATHS.character.hurtShock);
+            this.playAnimation(IMG_PATHS.character.hurt.shock);
         }
     }
 
     /**
-     * Plays the Wait animation for the character when it is idle.
+     * Plays the wait animation for the character when it is idle.
      */
     playWaitAnimation() {
-        this.playAnimation(IMG_PATHS.character.wait);
+        this.playAnimation(IMG_PATHS.character.idle);
     }
 
     /**
-     * Plays the Sleep animation for the character when it is idle for an extended period.
+     * Plays the sleep animation for the character after extended inactivity.
      */
     playSleepAnimation() {
         if (this.sleepAnimationFinished) {
@@ -374,7 +374,7 @@ class Character extends MortalObject {
      * Plays the default image for the character when no other state has priority.
      */
     defaultImageShark() {
-        this.loadImage(IMG_PATHS.character.wait[0]);
+        this.loadImage(IMG_PATHS.character.idle[0]);
     }
 
     /**

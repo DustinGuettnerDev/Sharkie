@@ -28,7 +28,7 @@ function createHudIcons(world, character) {
         }),
 
         new HudIcon({
-            path: IMG_PATHS.hudIcons.coins,
+            path: IMG_PATHS.hudIcons.coin,
             x: 270,
             y: 35,
             fontOffsetY: -5,

@@ -3,9 +3,9 @@
  */
 const AUDIO_PATHS = Object.freeze({
     character: {
-        slap: new AudioTrack("assets/audio/shark/slap.mp3"),
-        bubble: new AudioTrack("assets/audio/shark/bubble.mp3"),
-        hurt: new AudioTrack("assets/audio/shark/hurt.mp3", 1, 2),
+        slap: new AudioTrack("assets/audio/character/slap.mp3"),
+        bubble: new AudioTrack("assets/audio/character/bubble.mp3"),
+        hurt: new AudioTrack("assets/audio/character/hurt.mp3", 1, 2),
     },
     collectibles: {
         coin: new AudioTrack("assets/audio/collectibles/coins.mp3"),
@@ -14,9 +14,9 @@ const AUDIO_PATHS = Object.freeze({
     },
     enemies: {
         endboss: {
-            attack: new AudioTrack("assets/audio/enemies/endboss/attack.mp3"),
-            hurt: new AudioTrack("assets/audio/enemies/endboss/hurt.mp3", 1, 2),
-            appear: new AudioTrack("assets/audio/enemies/endboss/appear.mp3", 0.6, 0, 5.3),
+            attack: new AudioTrack("assets/audio/enemies/endboss/orca/attack.mp3"),
+            hurt: new AudioTrack("assets/audio/enemies/endboss/orca/hurt.mp3", 1, 2),
+            appear: new AudioTrack("assets/audio/enemies/endboss/orca/appear.mp3", 0.6, 0, 5.3),
         },
     },
     overlay: {

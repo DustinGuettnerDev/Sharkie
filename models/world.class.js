@@ -31,7 +31,7 @@ class World {
         }
 
         this.canvas = canvas;
-        this.ctx = canvas.getContext("2d"); // 2d zeichenkontext wird in ctx gespeichert
+        this.ctx = canvas.getContext("2d"); // Store the 2D rendering context in ctx.
         if (!this.ctx) {
             throw new Error("World initialization failed: could not create 2D rendering context.");
         }
@@ -74,8 +74,8 @@ class World {
     }
 
     /**
-        * Checks collisions and aggro range at regular intervals.
-        * Skips all checks while the character has zero life.
+     * Checks collisions and aggro range at regular intervals.
+     * Skips all checks while the character has zero life.
      */
     checkCollisionsOrAggroRange() {
         this.stopCollisionInterval();
@@ -106,7 +106,7 @@ class World {
                 this.character.isColliding(enemy) &&
                 !this.character.hasZeroLife &&
                 !this.character.isHurt &&
-                enemy.death !== true
+                enemy.dead !== true
             ) {
                 if (this.character.slap === true) {
                     this.enemySlapCollision(enemy);
@@ -127,7 +127,7 @@ class World {
         if (enemy.weakness.includes("slap")) {
             enemy.getHit();
             if (enemy.lifeCount === 0) {
-                enemy.death = true;
+                enemy.dead = true;
             }
         }
     }
@@ -188,14 +188,14 @@ class World {
     bubbleCollision() {
         for (let bubble of this.bubbles)
             for (let enemy of this.level.enemies) {
-                if (bubble.isColliding(enemy) && enemy.death == false) {
+                if (bubble.isColliding(enemy) && enemy.dead == false) {
                     if (
                         (enemy.weakness.includes("bubble") && bubble.isPoisonBubble == false) ||
                         (enemy.weakness.includes("poison-bubble") && bubble.isPoisonBubble == true)
                     ) {
                         enemy.getHit();
                         if (enemy.hasZeroLife) {
-                            enemy.death = true;
+                            enemy.dead = true;
                         }
                     }
                     bubble.removeFromWorld();
@@ -236,7 +236,7 @@ class World {
     }
 
     /**
-     * Checks if the PoisonBottle collectibles are visible, filtering out any that are not currently visible.
+     * Filters collectibles so hidden poison bottles are excluded while all other collectibles remain visible.
      * @param {(Coin|PoisonBottle)[]} drawObject The array of collectible objects to filter.
      * @returns {(Coin|PoisonBottle)[]} The filtered array of collectible objects.
      */
