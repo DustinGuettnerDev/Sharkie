@@ -54,22 +54,25 @@
     display: none !important;
 }
 
-.help-button {
+.help-button,
+.fullscreen-button,
+.mute-button {
     position: absolute;
-    right: 10px;
-    top: 10px;
-    padding: 10px;
+    padding: 5px;
     background-color: #531a82;
     border: 2px solid #fff;
     color: #fff;
+    text-align: center;
+    width: 80px;
 }
 
-.help-button:hover {
-    background-color: #7fffe0;
-    color: #531a82;
+.help-button {
+    right: 10px;
+    top: 10px;
 }
 
 .help-container {
+    box-sizing: border-box;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -80,10 +83,11 @@
     gap: 20px;
     align-items: center;
     margin: 0 auto;
-    width: 420px;
+    max-width: 420px;
     background-color: rgba(39, 38, 71, 0.8);
     border-radius: 20px;
     padding: 20px;
+    width: 100%;
 }
 
 .help-container div {
@@ -112,34 +116,21 @@
     width: 200px;
 }
 
-.fullscreen-button {
-    position: absolute;
-    right: 10px;
+.fullscreen-button,
+.mute-button {
     bottom: 10px;
-    background-image: url("../assets/img/overlay/full-screen/1.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 140px;
-    height: 40px;
 }
 
-.fullscreen-button:hover {
-    background-image: url("../assets/img/overlay/full-screen/2.png");
+.fullscreen-button {
+    right: 10px;
 }
 
 .mute-button {
-    position: absolute;
     left: 10px;
-    bottom: 10px;
-    padding: 10px;
-    background-color: #531a82;
-    border: 2px solid #fff;
-    color: #fff;
-    text-align: center;
-    width: 90px;
 }
 
+.help-button:hover,
+.fullscreen-button:hover,
 .mute-button:hover {
     background-color: #7fffe0;
     color: #531a82;

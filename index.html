@@ -6,7 +6,6 @@
         <link rel="stylesheet" href="style.css" />
         <link rel="stylesheet" href="styles/overlay.css" />
         <link rel="stylesheet" href="styles/fonts.css" />
-        <link rel="stylesheet" href="styles/fullscreen.css" />
         <link rel="stylesheet" href="styles/responsive.css" />
 
         <script src="models/audio-track.class.js"></script>
@@ -40,7 +39,7 @@
         <h1>Sharkie</h1>
 
         <div class="game-container">
-            <canvas id="canvas" width="720" height="480"></canvas>
+            <canvas class="game-canvas" id="canvas" width="720" height="480"></canvas>
             <button
                 id="start-button-id"
                 class="start-button"
@@ -99,7 +98,9 @@
                 id="fullscreen-button-id"
                 class="fullscreen-button"
                 onclick="uiController.toggleFullscreen()"
-            ></button>
+            >
+                FULL
+            </button>
 
             <button id="mute-button-id" class="mute-button" onclick="uiController.toggleMute()">
                 AUDIO

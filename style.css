@@ -4,12 +4,19 @@ body {
     align-items: center;
     flex-direction: column;
     font-family: "LuckiestGuy", sans-serif;
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    padding: 0 15px;
+    box-sizing: border-box;
 }
 
 h1 {
     color: white;
     font-size: 48px;
     margin-bottom: 32px;
+    position: absolute;
+    top: 150px;
 }
 
 canvas {
@@ -30,8 +37,7 @@ button {
 
 .game-container {
     position: relative;
-    width: 720px;
-    height: 480px;
+    aspect-ratio: 3 / 2;
 }
 
 .background {
