@@ -1,15 +1,13 @@
 /* Fullscreen */
-.game-container:fullscreen {
-    width: 2560px;
+html:fullscreen .game-container {
     height: 100vh;
+    aspect-ratio: 3 / 2;
 }
 
-.game-container:fullscreen canvas {
-    width: 100%;
+html:fullscreen .game-container canvas {
     height: 100%;
+    width: 100%;
 }
-
-/**/
 
 .game-canvas {
     width: 100%;

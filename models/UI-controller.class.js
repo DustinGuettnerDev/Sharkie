@@ -21,7 +21,7 @@ class UIController {
         this.gameOverImage = document.getElementById("game-over-id");
         this.youWinImage = document.getElementById("you-win-id");
         this.helpButton = document.getElementById("help-id");
-        this.gameContainer = document.querySelector(".game-container");
+        this.htmlElement = document.querySelector("html");
         this.muteButton = document.getElementById("mute-button-id");
         this.world = world;
     }
@@ -60,8 +60,8 @@ class UIController {
      * Toggles fullscreen mode for the game container.
      */
     toggleFullscreen() {
-        if (!document.fullscreenElement && this.gameContainer) {
-            this.gameContainer.requestFullscreen();
+        if (!document.fullscreenElement && this.htmlElement) {
+            this.htmlElement.requestFullscreen();
         } else if (document.exitFullscreen) {
             document.exitFullscreen();
         }
