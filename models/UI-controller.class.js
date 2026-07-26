@@ -13,9 +13,10 @@ class UIController {
     isMuted = false;
 
     /**
-     * Caches frequently used DOM elements to avoid repeated document lookups.
+     * Caches frequently used DOM elements and subscribes to fullscreen state changes.
      */
     constructor() {
+        this.gameContainer = document.getElementById("game-container-id");
         this.startButton = document.getElementById("start-button-id");
         this.gameEndContainer = document.getElementById("game-end-container-id");
         this.gameOverImage = document.getElementById("game-over-id");
@@ -24,6 +25,8 @@ class UIController {
         this.htmlElement = document.querySelector("html");
         this.muteButton = document.getElementById("mute-button-id");
         this.world = world;
+
+        document.addEventListener("fullscreenchange", () => this.syncFullscreenUi());
     }
 
     /**
@@ -57,14 +60,34 @@ class UIController {
     }
 
     /**
-     * Toggles fullscreen mode for the game container.
+     * Requests or exits fullscreen on the root HTML element.
+     * Visual mobile-state classes are applied in syncFullscreenUi() via fullscreenchange.
      */
     toggleFullscreen() {
-        if (!document.fullscreenElement && this.htmlElement) {
+        if (!document.fullscreenElement) {
             this.htmlElement.requestFullscreen();
-        } else if (document.exitFullscreen) {
+        } else {
             document.exitFullscreen();
         }
+    }
+
+    /**
+     * Synchronizes mobile rotation and title visibility with the real fullscreen state.
+     * This also handles fullscreen exits triggered outside the button (e.g. ESC/system UI).
+     */
+    syncFullscreenUi() {
+        const isMobile = window.matchMedia("(max-width: 480px)").matches;
+        const title = document.querySelector("h1");
+        const isFullscreen = Boolean(document.fullscreenElement);
+
+        if (!isMobile) {
+            this.gameContainer.classList.remove("game-container--rotated");
+            title.classList.remove("d_none");
+            return;
+        }
+
+        this.gameContainer.classList.toggle("game-container--rotated", isFullscreen);
+        title.classList.toggle("d_none", isFullscreen);
     }
 
     /**

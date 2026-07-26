@@ -1,4 +1,4 @@
-.start-button {
+.game-container__start-button {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -11,11 +11,11 @@
     width: 200px;
 }
 
-.start-button:hover {
+.game-container__start-button:hover {
     background-image: url("../assets/img/overlay/start/2.png");
 }
 
-.game-over-container {
+.game-container__end-screen {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -27,12 +27,12 @@
     gap: 10px;
 }
 
-.game-over {
+.game-container__game-over-image {
     width: 400px;
     height: auto;
 }
 
-.restart-button {
+.game-container__restart-button {
     background-image: url("../assets/img/overlay/try-again/1.png");
     background-size: contain;
     background-repeat: no-repeat;
@@ -41,11 +41,11 @@
     width: 200px;
 }
 
-.restart-button:hover {
+.game-container__restart-button:hover {
     background-image: url("../assets/img/overlay/try-again/2.png");
 }
 
-.you-win {
+.game-container__you-win-image {
     width: 400px;
     height: auto;
 }
@@ -54,9 +54,9 @@
     display: none !important;
 }
 
-.help-button,
-.fullscreen-button,
-.mute-button {
+.game-container__help-button,
+.game-container__fullscreen-button,
+.game-container__mute-button {
     position: absolute;
     padding: 5px;
     background-color: #531a82;
@@ -66,12 +66,12 @@
     width: 80px;
 }
 
-.help-button {
+.game-container__help-button {
     right: 10px;
     top: 10px;
 }
 
-.help-container {
+.game-container__help-overlay {
     box-sizing: border-box;
     position: absolute;
     top: 50%;
@@ -90,48 +90,48 @@
     width: 100%;
 }
 
-.help-container div {
+.game-container__help-overlay div {
     display: flex;
     justify-content: center;
 }
 
-.grid-item-text {
+.game-container__help-text {
     margin: 0;
     color: white;
     text-align: center;
 }
 
-.d-button {
+.game-container__help-bubble-key {
     height: 40px;
     width: 40px;
 }
 
-.move-button {
+.game-container__help-move-key {
     height: auto;
     width: 120px;
 }
 
-.spacebar-button {
+.game-container__help-attack-key {
     height: auto;
     width: 200px;
 }
 
-.fullscreen-button,
-.mute-button {
+.game-container__fullscreen-button,
+.game-container__mute-button {
     bottom: 10px;
 }
 
-.fullscreen-button {
+.game-container__fullscreen-button {
     right: 10px;
 }
 
-.mute-button {
+.game-container__mute-button {
     left: 10px;
 }
 
-.help-button:hover,
-.fullscreen-button:hover,
-.mute-button:hover {
+.game-container__help-button:hover,
+.game-container__fullscreen-button:hover,
+.game-container__mute-button:hover {
     background-color: #7fffe0;
     color: #531a82;
 }

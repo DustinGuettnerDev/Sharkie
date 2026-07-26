@@ -40,7 +40,7 @@ button {
     aspect-ratio: 3 / 2;
 }
 
-.background {
+.shark {
     background-image: url("assets/img/general/background-image/1.jpg");
     background-size: cover;
     background-position: center;

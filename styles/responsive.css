@@ -1,39 +1,23 @@
-/* Fullscreen */
-html:fullscreen .game-container {
-    height: 100vh;
-    aspect-ratio: 3 / 2;
-}
-
-html:fullscreen .game-container canvas {
-    height: 100%;
-    width: 100%;
-}
-
-.game-canvas {
-    width: 100%;
-    height: 100%;
-}
-
 @media (max-width: 480px) {
-    .game-over {
+    .game-container__game-over-image {
         width: 300px;
     }
 
-    .restart-button {
+    .game-container__restart-button {
         height: 80px;
         width: 160px;
     }
 
-    .mute-button,
-    .fullscreen-button,
-    .help-button {
+    .game-container__mute-button,
+    .game-container__fullscreen-button,
+    .game-container__help-button {
         font-size: 10px;
         padding: 2.5px 5px;
     }
 
-    .mute-button,
-    .fullscreen-button,
-    .help-button {
+    .game-container__mute-button,
+    .game-container__fullscreen-button,
+    .game-container__help-button {
         width: 60px;
     }
 }
