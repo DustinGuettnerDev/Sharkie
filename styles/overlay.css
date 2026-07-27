@@ -135,3 +135,44 @@
     background-color: #7fffe0;
     color: #531a82;
 }
+
+.game-container__mobile-movement-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    width: 80px;
+    height: 80px;
+}
+
+.triangle-down,
+.triangle-up,
+.triangle-left,
+.triangle-right {
+    background-color: #7fffe0;
+}
+
+.triangle-up {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.triangle-down {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.triangle-left {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.triangle-right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.game-container__mobile-action-btn {
+    color: #531a82;
+    background-color: #7fffe0;
+    padding: 2px;
+}
