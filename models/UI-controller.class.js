@@ -4,10 +4,13 @@
 class UIController {
     gameStarted = false;
     startButton = null;
+    restartButton = null;
     gameEndContainer = null;
     gameOverImage = null;
     youWinImage = null;
+    helpButton = null;
     helpContainer = null;
+    fullscreenButton = null;
     gameContainer = null;
     world = null;
     isMuted = false;
@@ -18,14 +21,31 @@ class UIController {
     constructor() {
         this.gameContainer = document.getElementById("game-container-id");
         this.startButton = document.getElementById("start-button-id");
+        this.restartButton = document.getElementById("restart-button-id");
         this.gameEndContainer = document.getElementById("game-end-container-id");
         this.gameOverImage = document.getElementById("game-over-id");
         this.youWinImage = document.getElementById("you-win-id");
-        this.helpButton = document.getElementById("help-id");
+        this.helpButton = document.getElementById("help-button-id");
+        this.helpContainer = document.getElementById("help-id");
+        this.fullscreenButton = document.getElementById("fullscreen-button-id");
         this.htmlElement = document.querySelector("html");
         this.muteButton = document.getElementById("mute-button-id");
+        this.mobileControls = document.getElementById("mobile-controls-id");
+        this.keyboardInfos = document.getElementById("keyboard-keys-information-id");
         this.world = world;
 
+        this.initUiKeys();
+    }
+
+    /**
+     * Binds UI button interactions to the controller methods.
+     */
+    initUiKeys() {
+        this.startButton.addEventListener("click", () => this.startGame());
+        this.restartButton.addEventListener("click", () => this.restartGame());
+        this.helpButton.addEventListener("click", () => this.showHelp());
+        this.fullscreenButton.addEventListener("click", () => this.toggleFullscreen());
+        this.muteButton.addEventListener("click", () => this.toggleMute());
         document.addEventListener("fullscreenchange", () => this.syncFullscreenUi());
     }
 
@@ -35,7 +55,7 @@ class UIController {
     startGame() {
         AUDIO_PATHS.background.main.play();
         this.gameStarted = true;
-        this.world = new World(canvas, keyboard, uiController);
+        this.world = new World(canvas, control, uiController);
         this.startButton.classList.add("hidden");
     }
 
@@ -49,14 +69,14 @@ class UIController {
         this.gameOverImage.classList.add("hidden");
         this.youWinImage.classList.add("hidden");
         this.world.stopAllLoops();
-        this.world = new World(canvas, keyboard, uiController);
+        this.world = new World(canvas, control, uiController);
     }
 
     /**
      * Toggles visibility of the help overlay.
      */
     showHelp() {
-        this.helpButton.classList.toggle("hidden");
+        this.helpContainer.classList.toggle("hidden");
     }
 
     /**
@@ -83,9 +103,11 @@ class UIController {
         if (!isMobile) {
             this.gameContainer.classList.remove("game-container--rotated");
             title.classList.remove("d_none");
+            this.mobileControls.classList.add("hidden");
             return;
         }
 
+        this.mobileControls.classList.toggle("hidden", !isFullscreen);
         this.gameContainer.classList.toggle("game-container--rotated", isFullscreen);
         title.classList.toggle("d_none", isFullscreen);
     }

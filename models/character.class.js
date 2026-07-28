@@ -64,7 +64,7 @@ class Character extends MortalObject {
      */
     movement() {
         this.movementInterval = setInterval(() => {
-            if (!this.world?.keyboard || !this.world?.level) return;
+            if (!this.world?.control || !this.world?.level) return;
             if (this.checkPlayerMovement()) return;
             if (this.checkDeathFallDownMovement()) return;
             if (this.checkDeathRiseUpMovement()) return;
@@ -79,16 +79,16 @@ class Character extends MortalObject {
     checkPlayerMovement() {
         if (this.hasZeroLife) return;
         if (this.isGameStarted) return;
-        if (this.world.keyboard.right && this.x < this.world.level.levelEnd_x) {
+        if (this.world.control.right && this.x < this.world.level.levelEnd_x) {
             this.x = Math.min(this.world.level.levelEnd_x, this.x + this.speed);
             this.otherDirection = false;
-        } else if (this.world.keyboard.left && this.x > this.world.level.levelStart_x) {
+        } else if (this.world.control.left && this.x > this.world.level.levelStart_x) {
             this.x = Math.max(0, this.x - this.speed);
             this.otherDirection = true;
         }
-        if (this.world.keyboard.up && this.y >= this.levelLimitUp) {
+        if (this.world.control.up && this.y >= this.levelLimitUp) {
             this.moveUp();
-        } else if (this.world.keyboard.down && this.y <= this.levelLimitDown) {
+        } else if (this.world.control.down && this.y <= this.levelLimitDown) {
             this.moveDown();
         }
         this.moveCamera();
@@ -151,7 +151,7 @@ class Character extends MortalObject {
      */
     animate() {
         this.animateInterval = setInterval(() => {
-            if (!this.world?.keyboard) return;
+            if (!this.world?.control) return;
             if (this.isGameStarted) return;
             if (this.checkDeath()) return;
             if (this.checkHurt()) return;
@@ -196,10 +196,10 @@ class Character extends MortalObject {
      */
     checkSwimming() {
         if (
-            this.world.keyboard.right ||
-            this.world.keyboard.left ||
-            this.world.keyboard.up ||
-            this.world.keyboard.down
+            this.world.control.right ||
+            this.world.control.left ||
+            this.world.control.up ||
+            this.world.control.down
         ) {
             this.startSleepCounter();
             this.slap = false;
@@ -215,7 +215,7 @@ class Character extends MortalObject {
      * @returns {boolean} True if the character is performing a slap action, otherwise false.
      */
     checkSlap() {
-        if (this.world.keyboard.spacebar) {
+        if (this.world.control.spacebar) {
             this.slap = true;
         }
         if (this.slap) {
@@ -242,7 +242,7 @@ class Character extends MortalObject {
      * @returns {boolean} True if the character is creating a bubble, otherwise false.
      */
     checkCreateBubble() {
-        if (this.world.keyboard.d) {
+        if (this.world.control.d) {
             this.createBubble.isActive = true;
         }
         if (this.createBubble.isActive) {

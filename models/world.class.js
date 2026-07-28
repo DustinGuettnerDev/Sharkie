@@ -7,7 +7,7 @@ class World {
 
     ctx = null;
     canvas = null;
-    keyboard = null;
+    control = null;
     collisionInterval = null;
     renderFrameId = null;
     camera_x = 0;
@@ -19,14 +19,14 @@ class World {
     uiController = null;
     level = null;
 
-    constructor(canvas, keyboard, uiController) {
+    constructor(canvas, control, uiController) {
         this.uiController = uiController;
         if (!canvas || typeof canvas.getContext !== "function") {
             throw new Error(
                 "World initialization failed: canvas is missing or does not provide getContext('2d').",
             );
         }
-        if (!keyboard) {
+        if (!control) {
             throw new Error("World initialization failed: keyboard input object is required.");
         }
 
@@ -36,7 +36,7 @@ class World {
             throw new Error("World initialization failed: could not create 2D rendering context.");
         }
         this.level = createLevel_1();
-        this.keyboard = keyboard;
+        this.control = control;
         this.character = new Character(this, this.uiController);
         this.hudIcons = createHudIcons(this, this.character);
         this.setWorld();
