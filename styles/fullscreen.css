@@ -1,6 +1,6 @@
 html:fullscreen .game-container {
     height: 100vh;
-    aspect-ratio: 3 / 2;
+    width: calc(100vh * 3 / 2);
 }
 
 html:fullscreen .game-container .game-container__canvas {
@@ -15,5 +15,6 @@ html:fullscreen .game-container .game-container__canvas {
 
 .game-container--rotated {
     transform: rotate(90deg);
-    height: 100vw !important;
+    width: 70vh !important;
+    height: calc(70vh * 2 / 3) !important;
 }

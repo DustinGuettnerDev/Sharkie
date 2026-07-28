@@ -96,7 +96,7 @@ class UIController {
      * This also handles fullscreen exits triggered outside the button (e.g. ESC/system UI).
      */
     syncFullscreenUi() {
-        const isMobile = window.matchMedia("(max-width: 480px)").matches;
+        const isMobile = window.matchMedia("(max-width: 1024px) and (max-height: 1366px)").matches;
         const title = document.querySelector("h1");
         const isFullscreen = Boolean(document.fullscreenElement);
 
@@ -140,4 +140,38 @@ class UIController {
             }
         }
     }
+
+    /*     fullscreen() {
+        const isMobile = window.matchMedia("(max-width: 1024px) and (max-height: 1366px)").matches;
+        const title = document.querySelector("h1");
+        const isFullscreen = Boolean(document.fullscreenElement);
+
+        if (!isMobile) {
+            this.gameContainer.classList.remove("game-container--rotated");
+            title.classList.remove("d_none");
+            this.mobileControls.classList.add("hidden");
+            return;
+        }
+
+        this.mobileControls.classList.toggle("hidden", !isFullscreen);
+        this.gameContainer.classList.toggle("game-container--rotated", isFullscreen);
+        title.classList.toggle("d_none", isFullscreen);
+
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const buttonSpacePercent = 0.12;
+        const numbers = Array.from({ length: 100 }, (_, i) => 100 - i);
+
+        for (const number of numbers) {
+            const percent = number / 100;
+            const calcHeight = viewportHeight * (1 - buttonSpacePercent) * percent;
+            const calcWidth = calcHeight * (3 / 2);
+
+            if (calcWidth <= viewportWidth * (1 - buttonSpacePercent)) {
+                this.gameContainer.style.width = `${Math.round(calcWidth)}px`;
+                this.gameContainer.style.height = `${Math.round(calcHeight)}px`;
+                break;
+            }
+        }
+    } */
 }
