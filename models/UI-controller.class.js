@@ -46,7 +46,7 @@ class UIController {
         this.helpButton.addEventListener("click", () => this.showHelp());
         this.fullscreenButton.addEventListener("click", () => this.toggleFullscreen());
         this.muteButton.addEventListener("click", () => this.toggleMute());
-        document.addEventListener("fullscreenchange", () => this.syncFullscreenUi());
+        document.addEventListener("fullscreenchange", () => this.handleFullscreenChange());
     }
 
     /**
@@ -81,7 +81,7 @@ class UIController {
 
     /**
      * Requests or exits fullscreen on the root HTML element.
-     * Visual mobile-state classes are applied in syncFullscreenUi() via fullscreenchange.
+     * Visual mobile-state classes are applied in handleFullscreenChange() via fullscreenchange.
      */
     toggleFullscreen() {
         if (!document.fullscreenElement) {
@@ -91,27 +91,27 @@ class UIController {
         }
     }
 
-    /**
+    /*   *
      * Synchronizes mobile rotation and title visibility with the real fullscreen state.
      * This also handles fullscreen exits triggered outside the button (e.g. ESC/system UI).
      */
-    syncFullscreenUi() {
+    /*   syncFullscreenUi() {
         const isMobile = window.matchMedia("(max-width: 1024px) and (max-height: 1366px)").matches;
         const title = document.querySelector("h1");
         const isFullscreen = Boolean(document.fullscreenElement);
 
         if (!isMobile) {
             this.gameContainer.classList.remove("game-container--rotated");
-            title.classList.remove("d_none");
+            title.classList.remove("hidden");
             this.mobileControls.classList.add("hidden");
             return;
         }
 
         this.mobileControls.classList.toggle("hidden", !isFullscreen);
         this.gameContainer.classList.toggle("game-container--rotated", isFullscreen);
-        title.classList.toggle("d_none", isFullscreen);
+        title.classList.toggle("hidden", isFullscreen);
     }
-
+ */
     /**
      * Toggles mute state and updates the button label.
      */
@@ -141,37 +141,74 @@ class UIController {
         }
     }
 
-    /*     fullscreen() {
-        const isMobile = window.matchMedia("(max-width: 1024px) and (max-height: 1366px)").matches;
+    /**
+     * Updates the UI whenever the fullscreen state changes.
+     */
+    handleFullscreenChange() {
+        const isMobile = this.#isMobileViewport();
         const title = document.querySelector("h1");
         const isFullscreen = Boolean(document.fullscreenElement);
 
-        if (!isMobile) {
+        this.#updateFullscreenUi(isMobile, isFullscreen, title);
+
+        if (isFullscreen) {
+            this.#calcCanvasSize();
+        } else {
+            this.#resetCalcSize();
+        }
+    }
+
+    /**
+     * Checks whether the current viewport matches the mobile fullscreen layout.
+     */
+    #isMobileViewport() {
+        return window.matchMedia("(max-width: 1024px) and (max-height: 1400px)").matches;
+    }
+
+    /**
+     * Applies the visual fullscreen state to the game container, title and mobile controls.
+     */
+    #updateFullscreenUi(isMobile, isFullscreen, title) {
+        const toWideForLandescapeFormat = window.innerWidth > window.innerHeight;
+        if (!isMobile || toWideForLandescapeFormat) {
             this.gameContainer.classList.remove("game-container--rotated");
-            title.classList.remove("d_none");
+            title.classList.remove("hidden");
             this.mobileControls.classList.add("hidden");
             return;
         }
 
         this.mobileControls.classList.toggle("hidden", !isFullscreen);
         this.gameContainer.classList.toggle("game-container--rotated", isFullscreen);
-        title.classList.toggle("d_none", isFullscreen);
+        title.classList.toggle("hidden", isFullscreen);
+    }
 
+    /**
+     * Adjusts the game canvas size to fit the current fullscreen viewport.
+     */
+    #calcCanvasSize() {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
-        const buttonSpacePercent = 0.12;
+        const buttonSpacePercent = 0.7;
         const numbers = Array.from({ length: 100 }, (_, i) => 100 - i);
 
         for (const number of numbers) {
             const percent = number / 100;
-            const calcHeight = viewportHeight * (1 - buttonSpacePercent) * percent;
-            const calcWidth = calcHeight * (3 / 2);
+            const calcHeight = viewportHeight * percent;
+            const calcWidth = calcHeight * (2 / 3);
 
-            if (calcWidth <= viewportWidth * (1 - buttonSpacePercent)) {
-                this.gameContainer.style.width = `${Math.round(calcWidth)}px`;
-                this.gameContainer.style.height = `${Math.round(calcHeight)}px`;
+            if (calcWidth <= viewportWidth) {
+                this.gameContainer.style.width = `${Math.round(calcHeight * buttonSpacePercent)}px`;
+                this.gameContainer.style.height = `${Math.round(calcWidth * buttonSpacePercent)}px`;
                 break;
             }
         }
-    } */
+    }
+
+    /**
+     * Resets the custom canvas dimensions when fullscreen is left.
+     */
+    #resetCalcSize() {
+        this.gameContainer.style.width = "";
+        this.gameContainer.style.height = "";
+    }
 }

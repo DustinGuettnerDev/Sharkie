@@ -1,6 +1,7 @@
 html:fullscreen .game-container {
-    height: 100vh;
-    width: calc(100vh * 3 / 2);
+    width: min(100vw, calc(100vh * 2 / 3));
+    height: min(100vh, calc(100vw * 3 / 2));
+    margin-top: 0;
 }
 
 html:fullscreen .game-container .game-container__canvas {
@@ -15,6 +16,4 @@ html:fullscreen .game-container .game-container__canvas {
 
 .game-container--rotated {
     transform: rotate(90deg);
-    width: 70vh !important;
-    height: calc(70vh * 2 / 3) !important;
 }

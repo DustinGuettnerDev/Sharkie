@@ -50,10 +50,6 @@
     height: auto;
 }
 
-.hidden {
-    display: none !important;
-}
-
 .game-container__help-button,
 .game-container__fullscreen-button,
 .game-container__mute-button {
