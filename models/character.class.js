@@ -1,3 +1,6 @@
+/**
+ * Represents the player-controlled shark character.
+ */
 class Character extends MortalObject {
     const;
 

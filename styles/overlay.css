@@ -1,3 +1,20 @@
+.game-container__lock-screen {
+    height: 100%;
+    width: 100%;
+    z-index: 99;
+    position: absolute;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    pointer-events: none;
+}
+
+.game-container__lock-screen-text {
+    padding: 0 10px;
+}
+
 .game-container__start-button {
     position: absolute;
     left: 50%;
@@ -8,7 +25,7 @@
     background-repeat: no-repeat;
     background-position: center;
     height: 100px;
-    width: 200px;
+    width: 28%;
 }
 
 .game-container__start-button:hover {
@@ -79,18 +96,26 @@
     gap: 20px;
     align-items: center;
     margin: 0 auto;
-    max-width: 420px;
+    max-width: 70%;
     background-color: rgba(39, 38, 71, 0.8);
     border-radius: 10px;
     padding: 20px;
     width: 100%;
-    height: 300px;
+    height: 62.5%;
     overflow: auto;
 }
 
-.game-container__help-overlay div {
+.game-container__help-row {
     display: flex;
     justify-content: center;
+}
+
+.game-container__help-keys {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 10px;
 }
 
 .game-container__help-text {
@@ -151,7 +176,7 @@
     pointer-events: none;
 }
 
-.game-container__mobile-controls button {
+.game-container__mobile-btn {
     pointer-events: auto;
 }
 

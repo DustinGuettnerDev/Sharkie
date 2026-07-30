@@ -1,3 +1,6 @@
+/**
+ * Represents a puffer fish enemy that becomes aggressive when the character enters its range.
+ */
 class Puffer extends RegularEnemy {
     height = 100;
     width = 100;
