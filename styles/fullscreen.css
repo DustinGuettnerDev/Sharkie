@@ -13,3 +13,15 @@
 .game-container--rotated {
     transform: rotate(90deg);
 }
+
+:fullscreen .game-container--rotated .game-container__help-overlay {
+    font-size: clamp(12px, 2cqw, 18px);
+}
+
+.game-container--rotated .game-container__help-button,
+.game-container--rotated .game-container__fullscreen-button,
+.game-container--rotated .game-container__mute-button {
+    width: clamp(72px, 12cqw, 120px);
+    padding: clamp(2px, 0.6cqw, 5px);
+    font-size: clamp(10px, 1.2cqw, 14px);
+}

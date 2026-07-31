@@ -35,7 +35,12 @@ class UIController {
         this.lockScreen = document.getElementById("lock-screen-id");
         this.world = world;
         this.updatePortraitVisibility();
-        window.addEventListener("orientationchange", () => this.updatePortraitVisibility());
+        window.addEventListener("orientationchange", () => {
+            if (document.fullscreenElement) {
+                this.handleFullscreenChange();
+            }
+        });
+        document.addEventListener("fullscreenchange", () => this.updatePortraitVisibility());
         this.initUiKeys();
     }
 
@@ -50,13 +55,16 @@ class UIController {
     }
 
     /**
-     * Shows or hides the start button and lock screen based on viewport and fullscreen state.
+     * Shows or hides the start button and lock screen based on viewport, fullscreen, game, and end-screen state.
      */
     updatePortraitVisibility() {
-        this.startButton.classList.toggle(
-            "hidden",
-            !this.isDesktopViewport() && !document.fullscreenElement,
-        );
+        const inRestart = !this.gameEndContainer.classList.contains("hidden");
+        const shouldHideStartButton =
+            (!this.isDesktopViewport() && !document.fullscreenElement) ||
+            this.gameStarted ||
+            inRestart;
+
+        this.startButton.classList.toggle("hidden", shouldHideStartButton);
         this.lockScreen.classList.toggle(
             "hidden",
             this.isDesktopViewport() || document.fullscreenElement,
@@ -147,7 +155,7 @@ class UIController {
     }
 
     /**
-     * Updates the UI whenever the fullscreen state changes.
+     * Updates fullscreen-dependent UI state and recalculates the mobile fullscreen size when needed.
      */
     handleFullscreenChange() {
         const isDesktop = this.isDesktopViewport();
@@ -179,20 +187,20 @@ class UIController {
     }
 
     /**
-     * Scales the game container to fill the viewport in mobile portrait fullscreen.
+     * Scales the game container to fit the available screen space in mobile fullscreen.
      */
     #calcCanvasSize() {
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
+        const screenWidth = screen.width;
+        const screenHeight = screen.height;
         const buttonSpacePercent = 0.7;
         const numbers = Array.from({ length: 100 }, (_, i) => 100 - i);
 
         for (const number of numbers) {
             const percent = number / 100;
-            const calcHeight = viewportHeight * percent;
+            const calcHeight = screenHeight * percent;
             const calcWidth = calcHeight * (2 / 3);
 
-            if (calcWidth <= viewportWidth) {
+            if (calcWidth <= screenWidth) {
                 this.gameContainer.style.width = `${Math.round(calcHeight * buttonSpacePercent)}px`;
                 this.gameContainer.style.height = `${Math.round(calcWidth * buttonSpacePercent)}px`;
                 break;

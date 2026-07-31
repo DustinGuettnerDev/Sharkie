@@ -19,7 +19,7 @@
     left: 50%;
     transform: translateX(-50%);
     color: white;
-    font-size: 48px;
+    font-size: clamp(28px, 6cqw, 48px);
     margin: 0;
     text-align: center;
     z-index: 2;
@@ -50,7 +50,9 @@
 
 .game-container {
     position: relative;
+    width: min(100%, 720px);
     aspect-ratio: 3 / 2;
+    container-type: inline-size;
 }
 
 .game-container__help-overlay::-webkit-scrollbar {
