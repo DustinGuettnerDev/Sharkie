@@ -4,11 +4,11 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="styles/utilities.css" />
         <link rel="stylesheet" href="styles/overlay.css" />
         <link rel="stylesheet" href="styles/fonts.css" />
         <link rel="stylesheet" href="styles/responsive.css" />
         <link rel="stylesheet" href="styles/fullscreen.css" />
-        <link rel="stylesheet" href="styles/utilities.css" />
 
         <script src="models/audio-track.class.js"></script>
         <script src="models/UI-controller.class.js"></script>
@@ -40,24 +40,57 @@
     <body class="shark" onload="init()">
         <div id="mobile-controls-id" class="game-container__mobile-controls hidden">
             <div class="game-container__mobile-movement-controls">
-                <button id="mobile-up-btn-id" class="game-container__mobile-btn triangle-up">
+                <button id="mobile-up-btn-id" class="btn game-container__mobile-btn triangle-up">
                     <svg width="20" height="20" viewBox="0 0 24 24">
-                        <path d="M5 16l7 -8 7 8" stroke="#531a82" fill="none" stroke-width="2" />
+                        <path
+                            class="game-container__mobile-btn-path"
+                            d="M5 16l7 -8 7 8"
+                            stroke="#531a82"
+                            fill="none"
+                            stroke-width="2"
+                        />
                     </svg>
                 </button>
-                <button id="mobile-left-btn-id" class="game-container__mobile-btn triangle-left">
+                <button
+                    id="mobile-left-btn-id"
+                    class="btn game-container__mobile-btn triangle-left"
+                >
                     <svg width="20" height="20" viewBox="0 0 24 24">
-                        <path d="M16 19l-8 -7 8 -7" stroke="#531a82" fill="none" stroke-width="2" />
+                        <path
+                            class="game-container__mobile-btn-path"
+                            d="M16 19l-8 -7 8 -7"
+                            stroke="#531a82"
+                            fill="none"
+                            stroke-width="2"
+                        />
                     </svg>
                 </button>
-                <button id="mobile-right-btn-id" class="game-container__mobile-btn triangle-right">
+                <button
+                    id="mobile-right-btn-id"
+                    class="btn game-container__mobile-btn triangle-right"
+                >
                     <svg width="20" height="20" viewBox="0 0 24 24">
-                        <path d="M8 5l8 7-8 7" stroke="#531a82" fill="none" stroke-width="2" />
+                        <path
+                            class="game-container__mobile-btn-path"
+                            d="M8 5l8 7-8 7"
+                            stroke="#531a82"
+                            fill="none"
+                            stroke-width="2"
+                        />
                     </svg>
                 </button>
-                <button id="mobile-down-btn-id" class="game-container__mobile-btn triangle-down">
+                <button
+                    id="mobile-down-btn-id"
+                    class="btn game-container__mobile-btn triangle-down"
+                >
                     <svg width="20" height="20" viewBox="0 0 24 24">
-                        <path d="M5 8 l7 8 7 -8" stroke="#531a82" fill="none" stroke-width="2" />
+                        <path
+                            class="game-container__mobile-btn-path"
+                            d="M5 8 l7 8 7 -8"
+                            stroke="#531a82"
+                            fill="none"
+                            stroke-width="2"
+                        />
                     </svg>
                 </button>
             </div>
@@ -65,13 +98,13 @@
             <div class="game-container__mobile-action-controls">
                 <button
                     id="mobile-bubble-btn-id"
-                    class="game-container__mobile-btn game-container__mobile-action-btn"
+                    class="btn game-container__mobile-btn game-container__mobile-action-btn"
                 >
                     BUBBLE
                 </button>
                 <button
                     id="mobile-attack-btn-id"
-                    class="game-container__mobile-btn game-container__mobile-action-btn"
+                    class="btn game-container__mobile-btn game-container__mobile-action-btn"
                 >
                     ATTACK
                 </button>
@@ -86,7 +119,7 @@
                 </p>
             </div>
             <canvas class="game-container__canvas" id="canvas" width="720" height="480"></canvas>
-            <button id="start-button-id" class="game-container__start-button"></button>
+            <button id="start-button-id" class="game-container__start-btn btn"></button>
             <div id="game-end-container-id" class="game-container__end-screen hidden">
                 <img
                     id="game-over-id"
@@ -100,9 +133,9 @@
                     src="assets/img/overlay/titles/you-win/1.png"
                     alt="You Win"
                 />
-                <button id="restart-button-id" class="game-container__restart-button"></button>
+                <button id="restart-button-id" class="game-container__restart-btn btn"></button>
             </div>
-            <button id="help-button-id" class="game-container__help-button">help</button>
+            <button id="help-button-id" class="game-container__help-btn btn">help</button>
             <div id="help-id" class="game-container__help-overlay hidden">
                 <div id="keyboard-keys-information-id" class="game-container__help-keys">
                     <div class="game-container__help-row">
@@ -145,11 +178,11 @@
                 </p>
             </div>
 
-            <button id="fullscreen-button-id" class="game-container__fullscreen-button">
+            <button id="fullscreen-button-id" class="game-container__fullscreen-btn btn">
                 FULL
             </button>
 
-            <button id="mute-button-id" class="game-container__mute-button">AUDIO</button>
+            <button id="mute-button-id" class="game-container__mute-btn btn">AUDIO</button>
         </div>
     </body>
 </html>

@@ -57,7 +57,8 @@ class Endboss extends Enemy {
      */
     movement() {
         this.movementInterval = setInterval(() => {
-            if (!this.world?.character) return;
+            if (this.world.isPaused) return;
+            if (!this.world.character) return;
             if (this.checkDeathMovement()) return;
             if (this.checkDeathEndMovement()) return;
             if (this.checkHurtMovementStop()) return;
@@ -135,6 +136,7 @@ class Endboss extends Enemy {
      */
     animate() {
         this.animateInterval = setInterval(() => {
+            if (this.world.isPaused) return;
             this.checkPositionCharacter();
             if (this.checkAppearing()) return;
             if (this.checkDeath()) return;

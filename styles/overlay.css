@@ -15,7 +15,7 @@
     padding: 0 10px;
 }
 
-.game-container__start-button {
+.game-container__start-btn {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -24,11 +24,14 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    background-color: transparent;
+    color: transparent;
     width: clamp(100px, 20cqw, 250px);
     aspect-ratio: 2 / 1;
 }
 
-.game-container__start-button:hover {
+.game-container__start-btn:hover,
+.game-container__start-btn:active {
     background-image: url("../assets/img/overlay/start/2.png");
 }
 
@@ -49,16 +52,19 @@
     aspect-ratio: 8 / 1;
 }
 
-.game-container__restart-button {
+.game-container__restart-btn {
     background-image: url("../assets/img/overlay/try-again/1.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    background-color: transparent;
+    color: transparent;
     width: clamp(100px, 20cqw, 250px);
     aspect-ratio: 2 / 1;
 }
 
-.game-container__restart-button:hover {
+.game-container__restart-btn:hover,
+.game-container__restart-btn:active {
     background-image: url("../assets/img/overlay/try-again/2.png");
 }
 
@@ -67,9 +73,9 @@
     height: auto;
 }
 
-.game-container__help-button,
-.game-container__fullscreen-button,
-.game-container__mute-button {
+.game-container__help-btn,
+.game-container__fullscreen-btn,
+.game-container__mute-btn {
     background-color: #531a82;
     border: 2px solid #fff;
     color: #fff;
@@ -82,7 +88,7 @@
     font-size: clamp(10px, 1.2cqw, 14px);
 }
 
-.game-container__help-button {
+.game-container__help-btn {
     right: 10px;
     top: 10px;
 }
@@ -109,6 +115,7 @@
     aspect-ratio: 3/2;
     overflow: auto;
     font-size: clamp(12px, 2cqw, 18px);
+    z-index: 99;
 }
 
 .game-container__help-row {
@@ -151,22 +158,31 @@
     width: clamp(120px, 28cqw, 200px);
 }
 
-.game-container__fullscreen-button,
-.game-container__mute-button {
+.game-container__fullscreen-btn,
+.game-container__mute-btn {
     bottom: 10px;
 }
 
-.game-container__fullscreen-button {
+.game-container__fullscreen-btn {
     right: 10px;
 }
 
-.game-container__mute-button {
+.game-container__mute-btn {
     left: 10px;
 }
 
-.game-container__help-button:hover,
-.game-container__fullscreen-button:hover,
-.game-container__mute-button:hover {
+@media (pointer: fine) {
+    .game-container__help-btn:hover,
+    .game-container__fullscreen-btn:hover,
+    .game-container__mute-btn:hover {
+        background-color: #7fffe0;
+        color: #531a82;
+    }
+}
+
+.game-container__help-btn:active,
+.game-container__fullscreen-btn:active,
+.game-container__mute-btn:active {
     background-color: #7fffe0;
     color: #531a82;
 }
@@ -183,6 +199,10 @@
 
 .game-container__mobile-btn {
     pointer-events: auto;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
 }
 
 .game-container__mobile-action-controls {
@@ -206,6 +226,15 @@
 .triangle-left,
 .triangle-right {
     background-color: #7fffe0;
+}
+
+.game-container__mobile-btn.is-pressed {
+    background-color: #531a82;
+    color: white;
+}
+
+.game-container__mobile-btn.is-pressed .game-container__mobile-btn-path {
+    stroke: white;
 }
 
 .triangle-up {

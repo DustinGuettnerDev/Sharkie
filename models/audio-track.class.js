@@ -1,6 +1,6 @@
 /**
- * Wraps a single audio track with optional repeat and optional cut-off timing.
- * The optional cut-off is defined by an absolute track timestamp.
+ * Wraps a single HTML audio track with optional repeat, cut-off timing, and reset behavior.
+ * The cut-off is defined by an absolute track timestamp.
  */
 class AudioTrack {
     timeEnd;
@@ -12,8 +12,7 @@ class AudioTrack {
      * @param {string} audioPath Relative path to the audio file.
      * @param {number} volume Volume level for the audio track, from 0.0 (silent) to 1.0 (full volume). (default: 1)
      * @param {number} timeBegin Start position in seconds. (default: 0)
-     * @param {?number} timeEnd Optional absolute cut-off position in seconds.
-     * The constructor converts it to a relative duration from timeBegin. (default: null)
+     * @param {?number} timeEnd Optional absolute cut-off position in seconds. The constructor converts it to a relative duration from timeBegin. (default: null)
      * @param {boolean} repeat Restarts playback after end or cut-off when true. (default: false)
      */
     constructor(audioPath, volume = 1, timeBegin = 0, timeEnd = null, repeat = false) {
@@ -26,8 +25,8 @@ class AudioTrack {
     }
 
     /**
-     * Starts playback and applies optional cut-off and repeat behavior.
-     * Clears any previously scheduled cut-off before creating a new one.
+     * Starts playback and applies the configured cut-off and repeat behavior.
+     * Any previously scheduled cut-off timer is cleared before a new one is created.
      */
     play() {
         if (!this.audio || this.isPlaying) return;
@@ -50,7 +49,7 @@ class AudioTrack {
     }
 
     /**
-     * Replays the track from timeBegin after a normal end when repeat is enabled.
+     * Restarts the track from its initial position after a normal end when repeat is enabled.
      */
     #repeatPlayIfNormalEnded() {
         this.audio.removeEventListener("ended", this.#repeatPlayIfNormalEnded);
@@ -64,14 +63,14 @@ class AudioTrack {
 
     /**
      * Enables or disables browser-level mute for this audio track.
-     * @param {boolean} muted
+     * @param {boolean} muted Desired mute state.
      */
     setMuted(muted) {
         this.audio.muted = muted;
     }
 
     /**
-     * Stops playback, resets position to start, clears pending cut-off timer,
+     * Stops playback, resets the position to the start, clears any pending cut-off timer,
      * and removes the repeat listener.
      */
     stop() {

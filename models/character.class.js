@@ -67,7 +67,8 @@ class Character extends MortalObject {
      */
     movement() {
         this.movementInterval = setInterval(() => {
-            if (!this.world?.control || !this.world?.level) return;
+            if (this.world.isPaused) return;
+            if (!this.world.control || !this.world.level) return;
             if (this.checkPlayerMovement()) return;
             if (this.checkDeathFallDownMovement()) return;
             if (this.checkDeathRiseUpMovement()) return;
@@ -154,7 +155,8 @@ class Character extends MortalObject {
      */
     animate() {
         this.animateInterval = setInterval(() => {
-            if (!this.world?.control) return;
+            if (this.world.isPaused) return;
+            if (!this.world.control) return;
             if (this.isGameStarted) return;
             if (this.checkDeath()) return;
             if (this.checkHurt()) return;

@@ -1,5 +1,5 @@
 /**
- * Manages game UI elements, game state transitions, and display/audio controls.
+ * Manages game UI elements, game state transitions, fullscreen handling, and audio controls.
  */
 class UIController {
     gameStarted = false;
@@ -16,7 +16,7 @@ class UIController {
     isMuted = false;
 
     /**
-     * Caches frequently used DOM elements and registers event listeners for fullscreen and orientation changes.
+     * Caches frequently used DOM elements and registers event listeners for fullscreen changes, orientation changes, and UI interactions.
      */
     constructor() {
         this.gameContainer = document.getElementById("game-container-id");
@@ -114,8 +114,8 @@ class UIController {
     }
 
     /**
-     * Requests or exits fullscreen on the root HTML element.
-     * Visual mobile-state classes are applied in handleFullscreenChange() via fullscreenchange.
+     * Requests or exits fullscreen mode on the root HTML element.
+     * The actual layout and gameplay updates are handled in handleFullscreenChange().
      */
     toggleFullscreen() {
         if (!document.fullscreenElement) {
@@ -155,16 +155,38 @@ class UIController {
     }
 
     /**
-     * Updates fullscreen-dependent UI state and recalculates the mobile fullscreen size when needed.
+     * Handles fullscreen state changes for responsive layout, game pause/resume behavior, and canvas sizing.
      */
     handleFullscreenChange() {
         const isDesktop = this.isDesktopViewport();
         const title = document.querySelector(".game-container__title");
         const isFullscreen = Boolean(document.fullscreenElement);
 
+        this.#handleGameStateForFullscreen(isDesktop, isFullscreen);
         this.#updateFullscreenUi(isDesktop, isFullscreen, title);
+        this.#updateFullscreenLayout(isDesktop, isFullscreen);
+    }
 
-        if (isFullscreen && !this.isDesktopViewport()) {
+    /**
+     * Pauses or resumes the game when entering or leaving fullscreen on mobile.
+     */
+    #handleGameStateForFullscreen(isDesktop, isFullscreen) {
+        if (!this.gameStarted || isDesktop) {
+            return;
+        }
+
+        if (isFullscreen) {
+            this.resume();
+        } else {
+            this.pause();
+        }
+    }
+
+    /**
+     * Applies the responsive canvas sizing needed for mobile fullscreen mode.
+     */
+    #updateFullscreenLayout(isDesktop, isFullscreen) {
+        if (isFullscreen && !isDesktop) {
             this.#calcCanvasSize();
         } else {
             this.#resetCalcSize();
@@ -187,7 +209,7 @@ class UIController {
     }
 
     /**
-     * Scales the game container to fit the available screen space in mobile fullscreen.
+     * Calculates a canvas size that fits the available screen space in mobile fullscreen.
      */
     #calcCanvasSize() {
         const screenWidth = screen.width;
@@ -209,10 +231,27 @@ class UIController {
     }
 
     /**
-     * Resets the custom canvas dimensions when fullscreen is left.
+     * Restores the default canvas dimensions when exiting fullscreen.
      */
     #resetCalcSize() {
         this.gameContainer.style.width = "";
         this.gameContainer.style.height = "";
+    }
+
+    /**
+     * Pauses gameplay by freezing the world update loop.
+     */
+    pause() {
+        this.world.isPaused = true;
+    }
+
+    /**
+     * Resumes gameplay and restarts the render loop if needed.
+     */
+    resume() {
+        this.world.isPaused = false;
+        if (!this.world.renderFrameId) {
+            this.world.render();
+        }
     }
 }

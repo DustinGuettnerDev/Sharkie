@@ -29,6 +29,7 @@ class JellyFish extends RegularEnemy {
      */
     animate() {
         this.animateInterval = setInterval(() => {
+            if (this.world.isPaused) return;
             if (this.dead) {
                 const deathAnimationEnd = this.playAnimation(IMG_PATHS.jellyFish.dead);
             } else {

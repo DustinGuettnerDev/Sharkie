@@ -41,6 +41,7 @@ class Bubble extends MovableObject {
         if (!this.world?.character) return;
         let bubbleStartPosition = this.world.character.x;
         this.movementInterval = setInterval(() => {
+            if (this.world.isPaused) return;
             if (this.forward) {
                 this.moveRight();
             } else {

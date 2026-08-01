@@ -111,9 +111,26 @@ class Control {
             return;
         }
 
-        btn.addEventListener("touchstart", buttonOn);
-        btn.addEventListener("touchend", buttonOff);
-        btn.addEventListener("touchcancel", buttonOff);
+        const handlePress = (event) => {
+            event.preventDefault();
+            btn.classList.add("is-pressed");
+            buttonOn();
+        };
+
+        const handleRelease = (event) => {
+            event.preventDefault();
+            btn.classList.remove("is-pressed");
+            buttonOff();
+        };
+
+        btn.addEventListener("pointerdown", handlePress);
+        btn.addEventListener("pointerup", handleRelease);
+        btn.addEventListener("pointercancel", handleRelease);
+        btn.addEventListener("pointerleave", handleRelease);
+        btn.addEventListener("touchstart", handlePress);
+        btn.addEventListener("touchend", handleRelease);
+        btn.addEventListener("touchcancel", handleRelease);
+        btn.addEventListener("touchleave", handleRelease);
     }
 
     /** @param {boolean} boolean - Sets the right movement state. */

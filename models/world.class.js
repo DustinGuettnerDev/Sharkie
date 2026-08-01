@@ -16,8 +16,13 @@ class World {
     coinsTillLife = 7;
     maxPoisonBottleCollected = 2;
     gameEnd = false;
+    /**
+     * Central pause flag that freezes gameplay updates while the game is paused.
+     */
+    isPaused = false;
     uiController = null;
     level = null;
+    isPaused = false;
 
     constructor(canvas, control, uiController) {
         this.uiController = uiController;
@@ -46,8 +51,14 @@ class World {
 
     /**
      * Renders the game world, including the character, enemies, collectibles, and HUD icons.
+     * Rendering is skipped while the central pause flag is active.
      */
     render() {
+        if (this.isPaused) {
+            this.renderFrameId = null;
+            return;
+        }
+
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.checkGameEnd();
 
@@ -68,6 +79,9 @@ class World {
 
         // Renders the HUD icons on the canvas without any translation, keeping them fixed on the screen.
         this.addHudIconsToMap();
+
+        if (this.isPaused) return;
+
         this.renderFrameId = requestAnimationFrame(() => {
             this.render();
         });
@@ -75,12 +89,12 @@ class World {
 
     /**
      * Checks collisions and aggro range at regular intervals.
-     * Skips all checks while the character has zero life.
+     * Checks are skipped while the game is paused or the character has zero life.
      */
     checkCollisionsOrAggroRange() {
         this.stopCollisionInterval();
         this.collisionInterval = setInterval(() => {
-            if (this.character.hasZeroLife) return;
+            if (this.isPaused || this.character.hasZeroLife) return;
             this.enemyCollision();
             this.collectibleCollision();
             this.bubbleCollision();
