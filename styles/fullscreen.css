@@ -15,7 +15,7 @@
     width: 100%;
 }
 
-/* Center the rotated container in fullscreen */
+/* Center the rotated game container in fullscreen */
 :fullscreen .game-container--rotated {
     position: fixed;
     top: 50%;
@@ -25,7 +25,7 @@
     transform-origin: center center;
 }
 
-/* Align touch controls with the rotated game view */
+/* Align mobile controls with the rotated game view */
 :fullscreen .mobile-controls {
     top: 50%;
     left: 50%;

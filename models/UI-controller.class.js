@@ -4,12 +4,14 @@
 class UIController {
     gameStarted = false;
     startButton = null;
+    startScreen = null;
     restartButton = null;
     gameEndContainer = null;
     gameOverImage = null;
     youWinImage = null;
     helpButton = null;
     helpContainer = null;
+    keyboardKeysInformation = null;
     fullscreenButton = null;
     gameContainer = null;
     htmlElement = null;
@@ -23,12 +25,14 @@ class UIController {
     constructor() {
         this.gameContainer = document.getElementById("game-container-id");
         this.startButton = document.getElementById("start-button-id");
+        this.startScreen = document.getElementById("start-screen-id");
         this.restartButton = document.getElementById("restart-button-id");
         this.gameEndContainer = document.getElementById("game-end-container-id");
         this.gameOverImage = document.getElementById("game-over-id");
         this.youWinImage = document.getElementById("you-win-id");
         this.helpButton = document.getElementById("help-button-id");
         this.helpContainer = document.getElementById("help-id");
+        this.keyboardKeysInformation = document.getElementById("keyboard-keys-information-id");
         this.fullscreenButton = document.getElementById("fullscreen-button-id");
         this.htmlElement = document.querySelector("html");
         this.muteButton = document.getElementById("mute-button-id");
@@ -61,16 +65,15 @@ class UIController {
      */
     updatePortraitVisibility() {
         const inRestart = !this.gameEndContainer.classList.contains("hidden");
+        const isDesktop = this.isDesktopViewport();
         const shouldHideStartButton =
-            (!this.isDesktopViewport() && !document.fullscreenElement) ||
-            this.gameStarted ||
-            inRestart;
+            (!isDesktop && !document.fullscreenElement) || this.gameStarted || inRestart;
 
         this.startButton.classList.toggle("hidden", shouldHideStartButton);
-        this.lockScreen.classList.toggle(
-            "hidden",
-            this.isDesktopViewport() || document.fullscreenElement,
-        );
+        this.lockScreen.classList.toggle("hidden", isDesktop || document.fullscreenElement);
+        if (this.keyboardKeysInformation) {
+            this.keyboardKeysInformation.classList.toggle("hidden", !isDesktop);
+        }
     }
 
     /**
@@ -93,6 +96,9 @@ class UIController {
         this.gameStarted = true;
         this.world = new World(canvas, control, uiController);
         this.startButton.classList.add("hidden");
+        if (this.startScreen) {
+            this.startScreen.classList.add("hidden");
+        }
     }
 
     /**

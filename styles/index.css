@@ -1,4 +1,4 @@
-/* Main layout for the game page */
+/* Main page layout for the game shell */
 .shark-game {
     position: relative;
     gap: 50px;
@@ -31,7 +31,7 @@
     margin-bottom: 56px;
 }
 
-/* Overlays for the start, end, and help screens */
+/* Overlays for the start, end, and help states */
 .game-container__lock-screen {
     height: 100%;
     width: 100%;
@@ -49,6 +49,16 @@
     padding: 0 10px;
 }
 
+.game-container__start-screen {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    pointer-events: none;
+}
+
 .game-container__start-btn {
     position: absolute;
     left: 50%;
@@ -62,6 +72,7 @@
     color: transparent;
     width: clamp(100px, 20cqw, 250px);
     aspect-ratio: 2 / 1;
+    z-index: 2;
 }
 
 .game-container__start-btn:hover,
@@ -107,7 +118,7 @@
     background-image: url("../assets/img/overlay/try-again/2.png");
 }
 
-/* Buttons inside the game area */
+/* Control buttons inside the game container */
 .game-container__help-btn,
 .game-container__fullscreen-btn,
 .game-container__mute-btn {
@@ -157,7 +168,7 @@
     color: #531a82;
 }
 
-/* Help overlay with control instructions */
+/* Help overlay and control instructions */
 .game-container__help-overlay {
     box-sizing: border-box;
     position: absolute;
@@ -241,7 +252,7 @@
     width: clamp(120px, 28cqw, 200px);
 }
 
-/* Mobile touch controls */
+/* Mobile touch controls for gameplay input */
 .mobile-controls {
     position: fixed;
     display: flex;
