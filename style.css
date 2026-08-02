@@ -1,59 +1,17 @@
+/* Base page layout and shared visual styles */
 .shark {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     font-family: "LuckiestGuy", sans-serif;
-    margin: 0;
+    margin: 0 auto;
     min-height: 100vh;
     padding: 0 15px;
     box-sizing: border-box;
     background-image: url("assets/img/general/background-image/1.jpg");
     background-size: cover;
     background-position: center;
-}
-
-.game-container__title {
-    position: absolute;
-    top: -98px;
-    left: 50%;
-    transform: translateX(-50%);
     color: white;
-    font-size: clamp(28px, 6cqw, 48px);
-    margin: 0;
-    text-align: center;
-    z-index: 2;
-}
-
-.game-container__canvas {
-    background-color: black;
-    z-index: 0;
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
-.game-container {
-    position: relative;
-    width: min(100%, 720px);
-    aspect-ratio: 3 / 2;
-    container-type: inline-size;
-}
-
-.game-container__help-overlay::-webkit-scrollbar {
-    width: 10px;
-}
-
-.game-container__help-overlay::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.game-container__help-overlay::-webkit-scrollbar-thumb {
-    background: #531a82;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-.game-container__help-overlay::-webkit-scrollbar-thumb:hover {
-    background: #7fffe0;
+    max-width: 1920px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
 }

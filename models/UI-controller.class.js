@@ -1,5 +1,5 @@
 /**
- * Manages game UI elements, game state transitions, fullscreen handling, and audio controls.
+ * Manages UI elements, game state transitions, fullscreen behavior, and audio controls.
  */
 class UIController {
     gameStarted = false;
@@ -12,12 +12,14 @@ class UIController {
     helpContainer = null;
     fullscreenButton = null;
     gameContainer = null;
+    htmlElement = null;
+    muteButton = null;
+    mobileControls = null;
+    lockScreen = null;
+    footer = null;
     world = null;
     isMuted = false;
 
-    /**
-     * Caches frequently used DOM elements and registers event listeners for fullscreen changes, orientation changes, and UI interactions.
-     */
     constructor() {
         this.gameContainer = document.getElementById("game-container-id");
         this.startButton = document.getElementById("start-button-id");
@@ -31,8 +33,8 @@ class UIController {
         this.htmlElement = document.querySelector("html");
         this.muteButton = document.getElementById("mute-button-id");
         this.mobileControls = document.getElementById("mobile-controls-id");
-        this.keyboardInfos = document.getElementById("keyboard-keys-information-id");
         this.lockScreen = document.getElementById("lock-screen-id");
+        this.footer = document.getElementById("footer-id");
         this.world = world;
         this.updatePortraitVisibility();
         window.addEventListener("orientationchange", () => {
@@ -45,7 +47,7 @@ class UIController {
     }
 
     /**
-     * Returns true if the current device is a desktop or landscape screen.
+     * Returns true when the current viewport behaves like a desktop or landscape screen.
      */
     isDesktopViewport() {
         return (
@@ -55,7 +57,7 @@ class UIController {
     }
 
     /**
-     * Shows or hides the start button and lock screen based on viewport, fullscreen, game, and end-screen state.
+     * Shows or hides the start button and lock screen based on viewport, fullscreen, and game state.
      */
     updatePortraitVisibility() {
         const inRestart = !this.gameEndContainer.classList.contains("hidden");
@@ -72,7 +74,7 @@ class UIController {
     }
 
     /**
-     * Binds UI button interactions to the controller methods.
+     * Binds the UI buttons to their controller actions.
      */
     initUiKeys() {
         this.startButton.addEventListener("click", () => this.startGame());
@@ -84,7 +86,7 @@ class UIController {
     }
 
     /**
-     * Starts a new game world and hides the start button.
+     * Starts a new game round and hides the start button.
      */
     startGame() {
         AUDIO_PATHS.background.main.play();
@@ -94,7 +96,7 @@ class UIController {
     }
 
     /**
-     * Restarts the game by hiding end-game UI and creating a fresh world instance.
+     * Restarts the game by clearing the end-screen UI and creating a fresh world instance.
      */
     restartGame() {
         AUDIO_PATHS.background.main.play();
@@ -115,7 +117,7 @@ class UIController {
 
     /**
      * Requests or exits fullscreen mode on the root HTML element.
-     * The actual layout and gameplay updates are handled in handleFullscreenChange().
+     * The layout and gameplay updates are handled in handleFullscreenChange().
      */
     toggleFullscreen() {
         if (!document.fullscreenElement) {
@@ -155,11 +157,11 @@ class UIController {
     }
 
     /**
-     * Handles fullscreen state changes for responsive layout, game pause/resume behavior, and canvas sizing.
+     * Handles fullscreen transitions for layout updates, gameplay pause/resume behavior, and canvas sizing.
      */
     handleFullscreenChange() {
         const isDesktop = this.isDesktopViewport();
-        const title = document.querySelector(".game-container__title");
+        const title = document.getElementById("shark-title-id");
         const isFullscreen = Boolean(document.fullscreenElement);
 
         this.#handleGameStateForFullscreen(isDesktop, isFullscreen);
@@ -183,7 +185,7 @@ class UIController {
     }
 
     /**
-     * Applies the responsive canvas sizing needed for mobile fullscreen mode.
+     * Applies the responsive canvas sizing needed for fullscreen mode.
      */
     #updateFullscreenLayout(isDesktop, isFullscreen) {
         if (isFullscreen && !isDesktop) {
@@ -198,18 +200,18 @@ class UIController {
      */
     #updateFullscreenUi(isDesktop, isFullscreen, title) {
         title.classList.toggle("hidden", isFullscreen);
+        this.footer.classList.toggle("hidden", isFullscreen);
         if (isDesktop) {
             this.gameContainer.classList.remove("game-container--rotated");
             this.mobileControls.classList.add("hidden");
             return;
         }
-
         this.mobileControls.classList.toggle("hidden", !isFullscreen);
         this.gameContainer.classList.toggle("game-container--rotated", isFullscreen);
     }
 
     /**
-     * Calculates a canvas size that fits the available screen space in mobile fullscreen.
+     * Calculates a canvas size that fits the available screen space in fullscreen.
      */
     #calcCanvasSize() {
         const screenWidth = screen.width;

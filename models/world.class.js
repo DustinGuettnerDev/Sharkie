@@ -16,13 +16,9 @@ class World {
     coinsTillLife = 7;
     maxPoisonBottleCollected = 2;
     gameEnd = false;
-    /**
-     * Central pause flag that freezes gameplay updates while the game is paused.
-     */
     isPaused = false;
     uiController = null;
     level = null;
-    isPaused = false;
 
     constructor(canvas, control, uiController) {
         this.uiController = uiController;
@@ -36,7 +32,7 @@ class World {
         }
 
         this.canvas = canvas;
-        this.ctx = canvas.getContext("2d"); // Store the 2D rendering context in ctx.
+        this.ctx = canvas.getContext("2d"); // Store the 2D rendering context in the canvas instance.
         if (!this.ctx) {
             throw new Error("World initialization failed: could not create 2D rendering context.");
         }
@@ -62,22 +58,22 @@ class World {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.checkGameEnd();
 
-        // Shift the entire canvas context to the left by camera_x pixels to simulate camera movement
+        // Shift the canvas context to the left by camera_x pixels to simulate camera movement.
         this.ctx.translate(this.camera_x, 0);
 
-        // Renders the background objects, collectibles, bubbles, enemies, and character in the correct order on the shifted canvas context.
+        // Render the background objects, collectibles, bubbles, enemies, and character in the correct order on the shifted canvas context.
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.isVisibleFilterPB(this.level.collectible));
         this.addObjectsToMap(this.bubbles);
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character);
 
-        // Reset the translation for the next frame
-        // If not it would accumulate and the world would move faster and faster to the left.
-        // translate(-100) = moves the camera -100 to the left; the next time translate(-100) would move it -200 to the left, and so on.
+        // Reset the translation before the next frame.
+        // Otherwise the camera movement would accumulate and the world would drift further to the left each frame.
+        // translate(-100) moves the camera 100 pixels to the left; the next frame it would move 200 pixels, and so on.
         this.ctx.translate(-this.camera_x, 0);
 
-        // Renders the HUD icons on the canvas without any translation, keeping them fixed on the screen.
+        // Render the HUD icons without camera translation so they stay fixed on the screen.
         this.addHudIconsToMap();
 
         if (this.isPaused) return;
@@ -242,9 +238,7 @@ class World {
      */
     setWorld() {
         for (let enemy of this.level.regularEnemies) {
-            if (enemy instanceof Puffer) {
-                enemy.world = this;
-            }
+            enemy.world = this;
         }
         this.level.endboss.world = this;
     }

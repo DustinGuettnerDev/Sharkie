@@ -18,7 +18,7 @@ class RegularEnemy extends Enemy {
      */
     movement() {
         this.movementInterval = setInterval(() => {
-            if (this.world.isPaused) return;
+            if (!this.world || this.world.isPaused) return;
             if (this.dead) {
                 this.handleDeathMovement();
             } else {

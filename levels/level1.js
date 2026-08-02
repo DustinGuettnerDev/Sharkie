@@ -1,6 +1,6 @@
 /**
- * Creates and returns the first level of the game.
- * @returns {Level} The first level of the game.
+ * Creates the first level with enemies, collectibles, backgrounds, and the end boss.
+ * @returns {Level} The generated level object.
  */
 function createLevel_1() {
     const endboss = new Endboss();
@@ -64,7 +64,7 @@ function createLevel_1() {
 
             new Coin(4100, 250),
 
-            // Arch from top to bottom and back to top.
+            // Create an arc from top to bottom and back up.
             new Coin(4500, 120),
             new Coin(4580, 180),
             new Coin(4660, 250),
@@ -73,7 +73,7 @@ function createLevel_1() {
             new Coin(4900, 180),
             new Coin(4980, 120),
 
-            // Classic shallow coin arc.
+            // Create a shallow coin arc.
             new Coin(5450, 400),
             new Coin(5520, 330),
             new Coin(5630, 300),
@@ -81,7 +81,7 @@ function createLevel_1() {
             new Coin(5820, 330),
             new Coin(5890, 400),
 
-            // Wider top -> down -> top pattern for the second half.
+            // Create a wider top-to-bottom-to-top pattern for the second half.
             new Coin(6350, 110),
             new Coin(6460, 170),
             new Coin(6570, 240),
@@ -92,7 +92,7 @@ function createLevel_1() {
             new Coin(7120, 170),
             new Coin(7230, 110),
 
-            // Final reward arc close to level end.
+            // Create the final reward arc near the end of the level.
             new Coin(7480, 390),
             new Coin(7560, 330),
             new Coin(7660, 290),

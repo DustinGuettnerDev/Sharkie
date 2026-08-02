@@ -1,3 +1,37 @@
+/* Main layout for the game page */
+.shark-game {
+    position: relative;
+    gap: 50px;
+    align-items: center;
+}
+
+.shark-game__main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game-container {
+    position: relative;
+    width: min(100%, 720px);
+    aspect-ratio: 3 / 2;
+    container-type: inline-size;
+}
+
+.game-container__canvas {
+    background-color: black;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.footer {
+    margin-bottom: 56px;
+}
+
+/* Overlays for the start, end, and help screens */
 .game-container__lock-screen {
     height: 100%;
     width: 100%;
@@ -52,6 +86,11 @@
     aspect-ratio: 8 / 1;
 }
 
+.game-container__you-win-image {
+    width: clamp(200px, 50cqw, 400px);
+    height: auto;
+}
+
 .game-container__restart-btn {
     background-image: url("../assets/img/overlay/try-again/1.png");
     background-size: contain;
@@ -68,11 +107,7 @@
     background-image: url("../assets/img/overlay/try-again/2.png");
 }
 
-.game-container__you-win-image {
-    width: clamp(200px, 50cqw, 400px);
-    height: auto;
-}
-
+/* Buttons inside the game area */
 .game-container__help-btn,
 .game-container__fullscreen-btn,
 .game-container__mute-btn {
@@ -91,71 +126,6 @@
 .game-container__help-btn {
     right: 10px;
     top: 10px;
-}
-
-.game-container__help-overlay {
-    box-sizing: border-box;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    grid-template-columns: 50% 1fr;
-    gap: clamp(10px, 2.8cqw, 20px);
-    align-items: center;
-    margin: 0 auto;
-    max-width: min(800px, 70%);
-    background-color: rgba(39, 38, 71, 0.8);
-    border-radius: 10px;
-    padding: clamp(12px, 2.8cqw, 20px);
-    width: 100%;
-    aspect-ratio: 3/2;
-    overflow: auto;
-    font-size: clamp(12px, 2cqw, 18px);
-    z-index: 99;
-}
-
-.game-container__help-row {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-.game-container__help-keys {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    gap: clamp(12px, 3.5cqw, 25px);
-    width: 100%;
-}
-
-.game-container__help-text {
-    margin: 0;
-    color: white;
-    text-align: center;
-}
-
-.game-container__instruction-text {
-    grid-column: 1 / -1;
-    color: white;
-    text-align: center;
-    margin-top: 10px;
-}
-
-.game-container__help-bubble-key {
-    width: clamp(24px, 6cqw, 40px);
-}
-
-.game-container__help-move-key {
-    width: clamp(72px, 16cqw, 120px);
-}
-
-.game-container__help-attack-key {
-    width: clamp(120px, 28cqw, 200px);
 }
 
 .game-container__fullscreen-btn,
@@ -187,7 +157,92 @@
     color: #531a82;
 }
 
-.game-container__mobile-controls {
+/* Help overlay with control instructions */
+.game-container__help-overlay {
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    grid-template-columns: 50% 1fr;
+    gap: clamp(10px, 2.8cqw, 20px);
+    align-items: center;
+    margin: 0 auto;
+    max-width: min(800px, 70%);
+    background-color: rgba(39, 38, 71, 0.8);
+    border-radius: 10px;
+    padding: clamp(12px, 2.8cqw, 20px);
+    width: 100%;
+    aspect-ratio: 3/2;
+    overflow: auto;
+    font-size: clamp(12px, 2cqw, 18px);
+    z-index: 99;
+}
+
+.game-container__help-overlay::-webkit-scrollbar {
+    width: 10px;
+}
+
+.game-container__help-overlay::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.game-container__help-overlay::-webkit-scrollbar-thumb {
+    background: #531a82;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.game-container__help-overlay::-webkit-scrollbar-thumb:hover {
+    background: #7fffe0;
+}
+
+.game-container__help-keys {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: clamp(12px, 3.5cqw, 25px);
+    width: 100%;
+}
+
+.game-container__help-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.game-container__help-text {
+    margin: 0;
+    color: white;
+    text-align: center;
+}
+
+.game-container__instruction-text {
+    grid-column: 1 / -1;
+    color: white;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.game-container__help-bubble-key {
+    width: clamp(24px, 6cqw, 40px);
+}
+
+.game-container__help-move-key {
+    width: clamp(72px, 16cqw, 120px);
+}
+
+.game-container__help-attack-key {
+    width: clamp(120px, 28cqw, 200px);
+}
+
+/* Mobile touch controls */
+.mobile-controls {
     position: fixed;
     display: flex;
     width: 100vh;
@@ -197,22 +252,14 @@
     pointer-events: none;
 }
 
-.game-container__mobile-btn {
-    pointer-events: auto;
-    -webkit-appearance: none;
-    appearance: none;
-    -webkit-tap-highlight-color: transparent;
-    outline: none;
-}
-
-.game-container__mobile-action-controls {
+.mobile-controls__actions {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding-right: 15px;
 }
 
-.game-container__mobile-movement-controls {
+.mobile-controls__movement {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
@@ -221,20 +268,34 @@
     padding-left: 15px;
 }
 
+.mobile-controls__btn {
+    pointer-events: auto;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+.mobile-controls__action-btn {
+    color: #531a82;
+    background-color: #7fffe0;
+    padding: 2px;
+}
+
+.mobile-controls__btn.is-pressed {
+    background-color: #531a82;
+    color: white;
+}
+
+.mobile-controls__btn.is-pressed .mobile-controls__btn-path {
+    stroke: white;
+}
+
 .triangle-down,
 .triangle-up,
 .triangle-left,
 .triangle-right {
     background-color: #7fffe0;
-}
-
-.game-container__mobile-btn.is-pressed {
-    background-color: #531a82;
-    color: white;
-}
-
-.game-container__mobile-btn.is-pressed .game-container__mobile-btn-path {
-    stroke: white;
 }
 
 .triangle-up {
@@ -255,10 +316,4 @@
 .triangle-right {
     grid-column: 3;
     grid-row: 2;
-}
-
-.game-container__mobile-action-btn {
-    color: #531a82;
-    background-color: #7fffe0;
-    padding: 2px;
 }

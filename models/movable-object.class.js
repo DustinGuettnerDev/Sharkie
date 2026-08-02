@@ -1,5 +1,6 @@
 /**
- * Represents a movable object in the game, extending the DrawableObject class. A movable object can move in different directions, play animations, and detect collisions with other drawable objects.
+ * Base class for movable objects such as the player, enemies, and projectiles.
+ * It handles movement, animations, and collision detection.
  */
 class MovableObject extends DrawableObject {
     currentImage = 0;
@@ -16,9 +17,9 @@ class MovableObject extends DrawableObject {
     };
 
     /**
-     * Plays an animation by cycling through the provided array of image paths.
-     * @param {string[]} imagesObject An array of image paths for the animation.
-     * @returns {boolean} True if the animation has looped back to the start, false otherwise.
+     * Plays an animation by cycling through the provided image frames.
+     * @param {string[]} imagesObject List of image paths for the animation.
+     * @returns {boolean} True if the animation has looped back to the start, otherwise false.
      */
     playAnimation(imagesObject) {
         if (imagesObject !== this.lastAnimation) {
@@ -37,39 +38,39 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Moves the object to the right by increasing its x position by speed.
-     * @param {number} speed Distance added to x each call.
+     * Moves the object to the right by increasing its x position.
+     * @param {number} speed Distance per step.
      */
     moveRight(speed = this.speed) {
         this.x += speed;
     }
 
     /**
-     * Moves the object to the left by decreasing its x position by speed.
-     * @param {number} speed Distance subtracted from x each call.
+     * Moves the object to the left by decreasing its x position.
+     * @param {number} speed Distance per step.
      */
     moveLeft(speed = this.speed) {
         this.x -= speed;
     }
 
     /**
-     * Moves the object up by decreasing its y position by speed.
-     * @param {number} speed Distance subtracted from y each call.
+     * Moves the object upward by decreasing its y position.
+     * @param {number} speed Distance per step.
      */
     moveUp(speed = this.speed) {
         this.y -= speed;
     }
 
     /**
-     * Moves the object down by increasing its y position by speed.
-     * @param {number} speed Distance added to y each call.
+     * Moves the object downward by increasing its y position.
+     * @param {number} speed Distance per step.
      */
     moveDown(speed = this.speed) {
         this.y += speed;
     }
 
     /**
-     * Stops the movement interval if it is currently active.
+     * Stops the movement loop if it is currently running.
      */
     stopMovementInterval() {
         if (this.movementInterval) {
@@ -79,7 +80,7 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Stops the animation interval if it is currently active.
+     * Stops the animation loop if it is currently running.
      */
     stopAnimationInterval() {
         if (this.animateInterval) {
@@ -89,9 +90,9 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Checks if the current object is colliding with another movable object.
-     * @param {DrawableObject} drawObject
-     * @returns {boolean} True if the object is colliding with drawObject, false otherwise.
+     * Checks whether the object collides with another object.
+     * @param {DrawableObject} drawObject The other object.
+     * @returns {boolean} True on collision, otherwise false.
      */
     isColliding(drawObject) {
         return (

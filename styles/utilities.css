@@ -1,11 +1,9 @@
+/* Utility classes for visibility and hidden elements */
 .hidden {
     display: none !important;
 }
 
-.invisible {
-    visibility: hidden;
-}
-
+/* Shared styles for interactive buttons and links */
 .btn {
     cursor: pointer;
     z-index: 1;
@@ -22,4 +20,42 @@
     appearance: none;
     -webkit-tap-highlight-color: transparent;
     outline: none;
+}
+
+/* General helpers for text and links */
+@media (pointer: fine) {
+    .link:hover {
+        text-decoration: underline;
+    }
+}
+
+.link {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.795);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.link:active {
+    text-decoration: underline;
+}
+
+/* Shared heading and text styles */
+.page-title {
+    font-size: clamp(32px, 5vw, 48px);
+    margin: 56px 0 24px;
+    text-align: center;
+}
+
+.page-title2 {
+    font-size: clamp(22px, 3.5vw, 30px);
+}
+
+.page-title3 {
+    font-size: clamp(16px, 3vw, 24px);
+}
+
+.page-text {
+    font-size: clamp(14px, 2vw, 18px);
+    line-height: 1.5;
 }

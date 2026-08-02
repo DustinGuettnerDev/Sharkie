@@ -1,3 +1,4 @@
+/* Fullscreen layout adjustments for the game container */
 :fullscreen .game-container {
     height: 100vh;
     width: calc(100vh * 3 / 2);
@@ -5,19 +6,40 @@
     max-width: none;
 }
 
+:fullscreen .shark {
+    flex-direction: row;
+}
+
 :fullscreen .game-container .game-container__canvas {
     height: 100%;
     width: 100%;
 }
 
-.game-container--rotated {
-    transform: rotate(90deg);
+/* Center the rotated container in fullscreen */
+:fullscreen .game-container--rotated {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    transform: translate(-50%, -50%) rotate(90deg);
+    transform-origin: center center;
 }
 
+/* Align touch controls with the rotated game view */
+:fullscreen .mobile-controls {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    transform-origin: center center;
+    z-index: 120;
+}
+
+/* Typography sizing for the rotated fullscreen view */
 :fullscreen .game-container--rotated .game-container__help-overlay {
     font-size: clamp(12px, 2cqw, 18px);
 }
 
+/* Button sizing for the rotated fullscreen view */
 .game-container--rotated .game-container__help-btn,
 .game-container--rotated .game-container__fullscreen-btn,
 .game-container--rotated .game-container__mute-btn {

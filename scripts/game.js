@@ -4,7 +4,7 @@ let control = null;
 let uiController = null;
 
 /**
- * Initializes the game by setting up the canvas, control input, and UI controller.
+ * Initializes the game by creating the canvas, input controller, and UI controller.
  */
 function init() {
     canvas = document.getElementById("canvas");

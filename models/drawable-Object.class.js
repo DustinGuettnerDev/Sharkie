@@ -1,5 +1,5 @@
 /**
- * Represents a drawable object in the game, providing basic properties and methods for image handling.
+ * Base class for all visible game objects with image and position data.
  */
 class DrawableObject {
     img = null;
@@ -10,7 +10,7 @@ class DrawableObject {
     height = 0;
 
     loadImage(path) {
-        this.img = new Image(); // this.img = document.getElementById("image") <img id="image"> (unterschied nur im JS)
+        this.img = new Image();
         this.img.src = path;
     }
 
