@@ -15,7 +15,7 @@ class Endboss extends Enemy {
         left: 40,
         right: 45,
     };
-    lifeCount = 2;
+    lifeCount = 5;
     damageType = "shock";
     weakness = ["poison-bubble"];
     deathAnimationEnd = false;
