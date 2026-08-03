@@ -1,11 +1,9 @@
 /* Main page layout for the game shell */
-.shark-game {
-    position: relative;
+.shark--game {
     gap: 50px;
-    align-items: center;
 }
 
-.shark-game__main {
+.shark__main {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -17,6 +15,12 @@
     width: min(100%, 720px);
     aspect-ratio: 3 / 2;
     container-type: inline-size;
+}
+
+.game-container--landscape {
+    --height: calc(100vh - 100px);
+    height: var(--height);
+    width: calc(var(--height) / 2 * 3);
 }
 
 .game-container__canvas {
@@ -256,11 +260,12 @@
 .mobile-controls {
     position: fixed;
     display: flex;
-    width: 100vh;
+    width: 100vw;
     z-index: 10;
     justify-content: space-between;
-    transform: rotate(90deg);
     pointer-events: none;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .mobile-controls__actions {
@@ -281,6 +286,7 @@
 
 .mobile-controls__btn {
     pointer-events: auto;
+    touch-action: none;
     -webkit-appearance: none;
     appearance: none;
     -webkit-tap-highlight-color: transparent;

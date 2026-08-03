@@ -21,6 +21,9 @@ class UIController {
     footer = null;
     world = null;
     isMuted = false;
+    title = null;
+    landscapeQuery = null;
+    sharkIndex = null;
 
     constructor() {
         this.gameContainer = document.getElementById("game-container-id");
@@ -39,41 +42,27 @@ class UIController {
         this.mobileControls = document.getElementById("mobile-controls-id");
         this.lockScreen = document.getElementById("lock-screen-id");
         this.footer = document.getElementById("footer-id");
+        this.title = document.getElementById("shark-title-id");
+        this.sharkIndex = document.getElementById("shark-index-id");
         this.world = world;
-        this.updatePortraitVisibility();
-        window.addEventListener("orientationchange", () => {
-            if (document.fullscreenElement) {
-                this.handleFullscreenChange();
-            }
-        });
-        document.addEventListener("fullscreenchange", () => this.updatePortraitVisibility());
+        this.landscapeQuery = window.matchMedia("(orientation: landscape)");
+        this.landscapeQuery.addEventListener("change", () => this.handleLandscape());
         this.initUiKeys();
+        this.handleLandscape();
     }
 
-    /**
-     * Returns true when the current viewport behaves like a desktop or landscape screen.
-     */
-    isDesktopViewport() {
-        return (
-            !window.matchMedia("(max-width: 1024px) and (max-height: 1400px)").matches ||
-            screen.width > screen.height
-        );
-    }
+    isMobile() {
+        // Touch-like input: finger-driven devices usually report a coarse pointer and no hover.
+        const touchLike = window.matchMedia("(pointer: coarse) and (hover: none)").matches;
 
-    /**
-     * Shows or hides the start button and lock screen based on viewport, fullscreen, and game state.
-     */
-    updatePortraitVisibility() {
-        const inRestart = !this.gameEndContainer.classList.contains("hidden");
-        const isDesktop = this.isDesktopViewport();
-        const shouldHideStartButton =
-            (!isDesktop && !document.fullscreenElement) || this.gameStarted || inRestart;
+        // Keep a viewport guard so very large screens are not treated as mobile.
+        const smallViewport = window.matchMedia("(max-width: 1024px)").matches;
 
-        this.startButton.classList.toggle("hidden", shouldHideStartButton);
-        this.lockScreen.classList.toggle("hidden", isDesktop || document.fullscreenElement);
-        if (this.keyboardKeysInformation) {
-            this.keyboardKeysInformation.classList.toggle("hidden", !isDesktop);
-        }
+        // Extra fallback: some devices expose touch through maxTouchPoints.
+        const hasTouch = navigator.maxTouchPoints > 0;
+
+        // Consider it mobile only when viewport is small and touch capability is present.
+        return smallViewport && (touchLike || hasTouch);
     }
 
     /**
@@ -83,9 +72,8 @@ class UIController {
         this.startButton.addEventListener("click", () => this.startGame());
         this.restartButton.addEventListener("click", () => this.restartGame());
         this.helpButton.addEventListener("click", () => this.showHelp());
-        this.fullscreenButton.addEventListener("click", () => this.toggleFullscreen());
         this.muteButton.addEventListener("click", () => this.toggleMute());
-        document.addEventListener("fullscreenchange", () => this.handleFullscreenChange());
+        /* document.addEventListener("fullscreenchange", () => this.handleFullscreenChange()); */
     }
 
     /**
@@ -125,7 +113,7 @@ class UIController {
      * Requests or exits fullscreen mode on the root HTML element.
      * The layout and gameplay updates are handled in handleFullscreenChange().
      */
-    toggleFullscreen() {
+    toggleFullscreen(isLandscape) {
         if (!document.fullscreenElement) {
             this.htmlElement.requestFullscreen();
         } else {
@@ -162,79 +150,24 @@ class UIController {
         }
     }
 
-    /**
-     * Handles fullscreen transitions for layout updates, gameplay pause/resume behavior, and canvas sizing.
-     */
-    handleFullscreenChange() {
-        const isDesktop = this.isDesktopViewport();
-        const title = document.getElementById("shark-title-id");
-        const isFullscreen = Boolean(document.fullscreenElement);
-
-        this.#handleGameStateForFullscreen(isDesktop, isFullscreen);
-        this.#updateFullscreenUi(isDesktop, isFullscreen, title);
-        this.#updateFullscreenLayout(isDesktop, isFullscreen);
+    handleLandscape() {
+        const isMobile = this.isMobile();
+        const isLandscape = this.landscapeQuery.matches;
+        this.title.classList.toggle("hidden", isMobile && isLandscape);
+        this.footer.classList.toggle("hidden", isMobile && isLandscape);
+        this.mobileControls.classList.toggle("hidden", !(isMobile && isLandscape));
+        this.sharkIndex.classList.toggle("shark--landscape", isMobile && isLandscape);
+        this.gameContainer.classList.toggle("game-container--landscape", isMobile && isLandscape);
+        this.handleLockScreen(isMobile, isLandscape);
     }
 
-    /**
-     * Pauses or resumes the game when entering or leaving fullscreen on mobile.
-     */
-    #handleGameStateForFullscreen(isDesktop, isFullscreen) {
-        if (!this.gameStarted || isDesktop) {
-            return;
-        }
-
-        if (isFullscreen) {
-            this.resume();
+    handleLockScreen(isMobile, isLandscape) {
+        if (!isMobile) {
+            this.lockScreen.classList.add("hidden");
+            this.startButton.classList.remove("hidden");
         } else {
-            this.pause();
-        }
-    }
-
-    /**
-     * Applies the responsive canvas sizing needed for fullscreen mode.
-     */
-    #updateFullscreenLayout(isDesktop, isFullscreen) {
-        if (isFullscreen && !isDesktop) {
-            this.#calcCanvasSize();
-        } else {
-            this.#resetCalcSize();
-        }
-    }
-
-    /**
-     * Applies the visual fullscreen state to the game container, title and mobile controls.
-     */
-    #updateFullscreenUi(isDesktop, isFullscreen, title) {
-        title.classList.toggle("hidden", isFullscreen);
-        this.footer.classList.toggle("hidden", isFullscreen);
-        if (isDesktop) {
-            this.gameContainer.classList.remove("game-container--rotated");
-            this.mobileControls.classList.add("hidden");
-            return;
-        }
-        this.mobileControls.classList.toggle("hidden", !isFullscreen);
-        this.gameContainer.classList.toggle("game-container--rotated", isFullscreen);
-    }
-
-    /**
-     * Calculates a canvas size that fits the available screen space in fullscreen.
-     */
-    #calcCanvasSize() {
-        const screenWidth = screen.width;
-        const screenHeight = screen.height;
-        const buttonSpacePercent = 0.7;
-        const numbers = Array.from({ length: 100 }, (_, i) => 100 - i);
-
-        for (const number of numbers) {
-            const percent = number / 100;
-            const calcHeight = screenHeight * percent;
-            const calcWidth = calcHeight * (2 / 3);
-
-            if (calcWidth <= screenWidth) {
-                this.gameContainer.style.width = `${Math.round(calcHeight * buttonSpacePercent)}px`;
-                this.gameContainer.style.height = `${Math.round(calcWidth * buttonSpacePercent)}px`;
-                break;
-            }
+            this.lockScreen.classList.toggle("hidden", isLandscape);
+            this.startButton.classList.toggle("hidden", !isLandscape);
         }
     }
 

@@ -36,11 +36,11 @@
         <link rel="icon" type="image/svg+xml" href="assets/img/general/favicon/1.svg?v=5" />
         <title>Sharkie</title>
     </head>
-    <body class="shark shark-game" onload="init()">
+    <body id="shark-index-id" class="shark shark--game" onload="init()">
         <header>
             <h1 id="shark-title-id" class="page-title">Sharkie</h1>
         </header>
-        <main class="shark-game__main">
+        <main class="shark__main">
             <section id="mobile-controls-id" class="mobile-controls hidden">
                 <div class="mobile-controls__movement">
                     <button id="mobile-up-btn-id" class="btn mobile-controls__btn triangle-up">
@@ -109,7 +109,7 @@
             <section id="game-container-id" class="game-container">
                 <div id="lock-screen-id" class="game-container__lock-screen hidden">
                     <p class="game-container__lock-screen-text">
-                        To play the game properly, you need to activate fullscreen mode.
+                        To play the game properly, you need to activate landscape-modus.
                     </p>
                 </div>
                 <canvas

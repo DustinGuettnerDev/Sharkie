@@ -111,14 +111,21 @@ class Control {
             return;
         }
 
+        // We guard preventDefault() with event.cancelable to avoid browser intervention warnings.
+        // Some touch/pointer events are non-cancelable while scrolling, so preventDefault() would be ignored.
         const handlePress = (event) => {
-            event.preventDefault();
+            if (event.cancelable) {
+                event.preventDefault();
+            }
             btn.classList.add("is-pressed");
             buttonOn();
         };
 
+        // Use the same cancelable guard on release to keep behavior consistent and warning-free.
         const handleRelease = (event) => {
-            event.preventDefault();
+            if (event.cancelable) {
+                event.preventDefault();
+            }
             btn.classList.remove("is-pressed");
             buttonOff();
         };
