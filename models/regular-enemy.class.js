@@ -4,6 +4,11 @@
 class RegularEnemy extends Enemy {
     movementInterval = null;
 
+    /**
+     * Creates a regular enemy with randomized position and speed.
+     * @param {number} positionOffset Base x-position offset for spawning.
+     * @param {number} speedOffset Base speed factor.
+     */
     constructor(positionOffset = 900, speedOffset = 0.4) {
         super();
         this.positionOffset = positionOffset;

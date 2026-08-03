@@ -2,6 +2,10 @@
  * Represents a HUD (Heads-Up Display) icon in the game, extending the DrawableObject class.
  */
 class HudIcon extends DrawableObject {
+    /**
+     * Creates a HUD icon with image, position, and value tracking.
+     * @param {Object} config Configuration object for the icon.
+     */
     constructor({
         path = "",
         x = 0,

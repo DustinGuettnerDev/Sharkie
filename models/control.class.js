@@ -10,6 +10,9 @@ class Control {
     spacebar = false;
     d = false;
 
+    /**
+     * Initializes keyboard and mobile touch controls for the game.
+     */
     constructor() {
         this.initKeyboard();
         this.initMobileKeys();
@@ -98,6 +101,36 @@ class Control {
         );
     }
 
+    /** @param {boolean} boolean - Sets the right movement state. */
+    moveRight(boolean) {
+        this.right = boolean;
+    }
+
+    /** @param {boolean} boolean - Sets the left movement state. */
+    moveLeft(boolean) {
+        this.left = boolean;
+    }
+
+    /** @param {boolean} boolean - Sets the upward movement state. */
+    moveUp(boolean) {
+        this.up = boolean;
+    }
+
+    /** @param {boolean} boolean - Sets the downward movement state. */
+    moveDown(boolean) {
+        this.down = boolean;
+    }
+
+    /** @param {boolean} boolean - Sets the spacebar (attack) state. */
+    pressSpacebar(boolean) {
+        this.spacebar = boolean;
+    }
+
+    /** @param {boolean} boolean - Sets the D key (bubble) state. */
+    pressD(boolean) {
+        this.d = boolean;
+    }
+
     /**
      * Attaches touchstart, touchend, and touchcancel listeners to a mobile button.
      * @param {string} id - The element ID of the button.
@@ -138,35 +171,5 @@ class Control {
         btn.addEventListener("touchend", handleRelease);
         btn.addEventListener("touchcancel", handleRelease);
         btn.addEventListener("touchleave", handleRelease);
-    }
-
-    /** @param {boolean} boolean - Sets the right movement state. */
-    moveRight(boolean) {
-        this.right = boolean;
-    }
-
-    /** @param {boolean} boolean - Sets the left movement state. */
-    moveLeft(boolean) {
-        this.left = boolean;
-    }
-
-    /** @param {boolean} boolean - Sets the upward movement state. */
-    moveUp(boolean) {
-        this.up = boolean;
-    }
-
-    /** @param {boolean} boolean - Sets the downward movement state. */
-    moveDown(boolean) {
-        this.down = boolean;
-    }
-
-    /** @param {boolean} boolean - Sets the spacebar (attack) state. */
-    pressSpacebar(boolean) {
-        this.spacebar = boolean;
-    }
-
-    /** @param {boolean} boolean - Sets the D key (bubble) state. */
-    pressD(boolean) {
-        this.d = boolean;
     }
 }

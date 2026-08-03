@@ -156,7 +156,7 @@
     left: 10px;
 }
 
-@media (pointer: fine) {
+@media (pointer: fine) and (hover: hover) {
     .game-container__help-btn:hover,
     .game-container__fullscreen-btn:hover,
     .game-container__mute-btn:hover {

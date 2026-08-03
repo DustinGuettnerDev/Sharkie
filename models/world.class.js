@@ -12,16 +12,16 @@ class World {
     renderFrameId = null;
     camera_x = 0;
     bubbles = [];
-    testMode = false;
+    testMode = true;
     coinsTillLife = 7;
     maxPoisonBottleCollected = 2;
     gameEnd = false;
     isPaused = false;
     uiController = null;
     level = null;
+    locStorage = null;
 
-    constructor(canvas, control, uiController) {
-        this.uiController = uiController;
+    constructor(canvas, control, uiController, locStorage) {
         if (!canvas || typeof canvas.getContext !== "function") {
             throw new Error(
                 "World initialization failed: canvas is missing or does not provide getContext('2d').",
@@ -36,6 +36,8 @@ class World {
         if (!this.ctx) {
             throw new Error("World initialization failed: could not create 2D rendering context.");
         }
+        this.uiController = uiController;
+        this.locStorage = locStorage;
         this.level = createLevel_1();
         this.control = control;
         this.character = new Character(this, this.uiController);
@@ -43,6 +45,16 @@ class World {
         this.setWorld();
         this.render();
         this.checkCollisionsOrAggroRange();
+    }
+
+    /**
+     * Sets the world reference for all enemies in the level, allowing them to access the world context.
+     */
+    setWorld() {
+        for (let enemy of this.level.regularEnemies) {
+            enemy.world = this;
+        }
+        this.level.endboss.world = this;
     }
 
     /**
@@ -234,16 +246,6 @@ class World {
     }
 
     /**
-     * Sets the world reference for all enemies in the level, allowing them to access the world context.
-     */
-    setWorld() {
-        for (let enemy of this.level.regularEnemies) {
-            enemy.world = this;
-        }
-        this.level.endboss.world = this;
-    }
-
-    /**
      * Filters collectibles so hidden poison bottles are excluded while all other collectibles remain visible.
      * @param {(Coin|PoisonBottle)[]} drawObject The array of collectible objects to filter.
      * @returns {(Coin|PoisonBottle)[]} The filtered array of collectible objects.
@@ -272,7 +274,9 @@ class World {
         this.flipImage(drawObject);
 
         this.draw(drawObject);
-        this.drawFrame(drawObject);
+        if (this.testMode) {
+            this.drawFrame(drawObject);
+        }
 
         this.flipImageBack(drawObject);
     }

@@ -15,16 +15,6 @@
     width: 100%;
 }
 
-/* Center the rotated game container in fullscreen */
-:fullscreen .game-container--rotated {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin: 0;
-    transform: translate(-50%, -50%) rotate(90deg);
-    transform-origin: center center;
-}
-
 /* Align mobile controls with the rotated game view */
 :fullscreen .mobile-controls {
     top: 50%;
@@ -32,18 +22,4 @@
     transform: translate(-50%, -50%) rotate(90deg);
     transform-origin: center center;
     z-index: 120;
-}
-
-/* Typography sizing for the rotated fullscreen view */
-:fullscreen .game-container--rotated .game-container__help-overlay {
-    font-size: clamp(12px, 2cqw, 18px);
-}
-
-/* Button sizing for the rotated fullscreen view */
-.game-container--rotated .game-container__help-btn,
-.game-container--rotated .game-container__fullscreen-btn,
-.game-container--rotated .game-container__mute-btn {
-    width: clamp(72px, 12cqw, 120px);
-    padding: clamp(2px, 0.6cqw, 5px);
-    font-size: clamp(10px, 1.2cqw, 14px);
 }

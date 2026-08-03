@@ -13,6 +13,11 @@ class Coin extends DrawableObject {
         right: 5,
     };
 
+    /**
+     * Creates a coin at the specified position.
+     * @param {number} x X-coordinate.
+     * @param {number} y Y-coordinate.
+     */
     constructor(x = 0, y = 0) {
         super();
         this.loadImage(IMG_PATHS.coin);

@@ -2,8 +2,6 @@
  * Represents the player-controlled shark character.
  */
 class Character extends MortalObject {
-    const;
-
     height = 380;
     width = 280;
     x = 0;
@@ -43,7 +41,12 @@ class Character extends MortalObject {
         right: 55,
     };
 
-    constructor(world = null, uiController = null) {
+    /**
+     * Initializes the character, loads all animation frames, and starts movement and animation loops.
+     * @param {World} world Reference to the game world.
+     * @param {UIController} uiController Reference to the UI controller.
+     */
+    constructor(world, uiController) {
         super();
         this.world = world;
         this.uiController = uiController;

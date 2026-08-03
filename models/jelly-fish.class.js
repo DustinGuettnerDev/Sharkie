@@ -15,6 +15,11 @@ class JellyFish extends RegularEnemy {
     damageType = "shock";
     weakness = ["bubble", "poison-bubble"];
 
+    /**
+     * Initializes the jellyfish with swim/death animations and starts its loops.
+     * @param {number} positionOffset Initial x-position offset.
+     * @param {number} speedOffset Speed variation factor.
+     */
     constructor(positionOffset = 0, speedOffset = 0.4) {
         super(positionOffset, speedOffset);
         this.loadImage(IMG_PATHS.jellyFish.swim[0]);
@@ -31,7 +36,7 @@ class JellyFish extends RegularEnemy {
         this.animateInterval = setInterval(() => {
             if (this.world.isPaused) return;
             if (this.dead) {
-                const deathAnimationEnd = this.playAnimation(IMG_PATHS.jellyFish.dead);
+                this.playAnimation(IMG_PATHS.jellyFish.dead);
             } else {
                 this.playAnimation(IMG_PATHS.jellyFish.swim);
             }

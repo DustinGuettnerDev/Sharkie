@@ -40,6 +40,9 @@ class Endboss extends Enemy {
      * Constructor for the Endboss class.
      * Initializes the endboss by loading images and starting animations and movement.
      */
+    /**
+     * Initializes the endboss, loads all animation frames, and starts movement and animation loops.
+     */
     constructor() {
         super();
         this.loadImages(IMG_PATHS.endboss.orca.swim);

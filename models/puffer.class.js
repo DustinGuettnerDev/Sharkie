@@ -29,6 +29,11 @@ class Puffer extends RegularEnemy {
     aggro = false;
     speedSlap = 10;
 
+    /**
+     * Initializes the puffer with its animations and starts its loops.
+     * @param {number} positionOffset Initial x-position offset.
+     * @param {number} speedOffset Speed variation factor.
+     */
     constructor(positionOffset = 0, speedOffset = 0) {
         super(positionOffset, speedOffset);
         this.loadImage(IMG_PATHS.puffer.swim[0]);

@@ -17,6 +17,12 @@ class PoisonBottle extends DrawableObject {
         right: 5,
     };
 
+    /**
+     * Creates a poison bottle at the specified position.
+     * @param {number} x X-coordinate.
+     * @param {number} y Y-coordinate.
+     * @param {boolean} left Whether to use the left-facing image variant.
+     */
     constructor(x = 0, y = 0, left = false) {
         super();
         this.x = x;
@@ -25,8 +31,8 @@ class PoisonBottle extends DrawableObject {
     }
 
     /**
-     * Checks if the poison bottle should be display to the left or to the right
-     * @param {boolean} left True if the poison bottle should be displayed to the left, false for right.
+     * Loads the appropriate poison bottle image depending on its facing direction.
+     * @param {boolean} left True for the left-facing image, false for the right-facing image.
      */
     setPoisonBottleCollectible(left) {
         if (left) {

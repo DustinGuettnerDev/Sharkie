@@ -49,19 +49,6 @@ class AudioTrack {
     }
 
     /**
-     * Restarts the track from its initial position after a normal end when repeat is enabled.
-     */
-    #repeatPlayIfNormalEnded() {
-        this.audio.removeEventListener("ended", this.#repeatPlayIfNormalEnded);
-        this.audio.currentTime = this.timeBegin;
-        this.play();
-    }
-
-    get isPlaying() {
-        return !this.audio.paused && this.audio.currentTime > 0;
-    }
-
-    /**
      * Enables or disables browser-level mute for this audio track.
      * @param {boolean} muted Desired mute state.
      */
@@ -79,5 +66,22 @@ class AudioTrack {
         this.audio.currentTime = this.timeBegin;
         clearTimeout(this.timeoutId);
         this.audio.removeEventListener("ended", this.#repeatPlayIfNormalEnded);
+    }
+
+    /**
+     * Checks whether the audio track is currently playing.
+     * @returns {boolean} True when playback is active, otherwise false.
+     */
+    get isPlaying() {
+        return !this.audio.paused && this.audio.currentTime > 0;
+    }
+
+    /**
+     * Restarts the track from its initial position after a normal end when repeat is enabled.
+     */
+    #repeatPlayIfNormalEnded() {
+        this.audio.removeEventListener("ended", this.#repeatPlayIfNormalEnded);
+        this.audio.currentTime = this.timeBegin;
+        this.play();
     }
 }

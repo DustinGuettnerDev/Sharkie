@@ -1,7 +1,7 @@
 let canvas = null;
-let world = null;
 let control = null;
 let uiController = null;
+let locStorage = null;
 
 /**
  * Initializes the game by creating the canvas, input controller, and UI controller.
@@ -9,5 +9,6 @@ let uiController = null;
 function init() {
     canvas = document.getElementById("canvas");
     control = new Control();
-    uiController = new UIController();
+    locStorage = new LocalStorage();
+    uiController = new UIController(canvas, control, locStorage);
 }

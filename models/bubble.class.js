@@ -12,19 +12,27 @@ class Bubble extends MovableObject {
     world;
     isPoisonBubble;
 
-    constructor(x = 0, y = 0, forward = true, world = null, isPoisonBubble = false) {
+    /**
+     * Creates a bubble at the given position and starts its movement.
+     * @param {number} x X-coordinate.
+     * @param {number} y Y-coordinate.
+     * @param {boolean} forward True when the bubble should move to the right.
+     * @param {World} world Reference to the game world.
+     * @param {boolean} isPoisonBubble True for poison bubble behavior and image.
+     */
+    constructor(x = 0, y = 0, forward = true, world, isPoisonBubble = false) {
         super();
         this.x = x;
         this.y = y;
         this.forward = forward;
         this.world = world;
         this.isPoisonBubble = isPoisonBubble;
-        this.setBubbleImage(isPoisonBubble);
+        this.setBubbleImage();
         this.movement();
     }
 
     /**
-     * Sets the image of the bubble based on whether it is a poison bubble or not.
+     * Sets the bubble image based on the current poison state.
      */
     setBubbleImage() {
         if (this.isPoisonBubble) {

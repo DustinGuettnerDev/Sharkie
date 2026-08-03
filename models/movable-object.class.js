@@ -17,27 +17,6 @@ class MovableObject extends DrawableObject {
     };
 
     /**
-     * Plays an animation by cycling through the provided image frames.
-     * @param {string[]} imagesObject List of image paths for the animation.
-     * @returns {boolean} True if the animation has looped back to the start, otherwise false.
-     */
-    playAnimation(imagesObject) {
-        if (imagesObject !== this.lastAnimation) {
-            this.currentImage = 0;
-            this.lastAnimation = imagesObject;
-        }
-
-        let path = imagesObject[this.currentImage];
-        this.img = this.imageCache[path];
-        this.currentImage++;
-
-        if (this.currentImage >= imagesObject.length) {
-            this.currentImage = 0;
-            return true;
-        }
-    }
-
-    /**
      * Moves the object to the right by increasing its x position.
      * @param {number} speed Distance per step.
      */
@@ -70,22 +49,23 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Stops the movement loop if it is currently running.
+     * Plays an animation by cycling through the provided image frames.
+     * @param {string[]} imagesObject List of image paths for the animation.
+     * @returns {boolean} True if the animation has looped back to the start, otherwise false.
      */
-    stopMovementInterval() {
-        if (this.movementInterval) {
-            clearInterval(this.movementInterval);
-            this.movementInterval = null;
+    playAnimation(imagesObject) {
+        if (imagesObject !== this.lastAnimation) {
+            this.currentImage = 0;
+            this.lastAnimation = imagesObject;
         }
-    }
 
-    /**
-     * Stops the animation loop if it is currently running.
-     */
-    stopAnimationInterval() {
-        if (this.animateInterval) {
-            clearInterval(this.animateInterval);
-            this.animateInterval = null;
+        let path = imagesObject[this.currentImage];
+        this.img = this.imageCache[path];
+        this.currentImage++;
+
+        if (this.currentImage >= imagesObject.length) {
+            this.currentImage = 0;
+            return true;
         }
     }
 
@@ -105,5 +85,25 @@ class MovableObject extends DrawableObject {
             this.y + this.collisionOffset.top <
                 drawObject.y + drawObject.height - drawObject.collisionOffset.bottom
         );
+    }
+
+    /**
+     * Stops the movement loop if it is currently running.
+     */
+    stopMovementInterval() {
+        if (this.movementInterval) {
+            clearInterval(this.movementInterval);
+            this.movementInterval = null;
+        }
+    }
+
+    /**
+     * Stops the animation loop if it is currently running.
+     */
+    stopAnimationInterval() {
+        if (this.animateInterval) {
+            clearInterval(this.animateInterval);
+            this.animateInterval = null;
+        }
     }
 }
