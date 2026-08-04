@@ -1,8 +1,3 @@
-let canvas = null;
-let control = null;
-let uiController = null;
-let locStorage = null;
-
 /**
  * Initializes the game by creating the canvas, input controller, and UI controller.
  */

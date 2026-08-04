@@ -22,83 +22,48 @@ class Control {
      * Registers keydown and keyup event listeners for keyboard controls.
      */
     initKeyboard() {
-        document.addEventListener("keydown", (e) => {
-            if (e.code === "ArrowRight") {
-                this.moveRight(true);
-            }
-            if (e.code === "ArrowLeft") {
-                this.moveLeft(true);
-            }
-            if (e.code === "ArrowUp") {
-                this.moveUp(true);
-            }
-            if (e.code === "ArrowDown") {
-                this.moveDown(true);
-            }
-            if (e.code === "Space") {
-                this.pressSpacebar(true);
-            }
-            if (e.code === "KeyD") {
-                this.pressD(true);
-            }
-        });
+        this.registerKeyboardListener("keydown", true);
+        this.registerKeyboardListener("keyup", false);
+    }
 
-        document.addEventListener("keyup", (e) => {
-            if (e.code === "ArrowRight") {
-                this.moveRight(false);
-            }
-            if (e.code === "ArrowLeft") {
-                this.moveLeft(false);
-            }
-            if (e.code === "ArrowUp") {
-                this.moveUp(false);
-            }
-            if (e.code === "ArrowDown") {
-                this.moveDown(false);
-            }
-            if (e.code === "Space") {
-                this.pressSpacebar(false);
-            }
-            if (e.code === "KeyD") {
-                this.pressD(false);
-            }
-        });
+    /**
+     * Registers one keyboard event type and maps keys to movement or attack states.
+     * @param {"keydown"|"keyup"} eventName Keyboard event type.
+     * @param {boolean} isPressed Target key state for this event type.
+     */
+    registerKeyboardListener(eventName, isPressed) {
+        document.addEventListener(eventName, (event) => this.handleKeyState(event.code, isPressed));
+    }
+
+    /**
+     * Applies movement or attack state changes for supported keyboard codes.
+     * @param {string} keyCode Keyboard code from the browser event.
+     * @param {boolean} isPressed Target state to apply.
+     */
+    handleKeyState(keyCode, isPressed) {
+        if (keyCode === "ArrowRight") this.moveRight(isPressed);
+        if (keyCode === "ArrowLeft") this.moveLeft(isPressed);
+        if (keyCode === "ArrowUp") this.moveUp(isPressed);
+        if (keyCode === "ArrowDown") this.moveDown(isPressed);
+        if (keyCode === "Space") this.pressSpacebar(isPressed);
+        if (keyCode === "KeyD") this.pressD(isPressed);
     }
 
     /**
      * Registers touch event listeners for all mobile control buttons.
      */
     initMobileKeys() {
-        this.#mobileButton(
-            "mobile-up-btn-id",
-            () => this.moveUp(true),
-            () => this.moveUp(false),
-        );
-        this.#mobileButton(
-            "mobile-left-btn-id",
-            () => this.moveLeft(true),
-            () => this.moveLeft(false),
-        );
-        this.#mobileButton(
-            "mobile-right-btn-id",
-            () => this.moveRight(true),
-            () => this.moveRight(false),
-        );
-        this.#mobileButton(
-            "mobile-down-btn-id",
-            () => this.moveDown(true),
-            () => this.moveDown(false),
-        );
-        this.#mobileButton(
-            "mobile-bubble-btn-id",
-            () => this.pressD(true),
-            () => this.pressD(false),
-        );
-        this.#mobileButton(
-            "mobile-attack-btn-id",
-            () => this.pressSpacebar(true),
-            () => this.pressSpacebar(false),
-        );
+        const mobileBindings = [
+            ["mobile-up-btn-id", () => this.moveUp(true), () => this.moveUp(false)],
+            ["mobile-left-btn-id", () => this.moveLeft(true), () => this.moveLeft(false)],
+            ["mobile-right-btn-id", () => this.moveRight(true), () => this.moveRight(false)],
+            ["mobile-down-btn-id", () => this.moveDown(true), () => this.moveDown(false)],
+            ["mobile-bubble-btn-id", () => this.pressD(true), () => this.pressD(false)],
+            ["mobile-attack-btn-id", () => this.pressSpacebar(true), () => this.pressSpacebar(false)],
+        ];
+        for (const [id, buttonOn, buttonOff] of mobileBindings) {
+            this.mobileButton(id, buttonOn, buttonOff);
+        }
     }
 
     /** @param {boolean} boolean - Sets the right movement state. */
@@ -137,39 +102,43 @@ class Control {
      * @param {Function} buttonOn - Callback when the button is pressed.
      * @param {Function} buttonOff - Callback when the button is released or cancelled.
      */
-    #mobileButton(id, buttonOn, buttonOff) {
+    mobileButton(id, buttonOn, buttonOff) {
         const btn = document.getElementById(id);
+        if (!btn) return;
+        const handlePress = this.createPointerHandler(btn, true, buttonOn);
+        const handleRelease = this.createPointerHandler(btn, false, buttonOff);
+        this.registerMobileButtonEvents(btn, handlePress, handleRelease);
+    }
 
-        if (!btn) {
-            return;
-        }
-
-        // We guard preventDefault() with event.cancelable to avoid browser intervention warnings.
-        // Some touch/pointer events are non-cancelable while scrolling, so preventDefault() would be ignored.
-        const handlePress = (event) => {
-            if (event.cancelable) {
-                event.preventDefault();
-            }
-            btn.classList.add("is-pressed");
-            buttonOn();
+    /**
+     * Creates a press or release handler with consistent pointer/touch cancellation behavior.
+     * @param {HTMLElement} button Target button element.
+     * @param {boolean} isPressed Whether this handler is for pressed state.
+     * @param {Function} callback Callback to execute after visual state update.
+     * @returns {(event: Event) => void} Event handler.
+     */
+    createPointerHandler(button, isPressed, callback) {
+        return (event) => {
+            if (event.cancelable) event.preventDefault();
+            button.classList.toggle("is-pressed", isPressed);
+            callback();
         };
+    }
 
-        // Use the same cancelable guard on release to keep behavior consistent and warning-free.
-        const handleRelease = (event) => {
-            if (event.cancelable) {
-                event.preventDefault();
-            }
-            btn.classList.remove("is-pressed");
-            buttonOff();
-        };
-
-        btn.addEventListener("pointerdown", handlePress);
-        btn.addEventListener("pointerup", handleRelease);
-        btn.addEventListener("pointercancel", handleRelease);
-        btn.addEventListener("pointerleave", handleRelease);
-        btn.addEventListener("touchstart", handlePress);
-        btn.addEventListener("touchend", handleRelease);
-        btn.addEventListener("touchcancel", handleRelease);
-        btn.addEventListener("touchleave", handleRelease);
+    /**
+     * Registers all pointer and touch events used by a mobile control button.
+     * @param {HTMLElement} button Target button element.
+     * @param {(event: Event) => void} handlePress Press event handler.
+     * @param {(event: Event) => void} handleRelease Release event handler.
+     */
+    registerMobileButtonEvents(button, handlePress, handleRelease) {
+        button.addEventListener("pointerdown", handlePress);
+        button.addEventListener("pointerup", handleRelease);
+        button.addEventListener("pointercancel", handleRelease);
+        button.addEventListener("pointerleave", handleRelease);
+        button.addEventListener("touchstart", handlePress);
+        button.addEventListener("touchend", handleRelease);
+        button.addEventListener("touchcancel", handleRelease);
+        button.addEventListener("touchleave", handleRelease);
     }
 }

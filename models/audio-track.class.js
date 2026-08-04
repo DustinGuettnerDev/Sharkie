@@ -22,6 +22,7 @@ class AudioTrack {
         this.audio.currentTime = this.timeBegin;
         this.repeat = repeat;
         this.timeEnd = timeEnd ? (timeEnd - timeBegin) * 1000 : null;
+        this.repeatPlayIfNormalEnded = this.repeatPlayIfNormalEnded.bind(this);
     }
 
     /**
@@ -44,7 +45,7 @@ class AudioTrack {
                 }
             }, this.timeEnd);
         } else if (this.repeat) {
-            this.audio.addEventListener("ended", this.#repeatPlayIfNormalEnded);
+            this.audio.addEventListener("ended", this.repeatPlayIfNormalEnded);
         }
     }
 
@@ -65,7 +66,7 @@ class AudioTrack {
         this.audio.pause();
         this.audio.currentTime = this.timeBegin;
         clearTimeout(this.timeoutId);
-        this.audio.removeEventListener("ended", this.#repeatPlayIfNormalEnded);
+        this.audio.removeEventListener("ended", this.repeatPlayIfNormalEnded);
     }
 
     /**
@@ -79,8 +80,8 @@ class AudioTrack {
     /**
      * Restarts the track from its initial position after a normal end when repeat is enabled.
      */
-    #repeatPlayIfNormalEnded() {
-        this.audio.removeEventListener("ended", this.#repeatPlayIfNormalEnded);
+    repeatPlayIfNormalEnded() {
+        this.audio.removeEventListener("ended", this.repeatPlayIfNormalEnded);
         this.audio.currentTime = this.timeBegin;
         this.play();
     }

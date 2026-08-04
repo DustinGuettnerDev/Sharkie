@@ -22,6 +22,21 @@ class World {
     locStorage = null;
 
     constructor(canvas, control, uiController, locStorage) {
+        this.validateWorldDependencies(canvas, control);
+        this.canvas = canvas;
+        this.ctx = this.createRenderingContext(canvas);
+        this.uiController = uiController;
+        this.locStorage = locStorage;
+        this.initializeLevelState(control);
+        this.startWorldLoops();
+    }
+
+    /**
+     * Validates required constructor dependencies before world initialization continues.
+     * @param {HTMLCanvasElement} canvas Canvas element used for rendering.
+     * @param {Control} control Input controller instance.
+     */
+    validateWorldDependencies(canvas, control) {
         if (!canvas || typeof canvas.getContext !== "function") {
             throw new Error(
                 "World initialization failed: canvas is missing or does not provide getContext('2d').",
@@ -30,19 +45,37 @@ class World {
         if (!control) {
             throw new Error("World initialization failed: keyboard input object is required.");
         }
+    }
 
-        this.canvas = canvas;
-        this.ctx = canvas.getContext("2d"); // Store the 2D rendering context in the canvas instance.
-        if (!this.ctx) {
+    /**
+     * Creates and validates the canvas 2D rendering context.
+     * @param {HTMLCanvasElement} canvas Canvas element used for rendering.
+     * @returns {CanvasRenderingContext2D} Active rendering context.
+     */
+    createRenderingContext(canvas) {
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
             throw new Error("World initialization failed: could not create 2D rendering context.");
         }
-        this.uiController = uiController;
-        this.locStorage = locStorage;
+        return ctx;
+    }
+
+    /**
+     * Initializes level data, character setup, and HUD state.
+     * @param {Control} control Input controller instance.
+     */
+    initializeLevelState(control) {
         this.level = createLevel_1();
         this.control = control;
         this.character = new Character(this, this.uiController);
         this.hudIcons = createHudIcons(this, this.character);
         this.setWorld();
+    }
+
+    /**
+     * Starts rendering and collision loops after successful initialization.
+     */
+    startWorldLoops() {
         this.render();
         this.checkCollisionsOrAggroRange();
     }
@@ -66,33 +99,32 @@ class World {
             this.renderFrameId = null;
             return;
         }
+        this.drawWorldFrame();
+        if (this.isPaused) return;
+        this.renderFrameId = requestAnimationFrame(() => this.render());
+    }
 
+    /**
+     * Draws one complete world frame including map layers and HUD.
+     */
+    drawWorldFrame() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.checkGameEnd();
-
-        // Shift the canvas context to the left by camera_x pixels to simulate camera movement.
         this.ctx.translate(this.camera_x, 0);
+        this.drawScrollableWorldLayers();
+        this.ctx.translate(-this.camera_x, 0);
+        this.addHudIconsToMap();
+    }
 
-        // Render the background objects, collectibles, bubbles, enemies, and character in the correct order on the shifted canvas context.
+    /**
+     * Draws all world layers that move with the camera offset.
+     */
+    drawScrollableWorldLayers() {
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.isVisibleFilterPB(this.level.collectible));
         this.addObjectsToMap(this.bubbles);
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character);
-
-        // Reset the translation before the next frame.
-        // Otherwise the camera movement would accumulate and the world would drift further to the left each frame.
-        // translate(-100) moves the camera 100 pixels to the left; the next frame it would move 200 pixels, and so on.
-        this.ctx.translate(-this.camera_x, 0);
-
-        // Render the HUD icons without camera translation so they stay fixed on the screen.
-        this.addHudIconsToMap();
-
-        if (this.isPaused) return;
-
-        this.renderFrameId = requestAnimationFrame(() => {
-            this.render();
-        });
     }
 
     /**
@@ -432,32 +464,49 @@ class World {
      */
     stopAllLoops() {
         this.stopCollisionInterval();
+        this.stopRenderLoop();
+        this.stopCharacterLoops();
+        this.stopEnemyLoops();
+        this.stopBubbleLoops();
+    }
 
-        if (this.renderFrameId) {
-            cancelAnimationFrame(this.renderFrameId);
-            this.renderFrameId = null;
-        }
+    /**
+     * Stops the animation frame render loop and clears its id.
+     */
+    stopRenderLoop() {
+        if (!this.renderFrameId) return;
+        cancelAnimationFrame(this.renderFrameId);
+        this.renderFrameId = null;
+    }
 
+    /**
+     * Stops character movement and animation intervals when available.
+     */
+    stopCharacterLoops() {
         if (this.character.stopMovementInterval) {
             this.character.stopMovementInterval();
         }
         if (this.character.stopAnimationInterval) {
             this.character.stopAnimationInterval();
         }
+    }
 
+    /**
+     * Stops movement and animation intervals for all active enemies.
+     */
+    stopEnemyLoops() {
         for (const enemy of this.level.enemies) {
-            if (enemy.stopMovementInterval) {
-                enemy.stopMovementInterval();
-            }
-            if (enemy.stopAnimationInterval) {
-                enemy.stopAnimationInterval();
-            }
+            if (enemy.stopMovementInterval) enemy.stopMovementInterval();
+            if (enemy.stopAnimationInterval) enemy.stopAnimationInterval();
         }
+    }
 
+    /**
+     * Stops movement intervals for all active bubbles.
+     */
+    stopBubbleLoops() {
         for (const bubble of this.bubbles) {
-            if (bubble.stopMovementInterval) {
-                bubble.stopMovementInterval();
-            }
+            if (bubble.stopMovementInterval) bubble.stopMovementInterval();
         }
     }
 }

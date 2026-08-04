@@ -37,6 +37,19 @@ class UIController {
         this.canvas = canvas;
         this.control = control;
         this.locStorage = locStorage;
+        this.cacheMainUiElements();
+        this.cacheSecondaryUiElements();
+        this.initLandscapeListeners();
+        this.initUiKeys();
+        this.handleLandscape();
+        this.applyStoredMuteState();
+    }
+
+    /**
+     * Caches game-flow UI elements that are directly tied to starting, restarting,
+     * and showing in-game overlays such as help and end screens.
+     */
+    cacheMainUiElements() {
         this.gameContainer = document.getElementById("game-container-id");
         this.startButton = document.getElementById("start-button-id");
         this.startScreen = document.getElementById("start-screen-id");
@@ -46,6 +59,13 @@ class UIController {
         this.youWinImage = document.getElementById("you-win-id");
         this.helpButton = document.getElementById("help-button-id");
         this.helpContainer = document.getElementById("help-id");
+    }
+
+    /**
+     * Caches layout and system UI elements used for device adaptation,
+     * fullscreen behavior, audio toggling, and page-level visibility updates.
+     */
+    cacheSecondaryUiElements() {
         this.fullscreenButton = document.getElementById("fullscreen-button-id");
         this.htmlElement = document.querySelector("html");
         this.muteButton = document.getElementById("mute-button-id");
@@ -54,12 +74,12 @@ class UIController {
         this.footer = document.getElementById("footer-id");
         this.title = document.getElementById("shark-title-id");
         this.sharkIndex = document.getElementById("shark-index-id");
+    }
+
+    initLandscapeListeners() {
         this.landscapeQuery = window.matchMedia("(orientation: landscape)");
         this.landscapeQuery.addEventListener("change", () => this.handleLandscape());
         window.addEventListener("resize", () => this.handleLandscape());
-        this.initUiKeys();
-        this.handleLandscape();
-        this.applyStoredMuteState();
     }
 
     /**
@@ -196,6 +216,12 @@ class UIController {
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
     handleLockScreen(isMobile, isLandscape) {
+        if (this.isEndScreenVisible()) {
+            this.lockScreen.classList.add("hidden");
+            this.startButton.classList.add("hidden");
+            return;
+        }
+
         if (!isMobile) {
             this.lockScreen.classList.add("hidden");
             this.startButton.classList.remove("hidden");
@@ -203,6 +229,14 @@ class UIController {
             this.lockScreen.classList.toggle("hidden", isLandscape);
             this.startButton.classList.toggle("hidden", !isLandscape);
         }
+    }
+
+    /**
+     * Checks whether the game-end overlay is currently visible.
+     * @returns {boolean} True when the restart/end screen is shown.
+     */
+    isEndScreenVisible() {
+        return !this.gameEndContainer.classList.contains("hidden");
     }
 
     /**
