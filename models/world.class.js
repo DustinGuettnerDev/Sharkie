@@ -240,22 +240,30 @@ class World {
      * Checks for collisions between bubbles and enemies, applying damage to enemies if the bubble's type matches their weakness.
      */
     bubbleCollision() {
-        for (let bubble of this.bubbles)
+        for (let bubble of this.bubbles) {
             for (let enemy of this.level.enemies) {
                 if (bubble.isColliding(enemy) && enemy.dead == false) {
-                    if (
-                        (enemy.weakness.includes("bubble") && bubble.isPoisonBubble == false) ||
-                        (enemy.weakness.includes("poison-bubble") && bubble.isPoisonBubble == true)
-                    ) {
-                        enemy.getHit();
-                        if (enemy.hasZeroLife) {
-                            enemy.dead = true;
-                        }
-                    }
-                    bubble.removeFromWorld();
+                    this.handleBubbleEnemyHit(bubble, enemy);
                     break;
                 }
             }
+        }
+    }
+
+    /**
+     * Applies damage to the enemy if the bubble type matches its weakness, then removes the bubble.
+     * @param {Bubble} bubble The bubble that made contact.
+     * @param {Enemy} enemy The enemy that was hit.
+     */
+    handleBubbleEnemyHit(bubble, enemy) {
+        const weaknessMatch =
+            (enemy.weakness.includes("bubble") && bubble.isPoisonBubble == false) ||
+            (enemy.weakness.includes("poison-bubble") && bubble.isPoisonBubble == true);
+        if (weaknessMatch) {
+            enemy.getHit();
+            if (enemy.hasZeroLife) enemy.dead = true;
+        }
+        bubble.removeFromWorld();
     }
 
     /**
@@ -359,7 +367,20 @@ class World {
      * @param {DrawableObject} drawObject The drawable object for which to draw the collision frame.
      */
     drawFrame(drawObject) {
-        if (
+        if (!this.isDebugFrameSupported(drawObject)) return;
+        this.renderingRedCollisonFrame(drawObject);
+        if (drawObject.aggroOffset) {
+            this.renderingYellowAggroFrame(drawObject);
+        }
+    }
+
+    /**
+     * Returns whether the given object type supports debug frame rendering.
+     * @param {DrawableObject} drawObject The object to check.
+     * @returns {boolean} True if a debug frame should be drawn for this object.
+     */
+    isDebugFrameSupported(drawObject) {
+        return (
             drawObject instanceof Character ||
             drawObject instanceof Puffer ||
             drawObject instanceof JellyFish ||
@@ -367,13 +388,7 @@ class World {
             drawObject instanceof Coin ||
             drawObject instanceof Bubble ||
             drawObject instanceof PoisonBottle
-        ) {
-            this.renderingRedCollisonFrame(drawObject);
-
-            if (drawObject.aggroOffset) {
-                this.renderingYellowAggroFrame(drawObject);
-            }
-        }
+        );
     }
 
     /**
@@ -440,15 +455,20 @@ class World {
      */
     checkGameEnd() {
         if (this.gameEnd) return;
-
         const characterDead = this.character.hasZeroLife;
         const endbossDead = this.level.endboss.deathAnimationEnd;
-
         if (!characterDead && !endbossDead) return;
-
         this.gameEnd = true;
-        AUDIO_PATHS.background.main.stop();
+        this.showGameEndScreen(characterDead, endbossDead);
+    }
 
+    /**
+     * Stops background audio and shows the appropriate end-game overlay.
+     * @param {boolean} characterDead Whether the player character died.
+     * @param {boolean} endbossDead Whether the endboss died.
+     */
+    showGameEndScreen(characterDead, endbossDead) {
+        AUDIO_PATHS.background.main.stop();
         this.uiController.gameEndContainer.classList.remove("hidden");
         if (characterDead) {
             AUDIO_PATHS.overlay.gameOver.play();

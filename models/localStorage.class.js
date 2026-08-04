@@ -1,3 +1,6 @@
+/**
+ * Wraps browser localStorage with JSON serialization for simple key-value storage.
+ */
 class LocalStorage {
     /**
      * Reads a JSON value from localStorage.

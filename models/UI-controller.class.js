@@ -26,6 +26,7 @@ class UIController {
     title = null;
     landscapeQuery = null;
     sharkIndex = null;
+    keyboardKeysInfo = null;
 
     /**
      * Initializes the UI controller by caching DOM elements and wiring event listeners.
@@ -74,6 +75,7 @@ class UIController {
         this.footer = document.getElementById("footer-id");
         this.title = document.getElementById("shark-title-id");
         this.sharkIndex = document.getElementById("shark-index-id");
+        this.keyboardKeysInfo = document.getElementById("keyboard-keys-information-id");
     }
 
     initLandscapeListeners() {
@@ -203,11 +205,36 @@ class UIController {
         const isMobile = this.isMobile();
         const isLandscape = this.landscapeQuery.matches;
         this.updateTitleAndFooterVisibility();
+        this.updateUiElementVisibility(isMobile, isLandscape);
+        this.handleLockScreen(isMobile, isLandscape);
+        this.handleGamePlayState(isMobile, isLandscape);
+    }
+
+    /**
+     * Toggles visibility of UI elements that depend on device type and orientation.
+     * @param {boolean} isMobile Whether the current device is mobile.
+     * @param {boolean} isLandscape Whether the current orientation is landscape.
+     */
+    updateUiElementVisibility(isMobile, isLandscape) {
         this.fullscreenButton.classList.toggle("hidden", isMobile);
         this.mobileControls.classList.toggle("hidden", !(isMobile && isLandscape));
+        this.keyboardKeysInfo.classList.toggle("hidden", isMobile);
         this.sharkIndex.classList.toggle("shark--landscape", isMobile && isLandscape);
         this.gameContainer.classList.toggle("game-container--landscape", isMobile && isLandscape);
-        this.handleLockScreen(isMobile, isLandscape);
+    }
+
+    /**
+     * Pauses or resumes the game depending on whether a mobile device is in portrait mode.
+     * @param {boolean} isMobile Whether the current device is mobile.
+     * @param {boolean} isLandscape Whether the current orientation is landscape.
+     */
+    handleGamePlayState(isMobile, isLandscape) {
+        if (!this.gameStarted) return;
+        if (!isLandscape && isMobile) {
+            this.pause();
+        } else {
+            this.resume();
+        }
     }
 
     /**
@@ -227,7 +254,7 @@ class UIController {
             this.startButton.classList.remove("hidden");
         } else {
             this.lockScreen.classList.toggle("hidden", isLandscape);
-            this.startButton.classList.toggle("hidden", !isLandscape);
+            this.startButton.classList.toggle("hidden", !isLandscape || this.gameStarted);
         }
     }
 
@@ -257,7 +284,27 @@ class UIController {
         return smallViewport && (touchLike || hasTouch);
     }
 
+    /**
+     * @returns {boolean} True if the current orientation is landscape.
+     */
     isLandscape() {
         return window.matchMedia("(orientation: landscape)").matches;
+    }
+
+    /**
+     * Pauses the game loop and background audio.
+     */
+    pause() {
+        this.world.isPaused = true;
+        AUDIO_PATHS.background.main.pause();
+    }
+
+    /**
+     * Resumes the game loop and background audio unless muted.
+     */
+    resume() {
+        this.world.isPaused = false;
+        this.world.render();
+        if (!this.isMuted) AUDIO_PATHS.background.main.play();
     }
 }

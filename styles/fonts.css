@@ -1,7 +1,18 @@
-/* Custom fonts for the game UI */
+/*Used fonts*/
 @font-face {
     font-family: "LuckiestGuy";
-    src: url("../assets/fonts/LuckiestGuy-Regular.ttf") format("truetype");
+    src: url("../assets/fonts/LuckiestGuy/LuckiestGuy-Regular.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
+}
+
+@font-face {
+    font-family: "OpenSans";
+    src: url("../assets/fonts/OpenSans/OpenSans-VariableFont_wdth,wght.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+.fs-opensans {
+    font-family: "OpenSans", sans-serif;
 }

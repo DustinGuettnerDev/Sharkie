@@ -113,11 +113,24 @@ class Puffer extends RegularEnemy {
      */
     handleDeathMovement() {
         if (!this.world?.character) return;
+        this.initDeathKnockbackDirection();
+        this.applyDeathKnockback();
+    }
+
+    /**
+     * Sets the knockback direction once based on the character's position relative to this puffer.
+     */
+    initDeathKnockbackDirection() {
         if (!this.deathKnockbackStarted) {
             this.deathKnockbackDirection = this.world.character.x < this.x ? "left" : "right";
             this.deathKnockbackStarted = true;
         }
+    }
 
+    /**
+     * Moves the puffer diagonally upward in the knockback direction during its death sequence.
+     */
+    applyDeathKnockback() {
         if (this.y > -500) {
             if (this.deathKnockbackDirection === "left") {
                 this.moveLeft(this.speedSlap);

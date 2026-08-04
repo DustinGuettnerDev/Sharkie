@@ -38,156 +38,167 @@
         <title>Sharkie</title>
     </head>
     <body id="shark-index-id" class="shark shark--game" onload="init()">
-        <header>
-            <h1 id="shark-title-id" class="page-title">Sharkie</h1>
-        </header>
-        <main class="shark__main">
-            <section id="mobile-controls-id" class="mobile-controls hidden">
-                <div class="mobile-controls__movement">
-                    <button id="mobile-up-btn-id" class="btn mobile-controls__btn triangle-up">
-                        <svg width="20" height="20" viewBox="0 0 24 24">
-                            <path
-                                class="mobile-controls__btn-path"
-                                d="M5 16l7 -8 7 8"
-                                stroke="#531a82"
-                                fill="none"
-                                stroke-width="2"
-                            />
-                        </svg>
-                    </button>
-                    <button id="mobile-left-btn-id" class="btn mobile-controls__btn triangle-left">
-                        <svg width="20" height="20" viewBox="0 0 24 24">
-                            <path
-                                class="mobile-controls__btn-path"
-                                d="M16 19l-8 -7 8 -7"
-                                stroke="#531a82"
-                                fill="none"
-                                stroke-width="2"
-                            />
-                        </svg>
-                    </button>
-                    <button
-                        id="mobile-right-btn-id"
-                        class="btn mobile-controls__btn triangle-right"
-                    >
-                        <svg width="20" height="20" viewBox="0 0 24 24">
-                            <path
-                                class="mobile-controls__btn-path"
-                                d="M8 5l8 7-8 7"
-                                stroke="#531a82"
-                                fill="none"
-                                stroke-width="2"
-                            />
-                        </svg>
-                    </button>
-                    <button id="mobile-down-btn-id" class="btn mobile-controls__btn triangle-down">
-                        <svg width="20" height="20" viewBox="0 0 24 24">
-                            <path
-                                class="mobile-controls__btn-path"
-                                d="M5 8 l7 8 7 -8"
-                                stroke="#531a82"
-                                fill="none"
-                                stroke-width="2"
-                            />
-                        </svg>
-                    </button>
-                </div>
-                <div class="mobile-controls__actions">
-                    <button
-                        id="mobile-bubble-btn-id"
-                        class="btn mobile-controls__btn mobile-controls__action-btn"
-                    >
-                        BUBBLE
-                    </button>
-                    <button
-                        id="mobile-attack-btn-id"
-                        class="btn mobile-controls__btn mobile-controls__action-btn"
-                    >
-                        ATTACK
-                    </button>
-                </div>
-            </section>
-            <section id="game-container-id" class="game-container">
-                <div id="lock-screen-id" class="game-container__lock-screen hidden">
-                    <p class="game-container__lock-screen-text">
-                        To play the game properly, you need to activate landscape-modus.
-                    </p>
-                </div>
-                <canvas
-                    class="game-container__canvas"
-                    id="canvas"
-                    width="720"
-                    height="480"
-                ></canvas>
-                <img
-                    id="start-screen-id"
-                    class="game-container__start-screen"
-                    src="assets/img/overlay/start-screen/1.png"
-                    alt="Start screen"
-                />
-                <button id="start-button-id" class="game-container__start-btn btn"></button>
-                <div id="game-end-container-id" class="game-container__end-screen hidden">
-                    <img
-                        id="game-over-id"
-                        class="game-container__game-over-image hidden"
-                        src="assets/img/overlay/titles/game-over/1.png"
-                        alt="Game Over"
-                    />
-                    <img
-                        id="you-win-id"
-                        class="game-container__you-win-image hidden"
-                        src="assets/img/overlay/titles/you-win/1.png"
-                        alt="You Win"
-                    />
-                    <button id="restart-button-id" class="game-container__restart-btn btn"></button>
-                </div>
-                <button id="help-button-id" class="game-container__help-btn btn">help</button>
-                <div id="help-id" class="game-container__help-overlay hidden">
-                    <div id="keyboard-keys-information-id" class="game-container__help-keys">
-                        <div class="game-container__help-row">
-                            <img
-                                class="game-container__help-move-key"
-                                src="assets/img/overlay/key/arrow-keys/1.png"
-                            />
-                        </div>
-                        <div class="game-container__help-row">
-                            <p class="game-container__help-text">MOVE SHARK</p>
-                        </div>
-                        <div class="game-container__help-row">
-                            <img
-                                class="game-container__help-bubble-key"
-                                src="assets/img/overlay/key/d-key/1.png"
-                            />
-                        </div>
-                        <div class="game-container__help-row">
-                            <p class="game-container__help-text">BUBBLE</p>
-                        </div>
-                        <div class="game-container__help-row">
-                            <img
-                                class="game-container__help-attack-key"
-                                src="assets/img/overlay/key/space-bar/1.png"
-                            />
-                        </div>
-                        <div class="game-container__help-row">
-                            <p class="game-container__help-text">ATTACK</p>
-                        </div>
+        <div class="shark__index-wrapper">
+            <header>
+                <h1 id="shark-title-id" class="page-title">Sharkie</h1>
+            </header>
+            <main class="shark__main">
+                <section id="mobile-controls-id" class="mobile-controls hidden">
+                    <div class="mobile-controls__movement">
+                        <button id="mobile-up-btn-id" class="btn mobile-controls__btn triangle-up">
+                            <svg width="20" height="20" viewBox="0 0 24 24">
+                                <path
+                                    class="mobile-controls__btn-path"
+                                    d="M5 16l7 -8 7 8"
+                                    stroke="#531a82"
+                                    fill="none"
+                                    stroke-width="2"
+                                />
+                            </svg>
+                        </button>
+                        <button
+                            id="mobile-left-btn-id"
+                            class="btn mobile-controls__btn triangle-left"
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24">
+                                <path
+                                    class="mobile-controls__btn-path"
+                                    d="M16 19l-8 -7 8 -7"
+                                    stroke="#531a82"
+                                    fill="none"
+                                    stroke-width="2"
+                                />
+                            </svg>
+                        </button>
+                        <button
+                            id="mobile-right-btn-id"
+                            class="btn mobile-controls__btn triangle-right"
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24">
+                                <path
+                                    class="mobile-controls__btn-path"
+                                    d="M8 5l8 7-8 7"
+                                    stroke="#531a82"
+                                    fill="none"
+                                    stroke-width="2"
+                                />
+                            </svg>
+                        </button>
+                        <button
+                            id="mobile-down-btn-id"
+                            class="btn mobile-controls__btn triangle-down"
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24">
+                                <path
+                                    class="mobile-controls__btn-path"
+                                    d="M5 8 l7 8 7 -8"
+                                    stroke="#531a82"
+                                    fill="none"
+                                    stroke-width="2"
+                                />
+                            </svg>
+                        </button>
                     </div>
-                    <p class="game-container__instruction-text">
-                        In this game, you must guide your shark to the final boss and defeat him.
-                        Every enemy has its own weakness, so you need to figure out which attack
-                        works best against each one. You can avoid the regular enemies, but to
-                        complete the game, you must defeat the final boss.
-                    </p>
-                </div>
-                <button id="fullscreen-button-id" class="game-container__fullscreen-btn btn">
-                    FULL
-                </button>
-                <button id="mute-button-id" class="game-container__mute-btn btn">AUDIO</button>
-            </section>
-        </main>
+                    <div class="mobile-controls__actions">
+                        <button
+                            id="mobile-bubble-btn-id"
+                            class="btn mobile-controls__btn mobile-controls__action-btn"
+                        >
+                            BUBBLE
+                        </button>
+                        <button
+                            id="mobile-attack-btn-id"
+                            class="btn mobile-controls__btn mobile-controls__action-btn"
+                        >
+                            ATTACK
+                        </button>
+                    </div>
+                </section>
+                <section id="game-container-id" class="game-container">
+                    <div id="lock-screen-id" class="game-container__lock-screen hidden">
+                        <p class="game-container__lock-screen-text">
+                            To play the game properly, you need to activate landscape-modus.
+                        </p>
+                    </div>
+                    <canvas
+                        class="game-container__canvas"
+                        id="canvas"
+                        width="720"
+                        height="480"
+                    ></canvas>
+                    <img
+                        id="start-screen-id"
+                        class="game-container__start-screen"
+                        src="assets/img/overlay/start-screen/1.png"
+                        alt="Start screen"
+                    />
+                    <button id="start-button-id" class="game-container__start-btn btn"></button>
+                    <div id="game-end-container-id" class="game-container__end-screen hidden">
+                        <img
+                            id="game-over-id"
+                            class="game-container__game-over-image hidden"
+                            src="assets/img/overlay/titles/game-over/1.png"
+                            alt="Game Over"
+                        />
+                        <img
+                            id="you-win-id"
+                            class="game-container__you-win-image hidden"
+                            src="assets/img/overlay/titles/you-win/1.png"
+                            alt="You Win"
+                        />
+                        <button
+                            id="restart-button-id"
+                            class="game-container__restart-btn btn"
+                        ></button>
+                    </div>
+                    <button id="help-button-id" class="game-container__help-btn btn">help</button>
+                    <div id="help-id" class="game-container__help-overlay hidden">
+                        <div id="keyboard-keys-information-id" class="game-container__help-keys">
+                            <div class="game-container__help-row">
+                                <img
+                                    class="game-container__help-move-key"
+                                    src="assets/img/overlay/key/arrow-keys/1.png"
+                                />
+                            </div>
+                            <div class="game-container__help-row">
+                                <p class="game-container__help-text">MOVE SHARK</p>
+                            </div>
+                            <div class="game-container__help-row">
+                                <img
+                                    class="game-container__help-bubble-key"
+                                    src="assets/img/overlay/key/d-key/1.png"
+                                />
+                            </div>
+                            <div class="game-container__help-row">
+                                <p class="game-container__help-text">BUBBLE</p>
+                            </div>
+                            <div class="game-container__help-row">
+                                <img
+                                    class="game-container__help-attack-key"
+                                    src="assets/img/overlay/key/space-bar/1.png"
+                                />
+                            </div>
+                            <div class="game-container__help-row">
+                                <p class="game-container__help-text">ATTACK</p>
+                            </div>
+                        </div>
+                        <p class="game-container__instruction-text">
+                            In this game, you must guide your shark to the final boss and defeat
+                            him. Every enemy has its own weakness, so you need to figure out which
+                            attack works best against each one. You can avoid the regular enemies,
+                            but to complete the game, you must defeat the final boss.
+                        </p>
+                    </div>
+                    <button id="fullscreen-button-id" class="game-container__fullscreen-btn btn">
+                        FULL
+                    </button>
+                    <button id="mute-button-id" class="game-container__mute-btn btn">AUDIO</button>
+                </section>
+            </main>
 
-        <footer id="footer-id" class="footer">
-            <a class="link" href="impressum.html">Impressum</a>
-        </footer>
+            <footer id="footer-id" class="footer">
+                <a class="link" href="impressum.html">Impressum</a>
+            </footer>
+        </div>
     </body>
 </html>

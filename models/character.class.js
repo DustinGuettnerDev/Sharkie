@@ -17,7 +17,7 @@ class Character extends MortalObject {
     movementInterval = null;
     animateInterval = null;
     inactiveStartTime = Date.now();
-    waitTime = 5000;
+    waitTime = 1000;
     sleepTime = 15000;
     sleepAnimationFinished = false;
     slap = false;
@@ -50,6 +50,15 @@ class Character extends MortalObject {
         super();
         this.world = world;
         this.uiController = uiController;
+        this.loadAllImages();
+        this.movement();
+        this.animate();
+    }
+
+    /**
+     * Loads all animation frame sets required by the character.
+     */
+    loadAllImages() {
         this.loadImage(IMG_PATHS.character.idle[0]);
         this.loadImages(IMG_PATHS.character.swim);
         this.loadImages(IMG_PATHS.character.hurt.poison);
@@ -61,8 +70,6 @@ class Character extends MortalObject {
         this.loadImages(IMG_PATHS.character.attack.slap);
         this.loadImages(IMG_PATHS.character.attack.bubble.normal);
         this.loadImages(IMG_PATHS.character.attack.bubble.poison);
-        this.movement();
-        this.animate();
     }
 
     /**
@@ -86,6 +93,16 @@ class Character extends MortalObject {
     checkPlayerMovement() {
         if (this.hasZeroLife) return;
         if (this.isGameStarted) return;
+        this.moveHorizontal();
+        this.moveVertical();
+        this.moveCamera();
+        return true;
+    }
+
+    /**
+     * Moves the character left or right based on keyboard input.
+     */
+    moveHorizontal() {
         if (this.world.control.right && this.x < this.world.level.levelEnd_x) {
             this.x = Math.min(this.world.level.levelEnd_x, this.x + this.speed);
             this.otherDirection = false;
@@ -93,13 +110,17 @@ class Character extends MortalObject {
             this.x = Math.max(0, this.x - this.speed);
             this.otherDirection = true;
         }
+    }
+
+    /**
+     * Moves the character up or down based on keyboard input.
+     */
+    moveVertical() {
         if (this.world.control.up && this.y >= this.levelLimitUp) {
             this.moveUp();
         } else if (this.world.control.down && this.y <= this.levelLimitDown) {
             this.moveDown();
         }
-        this.moveCamera();
-        return true;
     }
 
     /**

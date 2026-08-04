@@ -22,31 +22,38 @@ class AudioTrack {
         this.audio.currentTime = this.timeBegin;
         this.repeat = repeat;
         this.timeEnd = timeEnd ? (timeEnd - timeBegin) * 1000 : null;
-        this.repeatPlayIfNormalEnded = this.repeatPlayIfNormalEnded.bind(this);
     }
 
     /**
-     * Starts playback and applies the configured cut-off and repeat behavior.
-     * Any previously scheduled cut-off timer is cleared before a new one is created.
+     * Starts playback and schedules the cut-off timer if configured.
      */
     play() {
         if (!this.audio || this.isPlaying) return;
         this.audio.play();
+        this.setupPlaybackBehavior();
+    }
 
+    /**
+     * Configures the cut-off timer after playback starts.
+     */
+    setupPlaybackBehavior() {
         clearTimeout(this.timeoutId);
-
         if (this.timeEnd) {
-            this.timeoutId = setTimeout(() => {
-                this.audio.pause();
-                this.audio.currentTime = this.timeBegin;
-
-                if (this.repeat) {
-                    this.play();
-                }
-            }, this.timeEnd);
-        } else if (this.repeat) {
-            this.audio.addEventListener("ended", this.repeatPlayIfNormalEnded);
+            this.setupCutoffTimer();
         }
+    }
+
+    /**
+     * Schedules a timeout to pause and rewind the audio at the configured cut-off point.
+     */
+    setupCutoffTimer() {
+        this.timeoutId = setTimeout(() => {
+            this.audio.pause();
+            this.audio.currentTime = this.timeBegin;
+            if (this.repeat) {
+                this.play();
+            }
+        }, this.timeEnd);
     }
 
     /**
@@ -58,15 +65,13 @@ class AudioTrack {
     }
 
     /**
-     * Stops playback, resets the position to the start, clears any pending cut-off timer,
-     * and removes the repeat listener.
+     * Stops playback, resets to start position, and clears any pending cut-off timer.
      */
     stop() {
         if (!this.audio) return;
         this.audio.pause();
         this.audio.currentTime = this.timeBegin;
         clearTimeout(this.timeoutId);
-        this.audio.removeEventListener("ended", this.repeatPlayIfNormalEnded);
     }
 
     /**
@@ -75,14 +80,5 @@ class AudioTrack {
      */
     get isPlaying() {
         return !this.audio.paused && this.audio.currentTime > 0;
-    }
-
-    /**
-     * Restarts the track from its initial position after a normal end when repeat is enabled.
-     */
-    repeatPlayIfNormalEnded() {
-        this.audio.removeEventListener("ended", this.repeatPlayIfNormalEnded);
-        this.audio.currentTime = this.timeBegin;
-        this.play();
     }
 }

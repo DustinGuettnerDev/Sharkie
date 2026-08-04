@@ -23,9 +23,13 @@
 }
 
 /* General helpers for text and links */
-@media (pointer: fine) {
+@media (pointer: fine) and (hover: hover) {
     .link:hover {
         text-decoration: underline;
+    }
+
+    .btn-back:hover {
+        transform: scale(1.25);
     }
 }
 
@@ -58,4 +62,16 @@
 .page-text {
     font-size: clamp(14px, 2vw, 18px);
     line-height: 1.5;
+}
+
+.btn-back {
+    text-decoration: none;
+    color: white;
+    font-size: 32px;
+    transition: transform 0.2s ease;
+    display: inline-block;
+}
+
+.btn-back:active {
+    transform: scale(1.25);
 }
