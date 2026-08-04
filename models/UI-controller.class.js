@@ -292,19 +292,36 @@ class UIController {
     }
 
     /**
-     * Pauses the game loop and background audio.
+     * Pauses the game loop and all audio tracks.
      */
     pause() {
         this.world.isPaused = true;
-        AUDIO_PATHS.background.main.pause();
+        this.forEachTrack(AUDIO_PATHS, (t) => t.pause());
     }
 
     /**
-     * Resumes the game loop and background audio unless muted.
+     * Resumes the game loop and all audio tracks unless muted or game has ended.
      */
     resume() {
         this.world.isPaused = false;
         this.world.render();
-        if (!this.isMuted) AUDIO_PATHS.background.main.play();
+        if (!this.isMuted && !this.world.gameEnd) {
+            this.forEachTrack(AUDIO_PATHS, (t) => t.play());
+        }
+    }
+
+    /**
+     * Calls the given callback for every AudioTrack instance in the audio tree.
+     * @param {object} node Audio tree node to traverse.
+     * @param {Function} callback Function to call with each AudioTrack.
+     */
+    forEachTrack(node, callback) {
+        for (const value of Object.values(node)) {
+            if (value instanceof AudioTrack) {
+                callback(value);
+            } else {
+                this.forEachTrack(value, callback);
+            }
+        }
     }
 }
