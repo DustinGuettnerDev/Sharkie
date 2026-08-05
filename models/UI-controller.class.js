@@ -32,7 +32,7 @@ class UIController {
     resumeButton = null;
 
     /**
-     * Initializes the UI controller by caching DOM elements and wiring event listeners.
+     * Initializes the UI controller and wires the main listeners.
      * @param {HTMLCanvasElement} canvas Game canvas.
      * @param {Control} control Input controller.
      * @param {LocalStorage} locStorage Local storage helper.
@@ -51,8 +51,7 @@ class UIController {
     }
 
     /**
-     * Caches game-flow UI elements that are directly tied to starting, restarting,
-     * and showing in-game overlays such as help and end screens.
+     * Caches the main game-flow UI elements.
      */
     cacheMainUiElements() {
         this.gameContainer = document.getElementById("game-container-id");
@@ -68,8 +67,7 @@ class UIController {
     }
 
     /**
-     * Caches layout and system UI elements used for device adaptation,
-     * fullscreen behavior, audio toggling, and page-level visibility updates.
+     * Caches layout and system UI elements.
      */
     cacheSecondaryUiElements() {
         this.fullscreenButton = document.getElementById("fullscreen-button-id");
@@ -84,7 +82,7 @@ class UIController {
     }
 
     /**
-     * Registers the orientation and resize listeners that drive the mobile pause and resume flow.
+     * Registers orientation and resize listeners.
      */
     initLandscapeListeners() {
         this.landscapeQuery = window.matchMedia("(orientation: landscape)");
@@ -93,7 +91,7 @@ class UIController {
     }
 
     /**
-     * Binds the UI buttons to their controller actions.
+     * Binds UI button actions.
      */
     initUiKeys() {
         this.startButton.addEventListener("click", () => this.startGame());
@@ -105,7 +103,7 @@ class UIController {
     }
 
     /**
-     * Applies the stored mute state to all audio tracks and updates the mute label.
+     * Applies the stored mute state to all audio tracks.
      */
     applyStoredMuteState() {
         this.isMuted = this.locStorage.getSingleItem("muted");
@@ -114,7 +112,7 @@ class UIController {
     }
 
     /**
-     * Toggles mute state and updates the button label.
+     * Toggles the mute state.
      */
     toggleMute() {
         this.isMuted = !this.isMuted;
@@ -124,8 +122,8 @@ class UIController {
     }
 
     /**
-     * Applies mute state to all configured AudioTrack instances.
-     * @param {object} node Audio tree object.
+     * Applies the mute state to every AudioTrack in the tree.
+     * @param {object} node Audio tree node.
      * @param {boolean} muted Target mute state.
      */
     setMuteState(node, muted) {
@@ -139,7 +137,7 @@ class UIController {
     }
 
     /**
-     * Updates the mute button label based on the current mute state.
+     * Updates the mute button label.
      */
     visualizeMute() {
         if (this.isMuted) {
@@ -150,9 +148,13 @@ class UIController {
     }
 
     /**
-     * Starts a new game round and hides the start button.
+     * Starts a new game round.
      */
     startGame() {
+        if (this.isMobile() && !this.isLandscape()) {
+            return;
+        }
+
         AUDIO_PATHS.background.main.play();
         this.gameStarted = true;
         this.world = new World(this.canvas, this.control, this, this.locStorage);
@@ -164,14 +166,19 @@ class UIController {
     }
 
     /**
-     * Restarts the game by clearing the end-screen UI and creating a fresh world instance.
+     * Restarts the game and clears the end-screen UI.
      */
     restartGame() {
+        if (this.isMobile() && !this.isLandscape()) {
+            return;
+        }
+
         AUDIO_PATHS.background.main.play();
         this.gameStarted = true;
         this.gameEndContainer.classList.add("hidden");
         this.gameOverImage.classList.add("hidden");
         this.youWinImage.classList.add("hidden");
+        this.resumeButton.classList.add("hidden");
         this.world.stopAllLoops();
         this.world = new World(this.canvas, this.control, this, this.locStorage);
     }
@@ -184,8 +191,7 @@ class UIController {
     }
 
     /**
-     * Requests or exits fullscreen mode on the root HTML element.
-     * The layout and gameplay updates are handled in handleFullscreenChange().
+     * Toggles fullscreen mode on the root element.
      */
     async toggleFullscreen() {
         if (!document.fullscreenElement) {
@@ -197,7 +203,7 @@ class UIController {
     }
 
     /**
-     * Toggles title and footer visibility based on device type and fullscreen state.
+     * Updates the title and footer visibility.
      */
     updateTitleAndFooterVisibility() {
         const isMobile = this.isMobile();
@@ -209,7 +215,7 @@ class UIController {
     }
 
     /**
-     * Adjusts UI layout and control visibility for landscape orientation on mobile devices.
+     * Updates the mobile layout and UI visibility.
      */
     handleLandscape() {
         const isMobile = this.isMobile();
@@ -221,7 +227,7 @@ class UIController {
     }
 
     /**
-     * Toggles visibility of UI elements that depend on device type and orientation.
+     * Toggles UI elements based on device and orientation.
      * @param {boolean} isMobile Whether the current device is mobile.
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
@@ -232,25 +238,36 @@ class UIController {
         this.sharkIndex.classList.toggle("shark--landscape", isMobile && isLandscape);
         this.gameContainer.classList.toggle("game-container--landscape", isMobile && isLandscape);
         this.updateResumeButtonVisibility(isMobile, isLandscape);
+        this.updateRestartButtonVisibility(isMobile, isLandscape);
     }
 
     /**
-     * Shows or hides the resume button depending on whether the game is paused on mobile landscape.
+     * Shows or hides the resume button.
      * @param {boolean} isMobile Whether the current device is mobile.
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
     updateResumeButtonVisibility(isMobile, isLandscape) {
-        if (!this.world) {
+        if (!this.world || !this.gameStarted || this.isEndScreenVisible()) {
             this.resumeButton.classList.add("hidden");
-        } else {
-            const shouldShowResumeButton =
-                isMobile && isLandscape && this.gameStarted && this.world.isPaused;
-            this.resumeButton.classList.toggle("hidden", !shouldShowResumeButton);
+            return;
         }
+
+        const shouldShowResumeButton = isMobile && isLandscape && this.world.isPaused;
+        this.resumeButton.classList.toggle("hidden", !shouldShowResumeButton);
     }
 
     /**
-     * Pauses gameplay on mobile portrait mode and leaves the game running in landscape mode.
+     * Shows or hides the restart button.
+     * @param {boolean} isMobile Whether the current device is mobile.
+     * @param {boolean} isLandscape Whether the current orientation is landscape.
+     */
+    updateRestartButtonVisibility(isMobile, isLandscape) {
+        const shouldHideRestartButton = isMobile && !isLandscape;
+        this.restartButton.classList.toggle("hidden", shouldHideRestartButton);
+    }
+
+    /**
+     * Pauses gameplay in portrait mode on mobile.
      * @param {boolean} isMobile Whether the current device is mobile.
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
@@ -262,37 +279,33 @@ class UIController {
     }
 
     /**
-     * Manages lock screen and start button visibility based on device type and orientation.
+     * Updates the lock screen and start button visibility.
      * @param {boolean} isMobile Whether the current device is treated as mobile.
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
     handleLockScreen(isMobile, isLandscape) {
-        if (this.isEndScreenVisible()) {
-            this.lockScreen.classList.add("hidden");
-            this.startButton.classList.add("hidden");
-            return;
-        }
-
         if (!isMobile) {
             this.lockScreen.classList.add("hidden");
             this.startButton.classList.remove("hidden");
-        } else {
-            this.lockScreen.classList.toggle("hidden", isLandscape);
-            this.startButton.classList.toggle("hidden", !isLandscape || this.gameStarted);
+            return;
         }
+
+        const shouldShowLockScreen = !isLandscape;
+        this.lockScreen.classList.toggle("hidden", !shouldShowLockScreen);
+        this.startButton.classList.toggle("hidden", !isLandscape || this.gameStarted);
     }
 
     /**
-     * Checks whether the game-end overlay is currently visible.
-     * @returns {boolean} True when the restart/end screen is shown.
+     * Checks whether the end screen is visible.
+     * @returns {boolean} True when the end screen is shown.
      */
     isEndScreenVisible() {
         return !this.gameEndContainer.classList.contains("hidden");
     }
 
     /**
-     * Detects whether the current device should be treated as mobile.
-     * @returns {boolean} True when pointer and viewport heuristics indicate a mobile device.
+     * Detects whether the current device is mobile.
+     * @returns {boolean} True when the device matches the mobile heuristics.
      */
     isMobile() {
         // Touch-like input: finger-driven devices usually report a coarse pointer and no hover.
@@ -316,7 +329,7 @@ class UIController {
     }
 
     /**
-     * Pauses gameplay and stores the audio tracks that should be resumed later.
+     * Pauses gameplay and stores the tracks to resume.
      */
     pause() {
         this.world.isPaused = true;
@@ -331,7 +344,7 @@ class UIController {
     }
 
     /**
-     * Resumes the game loop and all audio tracks that were paused before.
+     * Resumes the game and the paused audio tracks.
      */
     resume() {
         this.world.isPaused = false;
@@ -355,8 +368,8 @@ class UIController {
     }
 
     /**
-     * Calls the given callback for every AudioTrack instance in the audio tree.
-     * @param {object} node Audio tree node to traverse.
+     * Calls the callback for every AudioTrack in the audio tree.
+     * @param {object} node Audio tree node.
      * @param {Function} callback Function to call with each AudioTrack.
      */
     forEachTrack(node, callback) {
