@@ -37,10 +37,6 @@ class Endboss extends Enemy {
     roarCharacterPosition = 800;
 
     /**
-     * Constructor for the Endboss class.
-     * Initializes the endboss by loading images and starting animations and movement.
-     */
-    /**
      * Initializes the endboss, loads all animation frames, and starts movement and animation loops.
      */
     constructor() {
@@ -61,7 +57,6 @@ class Endboss extends Enemy {
     movement() {
         this.movementInterval = setInterval(() => {
             if (this.world.isPaused) return;
-            if (!this.world.character) return;
             if (this.checkDeathMovement()) return;
             if (this.checkDeathEndMovement()) return;
             if (this.checkHurtMovementStop()) return;

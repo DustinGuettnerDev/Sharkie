@@ -50,7 +50,6 @@ class Puffer extends RegularEnemy {
     animate() {
         this.animateInterval = setInterval(() => {
             if (this.world.isPaused) return;
-            if (!this.world.character) return;
             if (this.checkDeath()) return;
             this.checkAggroRange();
             if (this.checkAggro()) return;

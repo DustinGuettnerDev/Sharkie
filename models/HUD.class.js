@@ -35,9 +35,10 @@ class HudIcon extends DrawableObject {
      * Updates the icon value based on the current state of the world and character.
      */
     updateValue() {
-        if (!this.world?.character) return;
-        if (this.kind === "life") this.iconValue = this.world.character.lifeCount;
-        if (this.kind === "coins") this.iconValue = this.world.character.coinCount;
-        if (this.kind === "poison") this.iconValue = this.world.character.poisonBottleCount;
+        if (this.world?.character) {
+            if (this.kind === "life") this.iconValue = this.world.character.lifeCount;
+            if (this.kind === "coins") this.iconValue = this.world.character.coinCount;
+            if (this.kind === "poison") this.iconValue = this.world.character.poisonBottleCount;
+        }
     }
 }

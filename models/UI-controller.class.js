@@ -5,7 +5,10 @@ class UIController {
     canvas = null;
     control = null;
     locStorage = null;
+    world = null;
+    audioTrack = null;
     gameStarted = false;
+    isMuted = false;
     startButton = null;
     startScreen = null;
     restartButton = null;
@@ -21,12 +24,12 @@ class UIController {
     mobileControls = null;
     lockScreen = null;
     footer = null;
-    world = null;
-    isMuted = false;
     title = null;
     landscapeQuery = null;
     sharkIndex = null;
     keyboardKeysInfo = null;
+    audiosPlaying = [];
+    resumeButton = null;
 
     /**
      * Initializes the UI controller by caching DOM elements and wiring event listeners.
@@ -34,10 +37,11 @@ class UIController {
      * @param {Control} control Input controller.
      * @param {LocalStorage} locStorage Local storage helper.
      */
-    constructor(canvas, control, locStorage) {
+    constructor(canvas, control, locStorage, audioTrack) {
         this.canvas = canvas;
         this.control = control;
         this.locStorage = locStorage;
+        this.audioTrack = audioTrack;
         this.cacheMainUiElements();
         this.cacheSecondaryUiElements();
         this.initLandscapeListeners();
@@ -60,6 +64,7 @@ class UIController {
         this.youWinImage = document.getElementById("you-win-id");
         this.helpButton = document.getElementById("help-button-id");
         this.helpContainer = document.getElementById("help-id");
+        this.resumeButton = document.getElementById("resume-button-id");
     }
 
     /**
@@ -78,6 +83,9 @@ class UIController {
         this.keyboardKeysInfo = document.getElementById("keyboard-keys-information-id");
     }
 
+    /**
+     * Registers the orientation and resize listeners that drive the mobile pause and resume flow.
+     */
     initLandscapeListeners() {
         this.landscapeQuery = window.matchMedia("(orientation: landscape)");
         this.landscapeQuery.addEventListener("change", () => this.handleLandscape());
@@ -89,6 +97,7 @@ class UIController {
      */
     initUiKeys() {
         this.startButton.addEventListener("click", () => this.startGame());
+        this.resumeButton.addEventListener("click", () => this.resumeFromPauseButton());
         this.restartButton.addEventListener("click", () => this.restartGame());
         this.helpButton.addEventListener("click", () => this.showHelp());
         this.muteButton.addEventListener("click", () => this.toggleMute());
@@ -148,6 +157,7 @@ class UIController {
         this.gameStarted = true;
         this.world = new World(this.canvas, this.control, this, this.locStorage);
         this.startButton.classList.add("hidden");
+        this.resumeButton.classList.add("hidden");
         if (this.startScreen) {
             this.startScreen.classList.add("hidden");
         }
@@ -221,10 +231,26 @@ class UIController {
         this.keyboardKeysInfo.classList.toggle("hidden", isMobile);
         this.sharkIndex.classList.toggle("shark--landscape", isMobile && isLandscape);
         this.gameContainer.classList.toggle("game-container--landscape", isMobile && isLandscape);
+        this.updateResumeButtonVisibility(isMobile, isLandscape);
     }
 
     /**
-     * Pauses or resumes the game depending on whether a mobile device is in portrait mode.
+     * Shows or hides the resume button depending on whether the game is paused on mobile landscape.
+     * @param {boolean} isMobile Whether the current device is mobile.
+     * @param {boolean} isLandscape Whether the current orientation is landscape.
+     */
+    updateResumeButtonVisibility(isMobile, isLandscape) {
+        if (!this.world) {
+            this.resumeButton.classList.add("hidden");
+        } else {
+            const shouldShowResumeButton =
+                isMobile && isLandscape && this.gameStarted && this.world.isPaused;
+            this.resumeButton.classList.toggle("hidden", !shouldShowResumeButton);
+        }
+    }
+
+    /**
+     * Pauses gameplay on mobile portrait mode and leaves the game running in landscape mode.
      * @param {boolean} isMobile Whether the current device is mobile.
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
@@ -232,8 +258,6 @@ class UIController {
         if (!this.gameStarted) return;
         if (!isLandscape && isMobile) {
             this.pause();
-        } else {
-            this.resume();
         }
     }
 
@@ -292,22 +316,42 @@ class UIController {
     }
 
     /**
-     * Pauses the game loop and all audio tracks.
+     * Pauses gameplay and stores the audio tracks that should be resumed later.
      */
     pause() {
         this.world.isPaused = true;
-        this.forEachTrack(AUDIO_PATHS, (t) => t.pause());
+        this.audiosPlaying = [];
+        this.forEachTrack(AUDIO_PATHS, (track) => {
+            if (track.isPaused || track.isPlaying) {
+                this.audiosPlaying.push(track);
+                track.pause();
+            }
+        });
+        this.updateResumeButtonVisibility(this.isMobile(), this.isLandscape());
     }
 
     /**
-     * Resumes the game loop and all audio tracks unless muted or game has ended.
+     * Resumes the game loop and all audio tracks that were paused before.
      */
     resume() {
         this.world.isPaused = false;
         this.world.render();
         if (!this.isMuted && !this.world.gameEnd) {
-            this.forEachTrack(AUDIO_PATHS, (t) => t.play());
+            this.audiosPlaying.forEach((track) => {
+                if (track.isPaused) {
+                    track.play();
+                }
+            });
         }
+        this.audiosPlaying = [];
+        this.updateResumeButtonVisibility(this.isMobile(), this.isLandscape());
+    }
+
+    /**
+     * Resumes the game from the explicit pause-button flow.
+     */
+    resumeFromPauseButton() {
+        this.resume();
     }
 
     /**

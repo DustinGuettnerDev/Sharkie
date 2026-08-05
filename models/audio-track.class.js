@@ -7,8 +7,11 @@ class AudioTrack {
     repeat;
     timeBegin;
     timeoutId = null;
+    pausedAt = 0;
+    isPaused = false;
 
     /**
+     * Creates a new audio element and initializes its playback state and timing settings.
      * @param {string} audioPath Relative path to the audio file.
      * @param {number} volume Volume level for the audio track, from 0.0 (silent) to 1.0 (full volume). (default: 1)
      * @param {number} timeBegin Start position in seconds. (default: 0)
@@ -25,11 +28,15 @@ class AudioTrack {
     }
 
     /**
-     * Starts playback and schedules the cut-off timer if configured.
+     * Starts playback from the saved pause position and schedules the cut-off timer if configured.
      */
     play() {
         if (!this.audio || this.isPlaying) return;
-        this.audio.play();
+        if (this.isPaused) {
+            this.audio.currentTime = this.pausedAt > 0 ? this.pausedAt : this.timeBegin;
+        }
+        this.isPaused = false;
+        this.audio.play().catch(() => {});
         this.setupPlaybackBehavior();
     }
 
@@ -65,10 +72,23 @@ class AudioTrack {
     }
 
     /**
-     * Stops playback, resets to start position, and clears any pending cut-off timer.
+     * Pauses playback and clears any pending cut-off timer.
+     */
+    pause() {
+        if (!this.audio) return;
+        this.pausedAt = this.audio.currentTime;
+        this.isPaused = true;
+        this.audio.pause();
+        clearTimeout(this.timeoutId);
+    }
+
+    /**
+     * Stops playback, resets the track to its start position, and clears any pending cut-off timer.
      */
     stop() {
         if (!this.audio) return;
+        this.pausedAt = this.timeBegin;
+        this.isPaused = false;
         this.audio.pause();
         this.audio.currentTime = this.timeBegin;
         clearTimeout(this.timeoutId);
@@ -79,6 +99,6 @@ class AudioTrack {
      * @returns {boolean} True when playback is active, otherwise false.
      */
     get isPlaying() {
-        return !this.audio.paused && this.audio.currentTime > 0;
+        return !this.audio.paused;
     }
 }

@@ -494,7 +494,6 @@ class World {
      * Stops the animation frame render loop and clears its id.
      */
     stopRenderLoop() {
-        if (!this.renderFrameId) return;
         cancelAnimationFrame(this.renderFrameId);
         this.renderFrameId = null;
     }

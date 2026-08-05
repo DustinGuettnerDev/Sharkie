@@ -180,7 +180,6 @@ class Character extends MortalObject {
     animate() {
         this.animateInterval = setInterval(() => {
             if (this.world.isPaused) return;
-            if (!this.world.control) return;
             if (this.isGameStarted) return;
             if (this.checkDeath()) return;
             if (this.checkHurt()) return;
@@ -394,8 +393,6 @@ class Character extends MortalObject {
             this.world.camera_x = -this.x + this.cameraOffset;
         } else if (this.x >= endboss.x + bossFightCameraOffset) {
             this.world.camera_x = -this.x + bossFightCameraOffset;
-        } else {
-            return;
         }
     }
 

@@ -5,5 +5,6 @@ function init() {
     canvas = document.getElementById("canvas");
     control = new Control();
     locStorage = new LocalStorage();
-    uiController = new UIController(canvas, control, locStorage);
+    audioTrack = new AudioTrack();
+    uiController = new UIController(canvas, control, locStorage, audioTrack);
 }
