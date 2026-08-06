@@ -32,7 +32,12 @@ class Control {
      * @param {boolean} isPressed Target key state for this event type.
      */
     registerKeyboardListener(eventName, isPressed) {
-        document.addEventListener(eventName, (event) => this.handleKeyState(event.code, isPressed));
+        document.addEventListener(eventName, (event) => {
+            if (event.code === "Space" && event.cancelable) {
+                event.preventDefault();
+            }
+            this.handleKeyState(event.code, isPressed);
+        });
     }
 
     /**
