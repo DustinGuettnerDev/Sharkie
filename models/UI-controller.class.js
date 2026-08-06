@@ -203,7 +203,7 @@ class UIController {
     }
 
     /**
-     * Updates the title and footer visibility.
+     * Hides the title and footer on mobile landscape or when fullscreen is active on desktop.
      */
     updateTitleAndFooterVisibility() {
         const isMobile = this.isMobile();
@@ -227,7 +227,7 @@ class UIController {
     }
 
     /**
-     * Toggles UI elements based on device and orientation.
+     * Updates the visibility of layout-dependent UI elements for the current device and orientation.
      * @param {boolean} isMobile Whether the current device is mobile.
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
@@ -242,7 +242,7 @@ class UIController {
     }
 
     /**
-     * Shows or hides the resume button.
+     * Shows the resume button only when the game is paused and the current layout allows it.
      * @param {boolean} isMobile Whether the current device is mobile.
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
@@ -252,12 +252,12 @@ class UIController {
             return;
         }
 
-        const shouldShowResumeButton = isMobile && isLandscape && this.world.isPaused;
+        const shouldShowResumeButton = this.world.isPaused && (!isMobile || isLandscape);
         this.resumeButton.classList.toggle("hidden", !shouldShowResumeButton);
     }
 
     /**
-     * Shows or hides the restart button.
+     * Hides the restart button in portrait mode on mobile.
      * @param {boolean} isMobile Whether the current device is mobile.
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
@@ -267,7 +267,7 @@ class UIController {
     }
 
     /**
-     * Pauses gameplay in portrait mode on mobile.
+     * Pauses gameplay when the device switches to portrait mode on mobile.
      * @param {boolean} isMobile Whether the current device is mobile.
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
@@ -279,14 +279,14 @@ class UIController {
     }
 
     /**
-     * Updates the lock screen and start button visibility.
+     * Shows or hides the lock screen and start button depending on device and orientation.
      * @param {boolean} isMobile Whether the current device is treated as mobile.
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
     handleLockScreen(isMobile, isLandscape) {
         if (!isMobile) {
             this.lockScreen.classList.add("hidden");
-            this.startButton.classList.remove("hidden");
+            if (!this.gameStarted) this.startButton.classList.remove("hidden");
             return;
         }
 

@@ -6,6 +6,7 @@ const AUDIO_PATHS = Object.freeze({
         slap: new AudioTrack("assets/audio/character/slap.mp3"),
         bubble: new AudioTrack("assets/audio/character/bubble.mp3"),
         hurt: new AudioTrack("assets/audio/character/hurt.mp3", 1, 2),
+        snoring: new AudioTrack("assets/audio/character/snoring.mp3", 0.2),
     },
     collectibles: {
         coin: new AudioTrack("assets/audio/collectibles/coins.mp3"),

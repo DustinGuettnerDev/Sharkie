@@ -197,6 +197,7 @@ class Character extends MortalObject {
      */
     checkDeath() {
         if (this.hasZeroLife) {
+            this.stopSnoring();
             AUDIO_PATHS.character.hurt.play();
             this.playDeathTypeAnimation();
             return true;
@@ -210,6 +211,7 @@ class Character extends MortalObject {
      */
     checkHurt() {
         if (this.isHurt) {
+            this.stopSnoring();
             AUDIO_PATHS.character.hurt.play();
             this.playHurtTypeAnimation();
             this.startSleepCounter();
@@ -229,6 +231,7 @@ class Character extends MortalObject {
             this.world.control.up ||
             this.world.control.down
         ) {
+            this.stopSnoring();
             this.startSleepCounter();
             this.slap = false;
             this.createBubble.isActive = false;
@@ -247,6 +250,7 @@ class Character extends MortalObject {
             this.slap = true;
         }
         if (this.slap) {
+            this.stopSnoring();
             this.startSleepCounter();
             this.playSlapAnimation();
             return true;
@@ -274,6 +278,7 @@ class Character extends MortalObject {
             this.createBubble.isActive = true;
         }
         if (this.createBubble.isActive) {
+            this.stopSnoring();
             this.startSleepCounter();
             this.playCreateBubbleAnimation();
             return true;
@@ -305,12 +310,20 @@ class Character extends MortalObject {
     checkIdle() {
         if (this.isInactive() >= this.sleepTime) {
             this.playSleepAnimation();
+            AUDIO_PATHS.character.snoring.play();
             return true;
         } else if (this.isInactive() >= this.waitTime) {
             this.playWaitAnimation();
             return true;
         }
         return false;
+    }
+
+    /**
+     * stop the snoring sound of the character
+     */
+    stopSnoring() {
+        AUDIO_PATHS.character.snoring.stop();
     }
 
     /**

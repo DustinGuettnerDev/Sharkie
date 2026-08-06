@@ -182,7 +182,8 @@
 @media (pointer: fine) and (hover: hover) {
     .game-container__help-btn:hover,
     .game-container__fullscreen-btn:hover,
-    .game-container__mute-btn:hover {
+    .game-container__mute-btn:hover,
+    .game-container__resume-btn:hover {
         background-color: #7fffe0;
         color: #531a82;
     }
