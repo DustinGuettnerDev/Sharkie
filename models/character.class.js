@@ -11,7 +11,7 @@ class Character extends MortalObject {
     speed = 20;
     levelLimitUp = -150;
     levelLimitDown = 160;
-    lifeCount = 2;
+    lifeCount = 4;
     coinCount = 0;
     poisonBottleCount = 0;
     movementInterval = null;
