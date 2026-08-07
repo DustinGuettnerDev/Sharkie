@@ -145,38 +145,51 @@
     background-image: url("../assets/img/overlay/try-again/2.png");
 }
 
-/* Control buttons inside the game container */
+/* Top-right control buttons and icon states */
+.game-container__ui-icons {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
 .game-container__help-btn,
 .game-container__fullscreen-btn,
 .game-container__mute-btn {
     background-color: #531a82;
     border: 2px solid #fff;
     color: #fff;
-    text-align: center;
+    border-radius: none;
+}
+
+.game-container__mute-btn {
+    position: relative;
+}
+
+.game-container__mute-btn--muted::after {
+    content: "";
     position: absolute;
-    box-sizing: border-box;
-    width: clamp(72px, 12cqw, 120px);
-    aspect-ratio: 8 / 1;
-    padding: clamp(2px, 0.6cqw, 5px);
-    font-size: clamp(10px, 1.2cqw, 14px);
+    left: 50%;
+    top: 50%;
+    width: 72%;
+    height: 8%;
+    min-height: 2px;
+    max-height: 4px;
+    background-color: #ff4d4f;
+    border-radius: 999px;
+    transform: translate(-50%, -50%) rotate(-40deg);
+    z-index: 1;
+    pointer-events: none;
 }
 
-.game-container__help-btn {
-    right: 10px;
-    top: 10px;
-}
-
-.game-container__fullscreen-btn,
-.game-container__mute-btn {
-    bottom: 10px;
-}
-
-.game-container__fullscreen-btn {
-    right: 10px;
-}
-
-.game-container__mute-btn {
-    left: 10px;
+.game-container__help-icon,
+.game-container__fullscreen-icon,
+.game-container__mute-icon {
+    height: 40px;
+    width: 40px;
+    filter: brightness(0) invert(1);
 }
 
 @media (pointer: fine) and (hover: hover) {
@@ -185,7 +198,13 @@
     .game-container__mute-btn:hover,
     .game-container__resume-btn:hover {
         background-color: #7fffe0;
-        color: #531a82;
+    }
+
+    .game-container__help-btn:hover .game-container__help-icon,
+    .game-container__fullscreen-btn:hover .game-container__fullscreen-icon,
+    .game-container__mute-btn:hover .game-container__mute-icon {
+        filter: brightness(0) saturate(100%) invert(18%) sepia(47%) saturate(2522%)
+            hue-rotate(255deg) brightness(84%) contrast(96%);
     }
 }
 
@@ -193,7 +212,13 @@
 .game-container__fullscreen-btn:active,
 .game-container__mute-btn:active {
     background-color: #7fffe0;
-    color: #531a82;
+}
+
+.game-container__help-btn:active .game-container__help-icon,
+.game-container__fullscreen-btn:active .game-container__fullscreen-icon,
+.game-container__mute-btn:active .game-container__mute-icon {
+    filter: brightness(0) saturate(100%) invert(18%) sepia(47%) saturate(2522%) hue-rotate(255deg)
+        brightness(84%) contrast(96%);
 }
 
 /* Help overlay and control instructions */

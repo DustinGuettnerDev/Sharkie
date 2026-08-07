@@ -137,14 +137,10 @@ class UIController {
     }
 
     /**
-     * Updates the mute button label.
+     * Reflects the current mute state via a CSS class on the mute button.
      */
     visualizeMute() {
-        if (this.isMuted) {
-            this.muteButton.innerText = "AUDIO OFF";
-        } else {
-            this.muteButton.innerHTML = "AUDIO ON";
-        }
+        this.muteButton.classList.toggle("game-container__mute-btn--muted", Boolean(this.isMuted));
     }
 
     /**
