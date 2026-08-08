@@ -231,5 +231,13 @@ const IMG_PATHS = Object.freeze({
         life: "assets/img/ui/life/1.png",
         poison: "assets/img/ui/poison/1.png",
         coin: "assets/img/ui/coin/1.png",
+        lifebar: [
+            "assets/img/ui/life/100.png",
+            "assets/img/ui/life/80.png",
+            "assets/img/ui/life/60.png",
+            "assets/img/ui/life/40.png",
+            "assets/img/ui/life/20.png",
+            "assets/img/ui/life/0.png",
+        ],
     },
 });

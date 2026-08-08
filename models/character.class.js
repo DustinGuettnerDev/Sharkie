@@ -7,11 +7,10 @@ class Character extends MortalObject {
     x = 0;
     y = 100;
     cameraOffset = 50;
-    world;
     speed = 20;
     levelLimitUp = -150;
     levelLimitDown = 160;
-    lifeCount = 4;
+    lifeCount = 5;
     coinCount = 0;
     poisonBottleCount = 0;
     movementInterval = null;
@@ -27,7 +26,6 @@ class Character extends MortalObject {
     deathRiseUp = false;
     deathRiseUpEnded = false;
     deathFallDownEnded = false;
-    uiController;
 
     createBubble = {
         isActive: false,

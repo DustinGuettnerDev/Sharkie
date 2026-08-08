@@ -2,7 +2,6 @@
  * Represents a background object in the game, extending the DrawableObject class.
  */
 class BackgroundObject extends DrawableObject {
-    x;
     y = 0;
     width = 720;
     height = 480;

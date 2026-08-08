@@ -4,13 +4,8 @@
 class Bubble extends MovableObject {
     height = 60;
     width = 60;
-    x;
-    y;
-    forward;
     speed = 2;
     movementInterval = null;
-    world;
-    isPoisonBubble;
 
     /**
      * Creates a bubble at the given position and starts its movement.

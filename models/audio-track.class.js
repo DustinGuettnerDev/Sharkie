@@ -3,9 +3,6 @@
  * The cut-off is defined by an absolute track timestamp.
  */
 class AudioTrack {
-    timeEnd;
-    repeat;
-    timeBegin;
     timeoutId = null;
     pausedAt = 0;
     isPaused = false;

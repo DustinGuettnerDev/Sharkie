@@ -4,8 +4,6 @@
 class Coin extends DrawableObject {
     height = 45;
     width = 45;
-    x;
-    y;
     collisionOffset = {
         top: 5,
         bottom: 5,
