@@ -431,4 +431,8 @@ class Character extends MortalObject {
         this.lastHit = Date.now();
         this.enemyDamageType = this.getEnemyDamageType(enemy);
     }
+
+    get fullLife() {
+        return this.lifeCount >= 5;
+    }
 }

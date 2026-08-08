@@ -1,4 +1,4 @@
-/* Fullscreen layout adjustments for the game container */
+/* Fullscreen layout adjustments for the game container and controls */
 :fullscreen .game-container {
     height: 100vh;
     width: calc(100vh * 3 / 2);
@@ -15,7 +15,7 @@
     width: 100%;
 }
 
-/* Align mobile controls with the rotated game view */
+/* Align mobile controls with the rotated fullscreen view */
 :fullscreen .mobile-controls {
     top: 50%;
     left: 50%;

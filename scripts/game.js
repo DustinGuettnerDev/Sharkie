@@ -1,5 +1,5 @@
 /**
- * Initializes the game by creating the canvas, input controller, and UI controller.
+ * Initializes the main game state by creating the canvas, input controller, storage helper, audio system, and UI controller.
  */
 function init() {
     canvas = document.getElementById("canvas");

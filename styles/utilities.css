@@ -1,9 +1,9 @@
-/* Utility classes for visibility and hidden elements */
+/* Utility helpers for visibility, spacing, and interactive states */
 .hidden {
     display: none !important;
 }
 
-/* Shared styles for interactive buttons and links */
+/* Shared styles for buttons and links */
 .btn {
     cursor: pointer;
     z-index: 1;
@@ -22,7 +22,7 @@
     outline: none;
 }
 
-/* General helpers for text and links */
+/* General text and link helpers */
 @media (pointer: fine) and (hover: hover) {
     .link:hover {
         text-decoration: underline;

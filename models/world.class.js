@@ -3,7 +3,7 @@
  */
 class World {
     character = null;
-    hudIcons = [];
+    HUD = [];
 
     ctx = null;
     canvas = null;
@@ -68,7 +68,7 @@ class World {
         this.level = createLevel_1();
         this.control = control;
         this.character = new Character(this, this.uiController);
-        this.hudIcons = createHudIcons(this, this.character);
+        this.HUD = createHud(this, this.character);
         this.setWorld();
     }
 
@@ -113,7 +113,7 @@ class World {
         this.ctx.translate(this.camera_x, 0);
         this.drawScrollableWorldLayers();
         this.ctx.translate(-this.camera_x, 0);
-        this.addHudIconsToMap();
+        this.addHudToMap();
     }
 
     /**
@@ -187,7 +187,7 @@ class World {
     }
 
     /**
-     * Checks for collisions between the character and collectibles, handling coin collection and poison bottle collection.
+     * Checks collisions between the character and collectible objects and delegates coin or poison handling.
      */
     collectibleCollision() {
         for (let collectible of this.level.collectible) {
@@ -197,29 +197,63 @@ class World {
     }
 
     /**
-     * Handles the collision between the character and a coin collectible,
-     * including coin pickup and life-up sound effects.
+     * Handles a coin pickup interaction, including collection rules, sounds, and life-up progression.
      * @param {Coin} collectible The coin collectible being checked for collision.
      */
     coinCollision(collectible) {
-        if (collectible instanceof Coin) {
-            if (this.character.isColliding(collectible)) {
-                this.level.collectible = this.level.collectible.filter((e) => e !== collectible);
-                this.character.coinCount += 1;
-                AUDIO_PATHS.collectibles.coin.currentTime = 0;
-                AUDIO_PATHS.collectibles.coin.play();
-                if (this.character.coinCount >= this.coinsTillLife) {
-                    this.character.lifeCount += 1;
-                    AUDIO_PATHS.collectibles.hpUp.currentTime = 0;
-                    AUDIO_PATHS.collectibles.hpUp.play();
-                    this.character.coinCount = 0;
-                }
-            }
+        if (!(collectible instanceof Coin)) return;
+
+        if (!this.canCollectCoin(collectible)) return;
+
+        this.removeCollectedCoin(collectible);
+        this.collectCoin();
+    }
+
+    /**
+     * Determines whether the given coin can currently be collected under the current life and coin rules.
+     * @param {Coin} collectible The coin collectible being checked for collision.
+     * @returns {boolean} True if the coin can be collected.
+     */
+    canCollectCoin(collectible) {
+        return (
+            this.character.isColliding(collectible) &&
+            (!this.character.fullLife || this.character.coinCount < this.coinsTillLife - 1)
+        );
+    }
+
+    /**
+     * Removes the collected coin from the active collectible list.
+     * @param {Coin} collectible The coin collectible to remove.
+     */
+    removeCollectedCoin(collectible) {
+        this.level.collectible = this.level.collectible.filter((e) => e !== collectible);
+    }
+
+    /**
+     * Increases the coin counter, plays the pickup sound, and triggers a life-up when the threshold is reached.
+     */
+    collectCoin() {
+        this.character.coinCount += 1;
+        AUDIO_PATHS.collectibles.coin.currentTime = 0;
+        AUDIO_PATHS.collectibles.coin.play();
+
+        if (this.character.coinCount >= this.coinsTillLife) {
+            this.applyLifeUp();
         }
     }
 
     /**
-     * Handles the collision between the character and a poison bottle collectible.
+     * Increases the character's life count up to the maximum value and resets the coin counter.
+     */
+    applyLifeUp() {
+        this.character.lifeCount = Math.min(this.character.lifeCount + 1, 5);
+        AUDIO_PATHS.collectibles.hpUp.currentTime = 0;
+        AUDIO_PATHS.collectibles.hpUp.play();
+        this.character.coinCount = 0;
+    }
+
+    /**
+     * Handles a poison bottle pickup interaction and updates the character's poison count when allowed.
      * @param {PoisonBottle} collectible The poison bottle collectible being checked for collision.
      */
     poisonBottleCollison(collectible) {
@@ -322,17 +356,19 @@ class World {
     }
 
     /**
-     * Adds HUD icons to the map, updating their values and rendering them on the canvas.
+     * Adds all HUD elements to the map, updates their current values, and renders their labels.
      */
-    addHudIconsToMap() {
-        for (let icon of this.hudIcons) {
-            this.addToMap(icon);
-            icon.updateValue();
-            this.drawValue({
-                text: icon.iconValue,
-                x: icon.x + 70,
-                y: icon.y + 50 + icon.fontOffsetY,
-            });
+    addHudToMap() {
+        for (let hudElement of this.HUD) {
+            this.addToMap(hudElement);
+            hudElement.update();
+            if (hudElement.mode === "icon") {
+                this.drawValue({
+                    text: hudElement.iconValue,
+                    x: hudElement.x + hudElement.fontOffsetX,
+                    y: hudElement.y + hudElement.fontOffsetY,
+                });
+            }
         }
     }
 

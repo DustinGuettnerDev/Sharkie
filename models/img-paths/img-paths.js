@@ -227,8 +227,7 @@ const IMG_PATHS = Object.freeze({
         },
     },
 
-    hudIcons: {
-        life: "assets/img/ui/life/1.png",
+    hud: {
         poison: "assets/img/ui/poison/1.png",
         coin: "assets/img/ui/coin/1.png",
         lifebar: [
