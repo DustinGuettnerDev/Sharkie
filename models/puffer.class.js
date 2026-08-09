@@ -34,8 +34,8 @@ class Puffer extends RegularEnemy {
      * @param {number} positionOffset Initial x-position offset.
      * @param {number} speedOffset Speed variation factor.
      */
-    constructor(positionOffset = 0, speedOffset = 0) {
-        super(positionOffset, speedOffset);
+    constructor(positionOffset = 0) {
+        super(positionOffset);
         this.loadImage(IMG_PATHS.puffer.swim[0]);
         this.loadImages(IMG_PATHS.puffer.swim);
         this.loadImages(IMG_PATHS.puffer.transition);

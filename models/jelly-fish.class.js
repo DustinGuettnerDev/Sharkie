@@ -20,8 +20,8 @@ class JellyFish extends RegularEnemy {
      * @param {number} positionOffset Initial x-position offset.
      * @param {number} speedOffset Speed variation factor.
      */
-    constructor(positionOffset = 0, speedOffset = 0.4) {
-        super(positionOffset, speedOffset);
+    constructor(positionOffset = 0) {
+        super(positionOffset);
         this.loadImage(IMG_PATHS.jellyFish.swim[0]);
         this.loadImages(IMG_PATHS.jellyFish.swim);
         this.loadImages(IMG_PATHS.jellyFish.dead);

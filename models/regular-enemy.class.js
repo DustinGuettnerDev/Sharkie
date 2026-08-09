@@ -9,13 +9,12 @@ class RegularEnemy extends Enemy {
      * @param {number} positionOffset Base x-position offset for spawning.
      * @param {number} speedOffset Base speed factor.
      */
-    constructor(positionOffset = 900, speedOffset = 0.4) {
+    constructor(positionOffset = 900) {
         super();
         this.positionOffset = positionOffset;
-        this.speedOffset = speedOffset;
-        this.x = 380 * Math.random() + this.positionOffset;
+        this.x = 200 * Math.random() + this.positionOffset;
         this.y = 400 * Math.random();
-        this.speed = this.speedOffset + Math.random() * 0.5;
+        this.speed = Math.random() * 1.5;
     }
 
     /**
