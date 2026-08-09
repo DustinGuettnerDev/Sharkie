@@ -43,83 +43,87 @@
                 <h1 id="shark-title-id" class="page-title">Sharkie</h1>
             </header>
             <main class="shark__main">
-                <section id="mobile-controls-id" class="mobile-controls hidden">
-                    <div class="mobile-controls__movement">
-                        <button id="mobile-up-btn-id" class="btn mobile-controls__btn triangle-up">
-                            <svg width="20" height="20" viewBox="0 0 24 24">
-                                <path
-                                    class="mobile-controls__btn-path"
-                                    d="M5 16l7 -8 7 8"
-                                    stroke="#531a82"
-                                    fill="none"
-                                    stroke-width="2"
-                                />
-                            </svg>
-                        </button>
-                        <button
-                            id="mobile-left-btn-id"
-                            class="btn mobile-controls__btn triangle-left"
-                        >
-                            <svg width="20" height="20" viewBox="0 0 24 24">
-                                <path
-                                    class="mobile-controls__btn-path"
-                                    d="M16 19l-8 -7 8 -7"
-                                    stroke="#531a82"
-                                    fill="none"
-                                    stroke-width="2"
-                                />
-                            </svg>
-                        </button>
-                        <button
-                            id="mobile-right-btn-id"
-                            class="btn mobile-controls__btn triangle-right"
-                        >
-                            <svg width="20" height="20" viewBox="0 0 24 24">
-                                <path
-                                    class="mobile-controls__btn-path"
-                                    d="M8 5l8 7-8 7"
-                                    stroke="#531a82"
-                                    fill="none"
-                                    stroke-width="2"
-                                />
-                            </svg>
-                        </button>
-                        <button
-                            id="mobile-down-btn-id"
-                            class="btn mobile-controls__btn triangle-down"
-                        >
-                            <svg width="20" height="20" viewBox="0 0 24 24">
-                                <path
-                                    class="mobile-controls__btn-path"
-                                    d="M5 8 l7 8 7 -8"
-                                    stroke="#531a82"
-                                    fill="none"
-                                    stroke-width="2"
-                                />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="mobile-controls__actions">
-                        <button
-                            id="mobile-bubble-btn-id"
-                            class="btn mobile-controls__btn mobile-controls__action-btn"
-                        >
-                            BUBBLE
-                        </button>
-                        <button
-                            id="mobile-attack-btn-id"
-                            class="btn mobile-controls__btn mobile-controls__action-btn"
-                        >
-                            ATTACK
-                        </button>
-                    </div>
-                </section>
                 <section id="game-container-id" class="game-container">
-                    <div id="lock-screen-id" class="game-container__lock-screen hidden">
+                    <section id="mobile-controls-id" class="hidden" aria-label="Mobile controls">
+                        <div class="mobile-controls__movement">
+                            <button
+                                id="mobile-up-btn-id"
+                                class="btn mobile-controls__btn triangle-up"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24">
+                                    <path
+                                        class="mobile-controls__btn-path"
+                                        d="M5 16l7 -8 7 8"
+                                        stroke="#531a82"
+                                        fill="none"
+                                        stroke-width="2"
+                                    />
+                                </svg>
+                            </button>
+                            <button
+                                id="mobile-left-btn-id"
+                                class="btn mobile-controls__btn triangle-left"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24">
+                                    <path
+                                        class="mobile-controls__btn-path"
+                                        d="M16 19l-8 -7 8 -7"
+                                        stroke="#531a82"
+                                        fill="none"
+                                        stroke-width="2"
+                                    />
+                                </svg>
+                            </button>
+                            <button
+                                id="mobile-right-btn-id"
+                                class="btn mobile-controls__btn triangle-right"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24">
+                                    <path
+                                        class="mobile-controls__btn-path"
+                                        d="M8 5l8 7-8 7"
+                                        stroke="#531a82"
+                                        fill="none"
+                                        stroke-width="2"
+                                    />
+                                </svg>
+                            </button>
+                            <button
+                                id="mobile-down-btn-id"
+                                class="btn mobile-controls__btn triangle-down"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24">
+                                    <path
+                                        class="mobile-controls__btn-path"
+                                        d="M5 8 l7 8 7 -8"
+                                        stroke="#531a82"
+                                        fill="none"
+                                        stroke-width="2"
+                                    />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="mobile-controls__actions">
+                            <button
+                                id="mobile-bubble-btn-id"
+                                class="btn mobile-controls__btn mobile-controls__action-btn"
+                            >
+                                BUBBLE
+                            </button>
+                            <button
+                                id="mobile-attack-btn-id"
+                                class="btn mobile-controls__btn mobile-controls__action-btn"
+                            >
+                                ATTACK
+                            </button>
+                        </div>
+                    </section>
+
+                    <aside id="lock-screen-id" class="game-container__lock-screen hidden">
                         <p class="game-container__lock-screen-text">
-                            To play the game properly, you need to activate landscape-modus.
+                            Please turn you device to play this game.
                         </p>
-                    </div>
+                    </aside>
                     <canvas
                         class="game-container__canvas"
                         id="canvas"
@@ -136,7 +140,11 @@
                     <button id="resume-button-id" class="game-container__resume-btn btn hidden">
                         Resume
                     </button>
-                    <div id="game-end-container-id" class="game-container__end-screen hidden">
+                    <section
+                        id="game-end-container-id"
+                        class="game-container__end-screen hidden"
+                        aria-label="Game end screen"
+                    >
                         <img
                             id="game-over-id"
                             class="game-container__game-over-image hidden"
@@ -153,8 +161,8 @@
                             id="restart-button-id"
                             class="game-container__restart-btn btn"
                         ></button>
-                    </div>
-                    <div class="game-container__ui-icons">
+                    </section>
+                    <aside class="game-container__ui-icons" aria-label="Game controls">
                         <button id="help-button-id" class="game-container__help-btn btn">
                             <img
                                 class="game-container__help-icon"
@@ -180,13 +188,20 @@
                                 alt=""
                             />
                         </button>
-                    </div>
-                    <div id="help-id" class="game-container__help-overlay hidden">
-                        <div id="keyboard-keys-information-id" class="game-container__help-keys">
+                    </aside>
+                    <aside
+                        id="help-id"
+                        class="game-container__help-overlay hidden"
+                        aria-label="Help"
+                    >
+                        <section
+                            id="keyboard-keys-information-id"
+                            class="game-container__help-keys"
+                            aria-label="Keyboard shortcuts"
+                        >
                             <div class="game-container__help-row">
                                 <img
                                     class="game-container__help-move-key"
-                                    a
                                     src="assets/img/overlay/key/arrow-keys/1.png"
                                 />
                             </div>
@@ -211,14 +226,16 @@
                             <div class="game-container__help-row">
                                 <p class="game-container__help-text">ATTACK</p>
                             </div>
-                        </div>
+                        </section>
                         <p class="game-container__instruction-text">
                             In this game, you must guide your shark to the final boss and defeat
                             him. Every enemy has its own weakness, so you need to figure out which
                             attack works best against each one. You can avoid the regular enemies,
-                            but to complete the game, you must defeat the final boss.
+                            but to complete the game, you must defeat the final boss. <br />
+                            <br />Tipp: For every 7 coins you get hp back. If you have full hp you
+                            can collect only 6 coins.
                         </p>
-                    </div>
+                    </aside>
                 </section>
             </main>
 

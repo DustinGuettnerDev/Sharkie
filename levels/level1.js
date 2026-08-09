@@ -13,6 +13,9 @@ function createLevel_1() {
     );
 }
 
+
+const = [Puffer,]
+
 /**
  * Creates and configures the level 1 endboss.
  * @returns {Endboss} Configured endboss instance.
