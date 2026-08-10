@@ -100,21 +100,18 @@
     gap: 15px;
 }
 
-.game-container__game-over-image {
+.game-container__game-over-image,
+.game-container__you-win-image {
     width: clamp(200px, 80cqw, 1000px);
     aspect-ratio: 8 / 1;
 }
 
-.game-container__you-win-image {
-    width: clamp(200px, 50cqw, 400px);
-    height: auto;
-}
-
 .game-container__restart-btn,
 .game-container__back-to-menu {
-    aspect-ratio: 5 / 1;
-    font-size: clamp(14px, 4cqw, 28px);
+    aspect-ratio: 4 / 1;
+    font-size: clamp(14px, 4cqw, 40px);
     padding: 4px;
+    width: clamp(80px, 25cqw, 220px);
 }
 
 /* Top-right utility buttons and icon sizing */
