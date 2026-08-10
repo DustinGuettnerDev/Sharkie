@@ -14,7 +14,7 @@ class RegularEnemy extends Enemy {
         this.positionOffset = positionOffset;
         this.x = 200 * Math.random() + this.positionOffset;
         this.y = 400 * Math.random();
-        this.speed = Math.random() * 1.5;
+        this.speed = Math.random() + 0.5;
     }
 
     /**

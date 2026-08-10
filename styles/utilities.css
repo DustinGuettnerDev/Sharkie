@@ -10,16 +10,32 @@
     padding: 0;
     border-radius: 15px;
     font-family: inherit;
-    background-color: transparent;
-    border: none;
-    color: inherit;
-    text-align: center;
     user-select: none;
     touch-action: manipulation;
     -webkit-appearance: none;
     appearance: none;
     -webkit-tap-highlight-color: transparent;
     outline: none;
+    background-color: #531a82;
+    border: 2px solid #fff;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+@media (pointer: fine) and (hover: hover) {
+    .btn:hover {
+        background-color: #7fffe0;
+        color: #531a82;
+    }
+}
+
+.btn:active {
+    background-color: #7fffe0;
+    color: #531a82;
 }
 
 /* General text and link helpers */

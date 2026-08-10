@@ -144,7 +144,7 @@ class UIController {
     }
 
     /**
-     * Starts a new game round.
+     * Starts a new game round and hides the start screen and intro controls.
      */
     startGame() {
         if (this.isMobile() && !this.isLandscape()) {
@@ -162,7 +162,7 @@ class UIController {
     }
 
     /**
-     * Restarts the game and clears the end-screen UI.
+     * Restarts the game and hides the end-screen overlay and related controls.
      */
     restartGame() {
         if (this.isMobile() && !this.isLandscape()) {
@@ -211,7 +211,7 @@ class UIController {
     }
 
     /**
-     * Updates the mobile layout and UI visibility.
+     * Updates the responsive layout and visibility of overlay-dependent UI elements.
      */
     handleLandscape() {
         const isMobile = this.isMobile();
@@ -238,7 +238,7 @@ class UIController {
     }
 
     /**
-     * Shows the resume button only when the game is paused and the current layout allows it.
+     * Shows the resume button only when gameplay is paused and the current layout allows it.
      * @param {boolean} isMobile Whether the current device is mobile.
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
@@ -253,7 +253,7 @@ class UIController {
     }
 
     /**
-     * Hides the restart button in portrait mode on mobile.
+     * Hides the restart control in portrait mode on mobile.
      * @param {boolean} isMobile Whether the current device is mobile.
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
@@ -275,20 +275,23 @@ class UIController {
     }
 
     /**
-     * Shows or hides the lock screen and start button depending on device and orientation.
+     * Shows or hides the lock screen and start button based on device and orientation while keeping the end screen hidden.
      * @param {boolean} isMobile Whether the current device is treated as mobile.
      * @param {boolean} isLandscape Whether the current orientation is landscape.
      */
     handleLockScreen(isMobile, isLandscape) {
         if (!isMobile) {
             this.lockScreen.classList.add("hidden");
-            if (!this.gameStarted) this.startButton.classList.remove("hidden");
+            const shouldShowStartButton = !this.gameStarted && !this.isEndScreenVisible();
+            this.startButton.classList.toggle("hidden", !shouldShowStartButton);
             return;
         }
 
         const shouldShowLockScreen = !isLandscape;
         this.lockScreen.classList.toggle("hidden", !shouldShowLockScreen);
-        this.startButton.classList.toggle("hidden", !isLandscape || this.gameStarted);
+        const shouldShowStartButtonOnMobile =
+            isLandscape && !this.gameStarted && !this.isEndScreenVisible();
+        this.startButton.classList.toggle("hidden", !shouldShowStartButtonOnMobile);
     }
 
     /**

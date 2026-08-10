@@ -139,7 +139,9 @@
                         src="assets/img/overlay/start-screen/1.png"
                         alt="Start screen"
                     />
-                    <button id="start-button-id" class="game-container__start-btn btn"></button>
+                    <button id="start-button-id" class="game-container__start-btn btn">
+                        Start
+                    </button>
                     <button id="resume-button-id" class="game-container__resume-btn btn hidden">
                         Resume
                     </button>
@@ -160,12 +162,11 @@
                             src="assets/img/overlay/titles/you-win/1.png"
                             alt="You Win"
                         />
-                        <div>
-                            <button
-                                id="restart-button-id"
-                                class="game-container__restart-btn btn"
-                            ></button>
-                            <button class="btn">go back to menu</button>
+                        <div class="game-container__endscreen-button-container">
+                            <button id="restart-button-id" class="game-container__restart-btn btn">
+                                Try again
+                            </button>
+                            <button class="game-container__back-to-menu btn">Menu</button>
                         </div>
                     </section>
                     <aside class="game-container__ui-icons" aria-label="Game controls">

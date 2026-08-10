@@ -40,7 +40,8 @@
     margin-top: 24px;
 }
 
-/* Overlays and UI panels for the start, end, and help states */
+/* Overlay panels and primary action areas */
+/* Start and resume buttons */
 .game-container__lock-screen {
     height: 100%;
     width: 100%;
@@ -68,42 +69,16 @@
     pointer-events: none;
 }
 
+.game-container__start-btn,
 .game-container__resume-btn {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background-color: #531a82;
-    border: 2px solid #fff;
-    color: #fff;
-    text-align: center;
-    position: absolute;
-    box-sizing: border-box;
-    width: clamp(100px, 20cqw, 250px);
-    aspect-ratio: 3 / 1;
-    padding: clamp(2px, 0.6cqw, 5px);
-    font-size: clamp(16px, 1.2cqw, 22px);
-}
-
-.game-container__start-btn {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background-image: url("../assets/img/overlay/start/1.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: transparent;
-    color: transparent;
-    width: clamp(100px, 20cqw, 250px);
-    aspect-ratio: 2 / 1;
     z-index: 2;
-}
-
-.game-container__start-btn:hover,
-.game-container__start-btn:active {
-    background-image: url("../assets/img/overlay/start/2.png");
+    font-size: clamp(16px, 6cqw, 64px);
+    width: clamp(90px, 25cqw, 250px);
+    aspect-ratio: 2.5 / 1;
 }
 
 .game-container__end-screen {
@@ -118,8 +93,15 @@
     gap: 10px;
 }
 
+/* End-screen controls and spacing */
+.game-container__endscreen-button-container {
+    margin-top: clamp(8px, 2.5cqw, 20px);
+    display: flex;
+    gap: 15px;
+}
+
 .game-container__game-over-image {
-    width: clamp(200px, 50cqw, 400px);
+    width: clamp(200px, 80cqw, 1000px);
     aspect-ratio: 8 / 1;
 }
 
@@ -128,25 +110,17 @@
     height: auto;
 }
 
-.game-container__restart-btn {
-    background-image: url("../assets/img/overlay/try-again/1.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: transparent;
-    color: transparent;
-    width: clamp(100px, 20cqw, 250px);
-    aspect-ratio: 2 / 1;
+.game-container__restart-btn,
+.game-container__back-to-menu {
+    aspect-ratio: 5 / 1;
+    font-size: clamp(14px, 4cqw, 28px);
+    padding: 4px;
 }
 
-.game-container__restart-btn:hover,
-.game-container__restart-btn:active {
-    background-image: url("../assets/img/overlay/try-again/2.png");
-}
-
-/* Responsive top-right control buttons and icon spacing */
+/* Top-right utility buttons and icon sizing */
 .game-container__ui-icons {
     position: absolute;
+    margin-top: 10px;
     top: 0;
     width: 100%;
     display: flex;
@@ -157,15 +131,13 @@
 .game-container__help-btn,
 .game-container__fullscreen-btn,
 .game-container__mute-btn {
-    background-color: #531a82;
-    border: 2px solid #fff;
-    color: #fff;
-    border-radius: clamp(0px, 2cqw, 50px);
     width: clamp(24px, 5.5cqw, 48px);
     height: clamp(24px, 5.5cqw, 48px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: clamp(0px, 3cqw, 10px) !important;
+}
+
+.game-container__fullscreen-btn {
+    margin-right: 10px;
 }
 
 .game-container__mute-btn {
@@ -225,7 +197,7 @@
         brightness(84%) contrast(96%);
 }
 
-/* Help overlay and control instructions */
+/* Help overlay and keyboard instruction layout */
 .game-container__help-overlay {
     box-sizing: border-box;
     position: absolute;
@@ -318,7 +290,7 @@
     flex-direction: column;
     justify-content: space-between;
     padding-right: 15px;
-    gap: 40px;
+    gap: 30px;
     z-index: 10;
 }
 
@@ -348,6 +320,7 @@
     color: #531a82;
     background-color: #7fffe0;
     padding: 2px;
+    font-size: 16px;
 }
 
 .mobile-controls__btn.is-pressed {
