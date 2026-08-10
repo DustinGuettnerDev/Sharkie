@@ -7,7 +7,7 @@ class Character extends MortalObject {
     x = 0;
     y = 100;
     cameraOffset = 50;
-    speed = 20;
+    speed = 10;
     levelLimitUp = -150;
     levelLimitDown = 160;
     lifeCount = 5;

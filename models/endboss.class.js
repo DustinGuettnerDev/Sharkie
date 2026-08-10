@@ -50,7 +50,7 @@ class Endboss extends Enemy {
         this.loadImages(IMG_PATHS.endboss.orca.attack);
         this.loadImages(IMG_PATHS.endboss.orca.hurt);
         this.loadImages(IMG_PATHS.endboss.orca.dead);
-        this.loadImages(IMG_PATHS.endboss.orca.appear);
+        this.loadImages(IMG_PATHS.endboss.orca.apear);
         this.animate();
         this.movement();
     }
