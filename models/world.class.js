@@ -121,7 +121,7 @@ class World {
      */
     drawScrollableWorldLayers() {
         this.addObjectsToMap(this.level.backgroundObjects);
-        this.addObjectsToMap(this.isVisibleFilterPB(this.level.collectible));
+        this.addObjectsToMap(this.isVisibleFilterPB(this.level.collectibles));
         this.addObjectsToMap(this.bubbles);
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.character);
@@ -190,7 +190,7 @@ class World {
      * Checks collisions between the character and collectible objects and delegates coin or poison handling.
      */
     collectibleCollision() {
-        for (let collectible of this.level.collectible) {
+        for (let collectible of this.level.collectibles) {
             this.coinCollision(collectible);
             this.poisonBottleCollison(collectible);
         }
@@ -226,7 +226,7 @@ class World {
      * @param {Coin} collectible The coin collectible to remove.
      */
     removeCollectedCoin(collectible) {
-        this.level.collectible = this.level.collectible.filter((e) => e !== collectible);
+        this.level.collectibles = this.level.collectibles.filter((e) => e !== collectible);
     }
 
     /**

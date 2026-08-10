@@ -38,14 +38,19 @@ class Endboss extends Enemy {
 
     /**
      * Initializes the endboss, loads all animation frames, and starts movement and animation loops.
+     * @param {Object} [config={}] Optional initial positioning values.
+     * @param {number} [config.x=8000] Initial x-position of the end boss.
+     * @param {number} [config.appearingPositionTrigger=7200] Trigger position where the boss appears.
      */
-    constructor() {
+    constructor({ x = 8000, appearingPositionTrigger = 7200 } = {}) {
         super();
+        this.x = x;
+        this.appearingPositionTrigger = appearingPositionTrigger;
         this.loadImages(IMG_PATHS.endboss.orca.swim);
         this.loadImages(IMG_PATHS.endboss.orca.attack);
         this.loadImages(IMG_PATHS.endboss.orca.hurt);
         this.loadImages(IMG_PATHS.endboss.orca.dead);
-        this.loadImages(IMG_PATHS.endboss.orca.apear);
+        this.loadImages(IMG_PATHS.endboss.orca.appear);
         this.animate();
         this.movement();
     }
