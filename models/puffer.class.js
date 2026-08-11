@@ -7,10 +7,12 @@ class Puffer extends RegularEnemy {
     animateInterval = null;
     collisionOffset = {
         top: 10,
-        bottom: 10,
+        bottom: 25,
         left: 5,
         right: 10,
     };
+    collisionOffsetBottomDefault = 25;
+    collisionOffsetBottomAggro = 5;
 
     aggroOffset = {
         top: -100,
@@ -90,6 +92,7 @@ class Puffer extends RegularEnemy {
         if (!this.aggro) return false;
 
         if (this.transitionAggroEnded) {
+            this.collisionOffset.bottom = this.collisionOffsetBottomAggro;
             this.playAnimation(IMG_PATHS.puffer.bubbleSwim);
             return true;
         }
@@ -104,6 +107,7 @@ class Puffer extends RegularEnemy {
     checkSwimming() {
         this.playAnimation(IMG_PATHS.puffer.swim);
         this.transitionAggroEnded = false;
+        this.collisionOffset.bottom = this.collisionOffsetBottomDefault;
         return true;
     }
 

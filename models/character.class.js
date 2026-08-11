@@ -40,6 +40,11 @@ class Character extends MortalObject {
         right: 55,
     };
 
+    collisionOffsetTopDefault = 180;
+    collisionOffsetBottomDefault = 100;
+    collisionOffsetTopSleep = 220;
+    collisionOffsetBottomSleep = 50;
+
     /**
      * Initializes the character, loads all animation frames, and starts movement and animation loops.
      * @param {World} world Reference to the game world.
@@ -324,7 +329,7 @@ class Character extends MortalObject {
     }
 
     /**
-     * stop the snoring sound of the character
+     * Stops the snoring sound.
      */
     stopSnoring() {
         AUDIO_PATHS.character.snoring.stop();
@@ -369,20 +374,37 @@ class Character extends MortalObject {
     }
 
     /**
-     * Plays the sleep animation for the character after extended inactivity.
+     * Plays the sleep animation — delegates to loop or intro phase.
      */
     playSleepAnimation() {
         if (this.sleepLoop) {
-            if (this.currentImage == 0) {
-                this.currentImage = 10;
-            }
-            this.playAnimation(IMG_PATHS.character.sleep);
-            return;
+            this.playSleepLoopAnimation();
+        } else {
+            this.playSleepIntroAnimation();
         }
+    }
 
+    /**
+     * Loops the sleep animation from frame 10 onwards, skipping the intro frames.
+     */
+    playSleepLoopAnimation() {
+        if (this.currentImage == 0) {
+            this.currentImage = 10;
+        }
+        this.playAnimation(IMG_PATHS.character.sleep);
+    }
+
+    /**
+     * Plays the sleep intro once, triggering sink and collision offset shift at set frames.
+     */
+    playSleepIntroAnimation() {
         let animationEnd = this.playAnimation(IMG_PATHS.character.sleep);
         if (this.currentImage == 4) {
             this.sinkDown = true;
+        }
+        if (this.currentImage == 9) {
+            this.collisionOffset.top = this.collisionOffsetTopSleep;
+            this.collisionOffset.bottom = this.collisionOffsetBottomSleep;
         }
         if (animationEnd) {
             this.sleepLoop = true;
@@ -397,6 +419,8 @@ class Character extends MortalObject {
         this.sleepLoop = false;
         this.sinkDown = false;
         this.sinkDownEnded = false;
+        this.collisionOffset.top = this.collisionOffsetTopDefault;
+        this.collisionOffset.bottom = this.collisionOffsetBottomDefault;
     }
 
     /**
@@ -445,6 +469,9 @@ class Character extends MortalObject {
         this.enemyDamageType = this.getEnemyDamageType(enemy);
     }
 
+    /**
+     * @returns {boolean} True when the character has maximum life.
+     */
     get fullLife() {
         return this.lifeCount >= 5;
     }

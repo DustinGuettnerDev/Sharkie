@@ -12,7 +12,7 @@ class World {
     renderFrameId = null;
     camera_x = 0;
     bubbles = [];
-    testMode = false;
+    testMode = true;
     coinsTillLife = 7;
     maxPoisonBottleCollected = 2;
     gameEnd = false;
@@ -20,6 +20,7 @@ class World {
     uiController = null;
     level = null;
     locStorage = null;
+    collisionTickMs = 200;
 
     constructor(canvas, control, uiController, locStorage) {
         this.validateWorldDependencies(canvas, control);
@@ -138,7 +139,7 @@ class World {
             this.enemyCollision();
             this.collectibleCollision();
             this.bubbleCollision();
-        }, 400);
+        }, this.collisionTickMs);
     }
 
     /**
