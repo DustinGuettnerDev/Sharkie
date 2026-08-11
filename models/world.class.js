@@ -69,7 +69,7 @@ class World {
         this.control = control;
         this.character = new Character(this, this.uiController);
         this.HUD = createHud(this, this.character);
-        this.setWorld();
+        this.setAttributes();
     }
 
     /**
@@ -81,9 +81,9 @@ class World {
     }
 
     /**
-     * Sets the world reference for all enemies in the level, allowing them to access the world context.
+     * Sets the world reference on all enemies so they can access the game world.
      */
-    setWorld() {
+    setAttributes() {
         for (let enemy of this.level.regularEnemies) {
             enemy.world = this;
         }

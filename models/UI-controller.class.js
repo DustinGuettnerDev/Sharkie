@@ -30,6 +30,7 @@ class UIController {
     keyboardKeysInfo = null;
     audiosPlaying = [];
     resumeButton = null;
+    menuButton = null;
 
     /**
      * Initializes the UI controller and wires the main listeners.
@@ -64,6 +65,7 @@ class UIController {
         this.helpButton = document.getElementById("help-button-id");
         this.helpContainer = document.getElementById("help-id");
         this.resumeButton = document.getElementById("resume-button-id");
+        this.menuButton = document.getElementById("menu-button-id");
     }
 
     /**
@@ -100,6 +102,7 @@ class UIController {
         this.helpButton.addEventListener("click", () => this.showHelp());
         this.muteButton.addEventListener("click", () => this.toggleMute());
         this.fullscreenButton.addEventListener("click", () => this.toggleFullscreen());
+        this.menuButton.addEventListener("click", () => this.goBackToMenu());
     }
 
     /**
@@ -379,5 +382,17 @@ class UIController {
                 this.forEachTrack(value, callback);
             }
         }
+    }
+
+    /**
+     * Stops all game loops, clears the canvas, and returns to the main menu.
+     */
+    goBackToMenu() {
+        this.world.stopAllLoops();
+        this.canvas.getContext("2d").clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.gameStarted = false;
+        this.startScreen.classList.remove("hidden");
+        this.startButton.classList.remove("hidden");
+        this.gameEndContainer.classList.add("hidden");
     }
 }
