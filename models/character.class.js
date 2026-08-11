@@ -18,14 +18,15 @@ class Character extends MortalObject {
     inactiveStartTime = Date.now();
     waitTime = 1000;
     sleepTime = 15000;
-    sleepAnimationFinished = false;
+    sleepLoop = false;
     slap = false;
     hurtTime = 2;
     deathAnimationEnd = false;
-    deathFallDown = false;
-    deathRiseUp = false;
-    deathRiseUpEnded = false;
-    deathFallDownEnded = false;
+    sinkDown = false;
+    floatUp = false;
+    floatUpEnded = false;
+    sinkDownEnded = false;
+    seabed = 100;
 
     createBubble = {
         isActive: false,
@@ -78,8 +79,8 @@ class Character extends MortalObject {
             if (this.world.isPaused) return;
             if (!this.world.control || !this.world.level) return;
             if (this.checkPlayerMovement()) return;
-            if (this.checkDeathFallDownMovement()) return;
-            if (this.checkDeathRiseUpMovement()) return;
+            if (this.checkSinkDownMovement()) return;
+            if (this.checkFloatUpMovement()) return;
             this.checkDeathStopMovement();
         }, this.movementTickMs);
     }
@@ -91,6 +92,7 @@ class Character extends MortalObject {
     checkPlayerMovement() {
         if (this.hasZeroLife) return;
         if (this.isGameStarted) return;
+        if (this.sinkDown) return;
         this.moveHorizontal();
         this.moveVertical();
         this.moveCamera();
@@ -130,14 +132,18 @@ class Character extends MortalObject {
     }
 
     /**
-     * Checks and handles the character's death movement while falling down.
-     * @returns {boolean} True if the character is currently in the death fall-down movement, otherwise false.
+     * Checks and handles the character's sinking movement towards the seabed (death or sleep).
+     * @returns {boolean} True if the character is currently sinking, otherwise false.
      */
-    checkDeathFallDownMovement() {
-        if (this.deathFallDown && !this.deathFallDownEnded) {
+    checkSinkDownMovement() {
+        if (this.sinkDown && !this.sinkDownEnded) {
             this.moveDown(1);
-            if (this.y >= 100) {
-                this.deathFallDownEnded = true;
+            if (this.y >= this.seabed) {
+                this.sinkDownEnded = true;
+            }
+
+            if (this.sinkDownEnded) {
+                this.sinkDown = false;
             }
             return true;
         }
@@ -145,14 +151,14 @@ class Character extends MortalObject {
     }
 
     /**
-     * Checks and handles the character's death movement while rising up.
-     * @returns {boolean} True if the character is currently in the death rise-up movement, otherwise false.
+     * Checks and handles the character's death movement while floating upward.
+     * @returns {boolean} True if the character is currently floating up, otherwise false.
      */
-    checkDeathRiseUpMovement() {
-        if (this.deathRiseUp && !this.deathRiseUpEnded) {
+    checkFloatUpMovement() {
+        if (this.floatUp && !this.floatUpEnded) {
             this.moveUp(1);
             if (this.y <= -500) {
-                this.deathRiseUpEnded = true;
+                this.floatUpEnded = true;
             }
             return true;
         }
@@ -164,7 +170,7 @@ class Character extends MortalObject {
      * @returns {boolean} True if the character's death movement has ended, otherwise false.
      */
     checkDeathStopMovement() {
-        if (this.deathFallDownEnded || this.deathRiseUpEnded) {
+        if (this.sinkDownEnded || this.floatUpEnded) {
             this.world.uiController.gameStarted = false;
             this.stopMovementInterval();
             return true;
@@ -212,7 +218,7 @@ class Character extends MortalObject {
             this.stopSnoring();
             AUDIO_PATHS.character.hurt.play();
             this.playHurtTypeAnimation();
-            this.startSleepCounter();
+            this.wakeUp();
             return true;
         }
         return false;
@@ -230,7 +236,7 @@ class Character extends MortalObject {
             this.world.control.down
         ) {
             this.stopSnoring();
-            this.startSleepCounter();
+            this.wakeUp();
             this.slap = false;
             this.createBubble.isActive = false;
             this.playAnimation(IMG_PATHS.character.swim);
@@ -249,7 +255,7 @@ class Character extends MortalObject {
         }
         if (this.slap) {
             this.stopSnoring();
-            this.startSleepCounter();
+            this.wakeUp();
             this.playSlapAnimation();
             return true;
         }
@@ -277,7 +283,7 @@ class Character extends MortalObject {
         }
         if (this.createBubble.isActive) {
             this.stopSnoring();
-            this.startSleepCounter();
+            this.wakeUp();
             this.playCreateBubbleAnimation();
             return true;
         }
@@ -331,12 +337,12 @@ class Character extends MortalObject {
         if (this.enemyDamageType === "poison") {
             this.deathAnimationEnd = this.playAnimation(IMG_PATHS.character.dead.poison);
             if (this.deathAnimationEnd) {
-                this.deathRiseUp = true;
+                this.floatUp = true;
             }
         } else if (this.enemyDamageType === "shock") {
             this.deathAnimationEnd = this.playAnimation(IMG_PATHS.character.dead.shock);
             if (this.deathAnimationEnd) {
-                this.deathFallDown = true;
+                this.sinkDown = true;
             }
         }
         if (this.deathAnimationEnd) {
@@ -366,24 +372,28 @@ class Character extends MortalObject {
      * Plays the sleep animation for the character after extended inactivity.
      */
     playSleepAnimation() {
-        if (this.sleepAnimationFinished) {
-            this.lastFrame(IMG_PATHS.character.sleep);
+        if (this.sleepLoop) {
+            if (this.currentImage == 0) {
+                this.currentImage = 10;
+            }
+            this.playAnimation(IMG_PATHS.character.sleep);
             return;
         }
-
+        this.sinkDown = true;
         let animationEnd = this.playAnimation(IMG_PATHS.character.sleep);
         if (animationEnd) {
-            this.sleepAnimationFinished = true;
-            this.lastFrame(IMG_PATHS.character.sleep);
+            this.sleepLoop = true;
         }
     }
 
     /**
-     * Starts the sleep counter for the character, marking the time when it became inactive.
+     * Resets all sleep and sink state, marking the character as active again.
      */
-    startSleepCounter() {
+    wakeUp() {
         this.inactiveStartTime = Date.now();
-        this.sleepAnimationFinished = false;
+        this.sleepLoop = false;
+        this.sinkDown = false;
+        this.sinkDownEnded = false;
     }
 
     /**
