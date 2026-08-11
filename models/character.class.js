@@ -17,7 +17,7 @@ class Character extends MortalObject {
     animateInterval = null;
     inactiveStartTime = Date.now();
     waitTime = 1000;
-    sleepTime = 1500;
+    sleepTime = 15000;
     sleepLoop = false;
     slap = false;
     hurtTime = 2;
@@ -44,6 +44,8 @@ class Character extends MortalObject {
     collisionOffsetBottomDefault = 100;
     collisionOffsetTopSleep = 220;
     collisionOffsetBottomSleep = 50;
+    collisionOffsetSideDefault = 55;
+    collisionOffsetSideSlap = 20;
 
     /**
      * Initializes the character, loads all animation frames, and starts movement and animation loops.
@@ -268,12 +270,19 @@ class Character extends MortalObject {
     }
 
     /**
-     * Plays the slap animation for the character and resets the slap state when the animation ends.
+     * Plays the slap animation, widens the collision box on the attacking side, and resets both when done.
      */
     playSlapAnimation() {
         AUDIO_PATHS.character.slap.play();
+        if (!this.otherDirection) {
+            this.collisionOffset.right = this.collisionOffsetSideSlap;
+        } else {
+            this.collisionOffset.left = this.collisionOffsetSideSlap;
+        }
         let animationEnd = this.playAnimation(IMG_PATHS.character.attack.slap);
         if (animationEnd) {
+            this.collisionOffset.right = this.collisionOffsetSideDefault;
+            this.collisionOffset.left = this.collisionOffsetSideDefault;
             this.slap = false;
         }
     }
@@ -421,6 +430,8 @@ class Character extends MortalObject {
         this.sinkDownEnded = false;
         this.collisionOffset.top = this.collisionOffsetTopDefault;
         this.collisionOffset.bottom = this.collisionOffsetBottomDefault;
+        this.collisionOffset.left = this.collisionOffsetSideDefault;
+        this.collisionOffset.right = this.collisionOffsetSideDefault;
     }
 
     /**
