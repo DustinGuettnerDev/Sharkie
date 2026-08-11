@@ -17,7 +17,7 @@ class Character extends MortalObject {
     animateInterval = null;
     inactiveStartTime = Date.now();
     waitTime = 1000;
-    sleepTime = 15000;
+    sleepTime = 1500;
     sleepLoop = false;
     slap = false;
     hurtTime = 2;
@@ -379,8 +379,11 @@ class Character extends MortalObject {
             this.playAnimation(IMG_PATHS.character.sleep);
             return;
         }
-        this.sinkDown = true;
+
         let animationEnd = this.playAnimation(IMG_PATHS.character.sleep);
+        if (this.currentImage == 4) {
+            this.sinkDown = true;
+        }
         if (animationEnd) {
             this.sleepLoop = true;
         }
