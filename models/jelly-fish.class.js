@@ -18,7 +18,6 @@ class JellyFish extends RegularEnemy {
     /**
      * Initializes the jellyfish with swim/death animations and starts its loops.
      * @param {number} positionOffset Initial x-position offset.
-     * @param {number} speedOffset Speed variation factor.
      */
     constructor(positionOffset = 0) {
         super(positionOffset);

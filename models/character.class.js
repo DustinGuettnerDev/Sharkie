@@ -27,6 +27,7 @@ class Character extends MortalObject {
     floatUpEnded = false;
     sinkDownEnded = false;
     seabed = 100;
+    slapHitWindow = false;
 
     createBubble = {
         isActive: false,
@@ -42,7 +43,6 @@ class Character extends MortalObject {
 
     collisionOffsetTopDefault = 180;
     collisionOffsetBottomDefault = 100;
-
     collisionOffsetTopSleep = 220;
     collisionOffsetBottomSleep = 50;
 
@@ -242,6 +242,7 @@ class Character extends MortalObject {
             this.world.control.down
         ) {
             this.stopSnoring();
+            this.slapHitWindow = false;
             this.wakeUp();
             this.slap = false;
             this.createBubble.isActive = false;
@@ -274,8 +275,13 @@ class Character extends MortalObject {
     playSlapAnimation() {
         AUDIO_PATHS.character.slap.play();
         let animationEnd = this.playAnimation(IMG_PATHS.character.attack.slap);
+        if (this.currentImage >= 4) {
+            this.slapHitWindow = true;
+        }
+
         if (animationEnd) {
             this.slap = false;
+            this.slapHitWindow = false;
         }
     }
 
@@ -422,8 +428,6 @@ class Character extends MortalObject {
         this.sinkDownEnded = false;
         this.collisionOffset.top = this.collisionOffsetTopDefault;
         this.collisionOffset.bottom = this.collisionOffsetBottomDefault;
-        this.collisionOffset.left = this.collisionOffsetSideDefault;
-        this.collisionOffset.right = this.collisionOffsetSideDefault;
     }
 
     /**

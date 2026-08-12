@@ -34,7 +34,6 @@ class Puffer extends RegularEnemy {
     /**
      * Initializes the puffer with its animations and starts its loops.
      * @param {number} positionOffset Initial x-position offset.
-     * @param {number} speedOffset Speed variation factor.
      */
     constructor(positionOffset = 0) {
         super(positionOffset);

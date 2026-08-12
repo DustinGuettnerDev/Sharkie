@@ -1,5 +1,5 @@
 /**
- * Represents the game world, managing the character, enemies, collectibles, and rendering.
+ * Represents the game world and coordinates game state, rendering, collisions, and loops.
  */
 class World {
     character = null;
@@ -12,7 +12,7 @@ class World {
     renderFrameId = null;
     camera_x = 0;
     bubbles = [];
-    testMode = true;
+    testMode = false;
     coinsTillLife = 7;
     maxPoisonBottleCollected = 2;
     gameEnd = false;
@@ -129,8 +129,8 @@ class World {
     }
 
     /**
-     * Checks collisions and aggro range at regular intervals.
-     * Checks are skipped while the game is paused or the character has zero life.
+     * Checks enemy, collectible, and bubble collisions at regular intervals.
+     * All collision checks are skipped while the game is paused or the character has no life left.
      */
     checkCollisionsOrAggroRange() {
         this.stopCollisionInterval();
@@ -153,7 +153,8 @@ class World {
     }
 
     /**
-     * Checks for collisions between the character and enemies, applying damage to the character or handling enemy hits if its weakness is "slap".
+     * Resolves character-enemy collisions. During the slap hit window, the enemy is attacked;
+     * otherwise the character takes damage unless test mode or the slap action is active.
      */
     enemyCollision() {
         for (let enemy of this.level.enemies) {
@@ -163,9 +164,9 @@ class World {
                 !this.character.isHurt &&
                 enemy.dead !== true
             ) {
-                if (this.character.slap === true) {
+                if (this.character.slapHitWindow === true) {
                     this.enemySlapCollision(enemy);
-                } else if (!this.testMode) {
+                } else if (!this.testMode && !this.character.slap) {
                     this.character.getHit(enemy);
                 }
             }
@@ -173,8 +174,8 @@ class World {
     }
 
     /**
-     * Handles the collision between the character's slap and the specified enemy,
-     * including the slap sound effect.
+     * Handles an enemy hit during the character's active slap hit window.
+     * The enemy only takes damage when its weakness includes "slap".
      * @param {Enemy} enemy The enemy object being slapped.
      */
     enemySlapCollision(enemy) {
@@ -188,7 +189,8 @@ class World {
     }
 
     /**
-     * Checks collisions between the character and collectible objects and delegates coin or poison handling.
+     * Checks collisions between the character and all collectibles.
+     * Coin and poison bottle handling is delegated to their respective methods.
      */
     collectibleCollision() {
         for (let collectible of this.level.collectibles) {
@@ -254,7 +256,7 @@ class World {
     }
 
     /**
-     * Handles a poison bottle pickup interaction and updates the character's poison count when allowed.
+     * Handles a poison bottle pickup and increases the poison bottle count when collection is allowed.
      * @param {PoisonBottle} collectible The poison bottle collectible being checked for collision.
      */
     poisonBottleCollison(collectible) {
@@ -272,7 +274,7 @@ class World {
     }
 
     /**
-     * Checks for collisions between bubbles and enemies, applying damage to enemies if the bubble's type matches their weakness.
+     * Checks bubble-enemy collisions and delegates matching weakness handling.
      */
     bubbleCollision() {
         for (let bubble of this.bubbles) {
@@ -286,7 +288,7 @@ class World {
     }
 
     /**
-     * Applies damage to the enemy if the bubble type matches its weakness, then removes the bubble.
+     * Applies damage when the bubble type matches the enemy's weakness, then removes the bubble.
      * @param {Bubble} bubble The bubble that made contact.
      * @param {Enemy} enemy The enemy that was hit.
      */
@@ -302,7 +304,8 @@ class World {
     }
 
     /**
-     * Spawns a bubble at the character's position, moving in the direction the character is facing. If the character has poison bottles, it will spawn a poison bubble instead.
+     * Spawns a bubble in the character's facing direction.
+     * A poison bubble is created when the character has at least one poison bottle.
      */
     spawnBubble() {
         const range = 50;
@@ -321,7 +324,7 @@ class World {
     }
 
     /**
-     * Filters collectibles so hidden poison bottles are excluded while all other collectibles remain visible.
+     * Excludes hidden poison bottles from rendering while keeping all other collectibles.
      * @param {(Coin|PoisonBottle)[]} drawObject The array of collectible objects to filter.
      * @returns {(Coin|PoisonBottle)[]} The filtered array of collectible objects.
      */
@@ -332,7 +335,7 @@ class World {
     }
 
     /**
-     * Adds an array of drawable objects to the map, rendering each object on the canvas.
+     * Renders every object in the supplied collection.
      * @param {DrawableObject[]} drawObjects The array of drawable objects to add to the map.
      */
     addObjectsToMap(drawObjects) {
@@ -342,7 +345,7 @@ class World {
     }
 
     /**
-     * Adds a single drawable object to the map, rendering it on the canvas.
+     * Renders one object and, when test mode is enabled, its debug frames.
      * @param {DrawableObject} drawObject The drawable object to add to the map.
      */
     addToMap(drawObject) {
@@ -357,7 +360,7 @@ class World {
     }
 
     /**
-     * Adds all HUD elements to the map, updates their current values, and renders their labels.
+     * Renders all HUD elements, updates their values, and draws icon counters.
      */
     addHudToMap() {
         for (let hudElement of this.HUD) {
@@ -400,7 +403,7 @@ class World {
     }
 
     /**
-     * Draws debug frames around supported objects to visualize collision and aggro areas.
+     * Draws the red collision frame and, when available, the yellow aggro frame.
      * @param {DrawableObject} drawObject The drawable object for which to draw the collision frame.
      */
     drawFrame(drawObject) {
@@ -412,7 +415,7 @@ class World {
     }
 
     /**
-     * Returns whether the given object type supports debug frame rendering.
+     * Returns whether the object supports collision-frame rendering.
      * @param {DrawableObject} drawObject The object to check.
      * @returns {boolean} True if a debug frame should be drawn for this object.
      */
@@ -429,7 +432,7 @@ class World {
     }
 
     /**
-     * Renders a red frame around the given drawable object to visualize its collision area.
+     * Renders a red frame around the object's collision area.
      * @param {DrawableObject} drawObject The drawable object for which to draw the red collision frame.
      */
     renderingRedCollisonFrame(drawObject) {
@@ -446,7 +449,7 @@ class World {
     }
 
     /**
-     * Renders the yellow aggro frame around the given drawable object to visualize its aggro area.
+     * Renders a yellow frame around the object's aggro area.
      * @param {DrawableObject} drawObject The drawable object for which to draw the yellow aggro frame.
      */
     renderingYellowAggroFrame(drawObject) {
@@ -463,7 +466,7 @@ class World {
     }
 
     /**
-     * Flips the image of the given drawable object horizontally if it is facing the opposite direction, allowing for proper rendering of left-facing sprites.
+     * Temporarily flips the canvas and object position for left-facing sprites.
      * @param {DrawableObject} drawObject The drawable object to flip.
      */
     flipImage(drawObject) {
@@ -476,7 +479,7 @@ class World {
     }
 
     /**
-     * Flips the image of the given drawable object back to its original orientation if it was previously flipped, restoring the canvas context.
+     * Restores the canvas and object position after a temporary horizontal flip.
      * @param {DrawableObject} drawObject The drawable object to flip back to its original orientation.
      */
     flipImageBack(drawObject) {
@@ -487,8 +490,7 @@ class World {
     }
 
     /**
-     * Detects character death or finished endboss death animation, stops background audio,
-     * and shows the corresponding end-game overlay exactly once.
+     * Detects a finished game state and shows the corresponding end-game overlay once.
      */
     checkGameEnd() {
         if (this.gameEnd) return;
@@ -500,7 +502,7 @@ class World {
     }
 
     /**
-     * Stops background audio and shows the appropriate end-game overlay.
+     * Stops background audio and displays the appropriate end-game overlay.
      * @param {boolean} characterDead Whether the player character died.
      * @param {boolean} endbossDead Whether the endboss died.
      */
@@ -517,7 +519,7 @@ class World {
     }
 
     /**
-     * Stops all ongoing loops in the game, including collision checking, rendering, character movement and animation, and enemy movement and animation.
+     * Stops collision checking, rendering, character loops, enemy loops, and bubble loops.
      */
     stopAllLoops() {
         this.stopCollisionInterval();
