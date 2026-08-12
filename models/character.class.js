@@ -17,7 +17,7 @@ class Character extends MortalObject {
     animateInterval = null;
     inactiveStartTime = Date.now();
     waitTime = 1000;
-    sleepTime = 15000;
+    sleepTime = 1500;
     sleepLoop = false;
     slap = false;
     hurtTime = 2;
@@ -177,7 +177,7 @@ class Character extends MortalObject {
      * @returns {boolean} True if the character's death movement has ended, otherwise false.
      */
     checkDeathStopMovement() {
-        if (this.sinkDownEnded || this.floatUpEnded) {
+        if ((this.sinkDownEnded || this.floatUpEnded) && this.deathAnimationEnd) {
             this.world.uiController.gameStarted = false;
             this.stopMovementInterval();
             return true;

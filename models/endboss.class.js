@@ -34,7 +34,7 @@ class Endboss extends Enemy {
     deathRiseUpEnded = false;
     resetAttackTimer = false;
     roarSoundAlreayPlayed = false;
-    roarCharacterPosition = 800;
+    roarCharacterPosition = 5000;
 
     /**
      * Initializes the endboss, loads all animation frames, and starts movement and animation loops.
