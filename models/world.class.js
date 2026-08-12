@@ -12,7 +12,7 @@ class World {
     renderFrameId = null;
     camera_x = 0;
     bubbles = [];
-    testMode = false;
+    testMode = true;
     coinsTillLife = 7;
     maxPoisonBottleCollected = 2;
     gameEnd = false;

@@ -45,7 +45,6 @@ class Character extends MortalObject {
     collisionOffsetTopSleep = 220;
     collisionOffsetBottomSleep = 50;
     collisionOffsetSideDefault = 55;
-    collisionOffsetSideSlap = 20;
 
     /**
      * Initializes the character, loads all animation frames, and starts movement and animation loops.
@@ -274,15 +273,8 @@ class Character extends MortalObject {
      */
     playSlapAnimation() {
         AUDIO_PATHS.character.slap.play();
-        if (!this.otherDirection) {
-            this.collisionOffset.right = this.collisionOffsetSideSlap;
-        } else {
-            this.collisionOffset.left = this.collisionOffsetSideSlap;
-        }
         let animationEnd = this.playAnimation(IMG_PATHS.character.attack.slap);
         if (animationEnd) {
-            this.collisionOffset.right = this.collisionOffsetSideDefault;
-            this.collisionOffset.left = this.collisionOffsetSideDefault;
             this.slap = false;
         }
     }
