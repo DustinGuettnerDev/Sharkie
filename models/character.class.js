@@ -42,9 +42,9 @@ class Character extends MortalObject {
 
     collisionOffsetTopDefault = 180;
     collisionOffsetBottomDefault = 100;
+
     collisionOffsetTopSleep = 220;
     collisionOffsetBottomSleep = 50;
-    collisionOffsetSideDefault = 55;
 
     /**
      * Initializes the character, loads all animation frames, and starts movement and animation loops.
