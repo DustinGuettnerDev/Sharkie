@@ -164,8 +164,8 @@
 .game-container__help-icon,
 .game-container__fullscreen-icon,
 .game-container__mute-icon {
-    height: clamp(20px, 3.2cqw, 40px);
-    width: clamp(20px, 3.2cqw, 40px);
+    height: clamp(20px, 4cqw, 40px);
+    width: clamp(20px, 4cqw, 40px);
     filter: invert(80%) sepia(74%) saturate(269%) hue-rotate(95deg) brightness(104%) contrast(102%);
 }
 
