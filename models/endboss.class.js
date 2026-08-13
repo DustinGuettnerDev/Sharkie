@@ -114,22 +114,34 @@ class Endboss extends Enemy {
      * @returns {boolean} True while attack movement is active, otherwise false.
      */
     checkAttackMovement() {
-        if (this.attackMove) {
-            if (this.isAboveCharacter) {
-                this.moveDown();
-            } else if (this.isBelowCharacter) {
-                this.moveUp();
-            }
-            if (this.isRightFromCharacter) {
-                this.otherDirection = false;
-                this.moveLeft();
-            } else if (this.isLeftFromCharacter) {
-                this.otherDirection = true;
-                this.moveRight();
-            }
-            return true;
+        if (!this.attackMove) return false;
+        this.moveVerticallyTowardCharacter();
+        this.moveHorizontallyTowardCharacter();
+        return true;
+    }
+
+    /**
+     * Moves the endboss vertically toward the character.
+     */
+    moveVerticallyTowardCharacter() {
+        if (this.isAboveCharacter) {
+            this.moveDown();
+        } else if (this.isBelowCharacter) {
+            this.moveUp();
         }
-        return false;
+    }
+
+    /**
+     * Moves the endboss horizontally toward the character and updates its direction.
+     */
+    moveHorizontallyTowardCharacter() {
+        if (this.isRightFromCharacter) {
+            this.otherDirection = false;
+            this.moveLeft();
+        } else if (this.isLeftFromCharacter) {
+            this.otherDirection = true;
+            this.moveRight();
+        }
     }
 
     /**

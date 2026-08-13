@@ -27,12 +27,7 @@ function createLevel1Endboss(xPosition = 7400, triggerPosition = 6800) {
  * @param {number} levelEndingRegularEnemies Last spawn position.
  * @returns {(Puffer|JellyFish)[]} The generated enemy list.
  */
-function createEnemies(
-    enemySpecies,
-    enemyNumber,
-    levelStartSpawnRegularEnemies,
-    levelEndingRegularEnemies,
-) {
+function createEnemies(enemySpecies, enemyNumber, levelStartSpawnRegularEnemies, levelEndingRegularEnemies) {
     const enemyArray = [];
     const positionPerEnemy = levelEndingRegularEnemies / enemyNumber;
     let positionOffset = levelStartSpawnRegularEnemies;

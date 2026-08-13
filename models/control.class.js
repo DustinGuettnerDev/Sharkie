@@ -64,11 +64,7 @@ class Control {
             ["mobile-right-btn-id", () => this.moveRight(true), () => this.moveRight(false)],
             ["mobile-down-btn-id", () => this.moveDown(true), () => this.moveDown(false)],
             ["mobile-bubble-btn-id", () => this.pressD(true), () => this.pressD(false)],
-            [
-                "mobile-attack-btn-id",
-                () => this.pressSpacebar(true),
-                () => this.pressSpacebar(false),
-            ],
+            ["mobile-attack-btn-id", () => this.pressSpacebar(true), () => this.pressSpacebar(false)],
         ];
         for (const [id, buttonOn, buttonOff] of mobileBindings) {
             this.mobileButton(id, buttonOn, buttonOff);

@@ -8,19 +8,7 @@ class Hud extends DrawableObject {
      * Creates a HUD element with image, position, and value tracking.
      * @param {Object} config Configuration object for the HUD element.
      */
-    constructor({
-        mode = "icon",
-        iconPath = null,
-        barArrayPaths = null,
-        x = 0,
-        y = 0,
-        height = 70,
-        width = 70,
-        fontOffsetY = 0,
-        fontOffsetX = 0,
-        kind = null,
-        world = null,
-    } = {}) {
+    constructor({ mode = "icon", iconPath = null, barArrayPaths = null, x = 0, y = 0, height = 70, width = 70, fontOffsetY = 0, fontOffsetX = 0, kind = null, world = null } = {}) {
         super();
         this.mode = mode;
         this.iconPath = iconPath;

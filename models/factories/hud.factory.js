@@ -5,11 +5,7 @@
  * @returns {HUD[]} List of all initialized HUD elements.
  */
 function createHud(world, character) {
-    return [
-        createHudLifeBar(world, character),
-        createPoisonHudIcon(world, character),
-        createCoinHudIcon(world, character),
-    ];
+    return [createHudLifeBar(world, character), createPoisonHudIcon(world, character), createCoinHudIcon(world, character)];
 }
 
 /**

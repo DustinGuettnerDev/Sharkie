@@ -151,14 +151,7 @@ class Puffer extends RegularEnemy {
      */
     isInAggroRange(character) {
         return (
-            this.x + this.width - this.aggroOffset.right >
-                character.x + character.collisionOffset.left &&
-            this.y + this.height - this.aggroOffset.bottom >
-                character.y + character.collisionOffset.top &&
-            this.x + this.aggroOffset.left <
-                character.x + character.width - character.collisionOffset.right &&
-            this.y + this.aggroOffset.top <
-                character.y + character.height - character.collisionOffset.bottom
+            this.x + this.width - this.aggroOffset.right > character.x + character.collisionOffset.left && this.y + this.height - this.aggroOffset.bottom > character.y + character.collisionOffset.top && this.x + this.aggroOffset.left < character.x + character.width - character.collisionOffset.right && this.y + this.aggroOffset.top < character.y + character.height - character.collisionOffset.bottom
         );
     }
 }

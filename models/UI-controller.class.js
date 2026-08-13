@@ -290,8 +290,7 @@ class UIController {
 
         const shouldShowLockScreen = !isLandscape;
         this.lockScreen.classList.toggle("hidden", !shouldShowLockScreen);
-        const shouldShowStartButtonOnMobile =
-            isLandscape && !this.gameStarted && !this.isEndScreenVisible();
+        const shouldShowStartButtonOnMobile = isLandscape && !this.gameStarted && !this.isEndScreenVisible();
         this.startButton.classList.toggle("hidden", !shouldShowStartButtonOnMobile);
     }
 

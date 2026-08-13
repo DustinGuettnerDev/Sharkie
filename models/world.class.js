@@ -4,7 +4,6 @@
 class World {
     character = null;
     HUD = [];
-
     ctx = null;
     canvas = null;
     control = null;
@@ -32,27 +31,15 @@ class World {
         this.startWorldLoops();
     }
 
-    /**
-     * Validates required constructor dependencies before world initialization continues.
-     * @param {HTMLCanvasElement} canvas Canvas element used for rendering.
-     * @param {Control} control Input controller instance.
-     */
     validateWorldDependencies(canvas, control) {
         if (!canvas || typeof canvas.getContext !== "function") {
-            throw new Error(
-                "World initialization failed: canvas is missing or does not provide getContext('2d').",
-            );
+            throw new Error("World initialization failed: canvas is missing or does not provide getContext('2d').");
         }
         if (!control) {
             throw new Error("World initialization failed: keyboard input object is required.");
         }
     }
 
-    /**
-     * Creates and validates the canvas 2D rendering context.
-     * @param {HTMLCanvasElement} canvas Canvas element used for rendering.
-     * @returns {CanvasRenderingContext2D} Active rendering context.
-     */
     createRenderingContext(canvas) {
         const ctx = canvas.getContext("2d");
         if (!ctx) {
@@ -61,10 +48,6 @@ class World {
         return ctx;
     }
 
-    /**
-     * Initializes level data, character setup, and HUD state.
-     * @param {Control} control Input controller instance.
-     */
     initializeLevelState(control) {
         this.level = createLevel_1();
         this.control = control;
@@ -73,17 +56,11 @@ class World {
         this.setAttributes();
     }
 
-    /**
-     * Starts rendering and collision loops after successful initialization.
-     */
     startWorldLoops() {
         this.render();
         this.checkCollisionsOrAggroRange();
     }
 
-    /**
-     * Sets the world reference on all enemies so they can access the game world.
-     */
     setAttributes() {
         for (let enemy of this.level.regularEnemies) {
             enemy.world = this;
@@ -91,10 +68,6 @@ class World {
         this.level.endboss.world = this;
     }
 
-    /**
-     * Renders the game world, including the character, enemies, collectibles, and HUD icons.
-     * Rendering is skipped while the central pause flag is active.
-     */
     render() {
         if (this.isPaused) {
             this.renderFrameId = null;
@@ -105,9 +78,6 @@ class World {
         this.renderFrameId = requestAnimationFrame(() => this.render());
     }
 
-    /**
-     * Draws one complete world frame including map layers and HUD.
-     */
     drawWorldFrame() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.checkGameEnd();
@@ -117,9 +87,6 @@ class World {
         this.addHudToMap();
     }
 
-    /**
-     * Draws all world layers that move with the camera offset.
-     */
     drawScrollableWorldLayers() {
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.isVisibleFilterPB(this.level.collectibles));
@@ -128,10 +95,6 @@ class World {
         this.addToMap(this.character);
     }
 
-    /**
-     * Checks enemy, collectible, and bubble collisions at regular intervals.
-     * All collision checks are skipped while the game is paused, ended, or the character has no life left.
-     */
     checkCollisionsOrAggroRange() {
         this.stopCollisionInterval();
         this.collisionInterval = setInterval(() => {
@@ -142,9 +105,6 @@ class World {
         }, this.collisionTickMs);
     }
 
-    /**
-     * Stops the collision checking interval if it is currently running.
-     */
     stopCollisionInterval() {
         if (this.collisionInterval) {
             clearInterval(this.collisionInterval);
@@ -152,18 +112,9 @@ class World {
         }
     }
 
-    /**
-     * Resolves character-enemy collisions. During the slap hit window, the enemy is attacked;
-     * otherwise the character takes damage unless test mode or the slap action is active.
-     */
     enemyCollision() {
         for (let enemy of this.level.enemies) {
-            if (
-                this.character.isColliding(enemy) &&
-                !this.character.hasZeroLife &&
-                !this.character.isHurt &&
-                enemy.dead !== true
-            ) {
+            if (this.character.isColliding(enemy) && !this.character.hasZeroLife && !this.character.isHurt && enemy.dead !== true) {
                 if (this.character.slapHitWindow === true) {
                     this.enemySlapCollision(enemy);
                 } else if (!this.testMode && !this.character.slap) {
@@ -173,25 +124,14 @@ class World {
         }
     }
 
-    /**
-     * Handles an enemy hit during the character's active slap hit window.
-     * The enemy only takes damage when its weakness includes "slap".
-     * @param {Enemy} enemy The enemy object being slapped.
-     */
     enemySlapCollision(enemy) {
         AUDIO_PATHS.character.slap.play();
         if (enemy.weakness.includes("slap")) {
             enemy.getHit();
-            if (enemy.lifeCount === 0) {
-                enemy.dead = true;
-            }
+            if (enemy.lifeCount === 0) enemy.dead = true;
         }
     }
 
-    /**
-     * Checks collisions between the character and all collectibles.
-     * Coin and poison bottle handling is delegated to their respective methods.
-     */
     collectibleCollision() {
         for (let collectible of this.level.collectibles) {
             this.coinCollision(collectible);
@@ -200,14 +140,12 @@ class World {
     }
 
     /**
-     * Handles a coin pickup interaction, including collection rules, sounds, and life-up progression.
-     * @param {Coin} collectible The coin collectible being checked for collision.
+     * Handles a coin pickup interaction, including its sound and life-up rules.
+     * @param {Coin} collectible The coin being checked for collision.
      */
     coinCollision(collectible) {
         if (!(collectible instanceof Coin)) return;
-
         if (!this.canCollectCoin(collectible)) return;
-
         this.removeCollectedCoin(collectible);
         this.collectCoin();
     }
@@ -218,10 +156,7 @@ class World {
      * @returns {boolean} True if the coin can be collected.
      */
     canCollectCoin(collectible) {
-        return (
-            this.character.isColliding(collectible) &&
-            (!this.character.fullLife || this.character.coinCount < this.coinsTillLife - 1)
-        );
+        return this.character.isColliding(collectible) && (!this.character.fullLife || this.character.coinCount < this.coinsTillLife - 1);
     }
 
     /**
@@ -261,11 +196,7 @@ class World {
      */
     poisonBottleCollison(collectible) {
         if (collectible instanceof PoisonBottle) {
-            if (
-                this.character.isColliding(collectible) &&
-                collectible.isVisible &&
-                this.character.poisonBottleCount < this.maxPoisonBottleCollected
-            ) {
+            if (this.character.isColliding(collectible) && collectible.isVisible && this.character.poisonBottleCount < this.maxPoisonBottleCollected) {
                 AUDIO_PATHS.collectibles.poison.play();
                 collectible.deactivateForTime();
                 this.character.poisonBottleCount += 1;
@@ -293,9 +224,7 @@ class World {
      * @param {Enemy} enemy The enemy that was hit.
      */
     handleBubbleEnemyHit(bubble, enemy) {
-        const weaknessMatch =
-            (enemy.weakness.includes("bubble") && bubble.isPoisonBubble == false) ||
-            (enemy.weakness.includes("poison-bubble") && bubble.isPoisonBubble == true);
+        const weaknessMatch = (enemy.weakness.includes("bubble") && bubble.isPoisonBubble == false) || (enemy.weakness.includes("poison-bubble") && bubble.isPoisonBubble == true);
         if (weaknessMatch) {
             enemy.getHit();
             if (enemy.hasZeroLife) enemy.dead = true;
@@ -313,180 +242,12 @@ class World {
         const isPoisonBubble = this.character.poisonBottleCount > 0;
 
         const forward = !this.character.otherDirection;
-        const x = forward
-            ? this.character.x + range + this.character.width - 50
-            : this.character.x - range;
+        const x = forward ? this.character.x + range + this.character.width - 50 : this.character.x - range;
 
         if (isPoisonBubble) {
             this.character.poisonBottleCount = Math.max(0, this.character.poisonBottleCount - 1);
         }
         this.bubbles.push(new Bubble(x, y, forward, this, isPoisonBubble));
-    }
-
-    /**
-     * Excludes hidden poison bottles from rendering while keeping all other collectibles.
-     * @param {(Coin|PoisonBottle)[]} drawObject The array of collectible objects to filter.
-     * @returns {(Coin|PoisonBottle)[]} The filtered array of collectible objects.
-     */
-    isVisibleFilterPB(drawObject) {
-        return drawObject.filter(
-            (collectible) => !(collectible instanceof PoisonBottle) || collectible.isVisible,
-        );
-    }
-
-    /**
-     * Renders every object in the supplied collection.
-     * @param {DrawableObject[]} drawObjects The array of drawable objects to add to the map.
-     */
-    addObjectsToMap(drawObjects) {
-        for (let drawObject of drawObjects) {
-            this.addToMap(drawObject);
-        }
-    }
-
-    /**
-     * Renders one object and, when test mode is enabled, its debug frames.
-     * @param {DrawableObject} drawObject The drawable object to add to the map.
-     */
-    addToMap(drawObject) {
-        this.flipImage(drawObject);
-
-        this.draw(drawObject);
-        if (this.testMode) {
-            this.drawFrame(drawObject);
-        }
-
-        this.flipImageBack(drawObject);
-    }
-
-    /**
-     * Renders all HUD elements, updates their values, and draws icon counters.
-     */
-    addHudToMap() {
-        for (let hudElement of this.HUD) {
-            this.addToMap(hudElement);
-            hudElement.update();
-            if (hudElement.mode === "icon") {
-                this.drawValue({
-                    text: hudElement.iconValue,
-                    x: hudElement.x + hudElement.fontOffsetX,
-                    y: hudElement.y + hudElement.fontOffsetY,
-                });
-            }
-        }
-    }
-
-    /**
-     * Draws a drawable object on the canvas.
-     * @param {DrawableObject} drawObject The drawable object to draw.
-     */
-    draw(drawObject) {
-        if (drawObject.img) {
-            this.ctx.drawImage(
-                drawObject.img,
-                drawObject.x,
-                drawObject.y,
-                drawObject.width,
-                drawObject.height,
-            );
-        }
-    }
-
-    /**
-     * Draws a value (text or number) on the canvas at the specified position with optional font and fill style.
-     * @param {{ text: string|number, x: number, y: number, font?: string, fillStyle?: string }} param0 The parameters for drawing the value.
-     */
-    drawValue({ text, x, y, font = "24px Arial", fillStyle = "white" }) {
-        this.ctx.font = font;
-        this.ctx.fillStyle = fillStyle;
-        this.ctx.fillText(`x ${text}`, x, y);
-    }
-
-    /**
-     * Draws the red collision frame and, when available, the yellow aggro frame.
-     * @param {DrawableObject} drawObject The drawable object for which to draw the collision frame.
-     */
-    drawFrame(drawObject) {
-        if (!this.isDebugFrameSupported(drawObject)) return;
-        this.renderingRedCollisonFrame(drawObject);
-        if (drawObject.aggroOffset) {
-            this.renderingYellowAggroFrame(drawObject);
-        }
-    }
-
-    /**
-     * Returns whether the object supports collision-frame rendering.
-     * @param {DrawableObject} drawObject The object to check.
-     * @returns {boolean} True if a debug frame should be drawn for this object.
-     */
-    isDebugFrameSupported(drawObject) {
-        return (
-            drawObject instanceof Character ||
-            drawObject instanceof Puffer ||
-            drawObject instanceof JellyFish ||
-            drawObject instanceof Endboss ||
-            drawObject instanceof Coin ||
-            drawObject instanceof Bubble ||
-            drawObject instanceof PoisonBottle
-        );
-    }
-
-    /**
-     * Renders a red frame around the object's collision area.
-     * @param {DrawableObject} drawObject The drawable object for which to draw the red collision frame.
-     */
-    renderingRedCollisonFrame(drawObject) {
-        this.ctx.beginPath();
-        this.ctx.lineWidth = "5";
-        this.ctx.strokeStyle = "red";
-        this.ctx.rect(
-            drawObject.x + drawObject.collisionOffset.left,
-            drawObject.y + drawObject.collisionOffset.top,
-            drawObject.width - drawObject.collisionOffset.left - drawObject.collisionOffset.right,
-            drawObject.height - drawObject.collisionOffset.top - drawObject.collisionOffset.bottom,
-        );
-        this.ctx.stroke();
-    }
-
-    /**
-     * Renders a yellow frame around the object's aggro area.
-     * @param {DrawableObject} drawObject The drawable object for which to draw the yellow aggro frame.
-     */
-    renderingYellowAggroFrame(drawObject) {
-        this.ctx.beginPath();
-        this.ctx.lineWidth = "5";
-        this.ctx.strokeStyle = "yellow";
-        this.ctx.rect(
-            drawObject.x + drawObject.aggroOffset.left,
-            drawObject.y + drawObject.aggroOffset.top,
-            drawObject.width - drawObject.aggroOffset.left - drawObject.aggroOffset.right,
-            drawObject.height - drawObject.aggroOffset.top - drawObject.aggroOffset.bottom,
-        );
-        this.ctx.stroke();
-    }
-
-    /**
-     * Temporarily flips the canvas and object position for left-facing sprites.
-     * @param {DrawableObject} drawObject The drawable object to flip.
-     */
-    flipImage(drawObject) {
-        if (drawObject.otherDirection) {
-            this.ctx.save();
-            this.ctx.translate(drawObject.width, 0);
-            this.ctx.scale(-1, 1);
-            drawObject.x *= -1;
-        }
-    }
-
-    /**
-     * Restores the canvas and object position after a temporary horizontal flip.
-     * @param {DrawableObject} drawObject The drawable object to flip back to its original orientation.
-     */
-    flipImageBack(drawObject) {
-        if (drawObject.otherDirection) {
-            drawObject.x *= -1;
-            this.ctx.restore();
-        }
     }
 
     /**
@@ -519,7 +280,7 @@ class World {
     }
 
     /**
-     * Stops collision checking, rendering, character loops, enemy loops, and bubble loops.
+     * Stops collision, rendering, character, enemy, and bubble loops.
      */
     stopAllLoops() {
         this.stopCollisionInterval();
@@ -530,7 +291,7 @@ class World {
     }
 
     /**
-     * Stops the animation frame render loop and clears its id.
+     * Stops the animation-frame rendering loop.
      */
     stopRenderLoop() {
         cancelAnimationFrame(this.renderFrameId);
@@ -538,7 +299,7 @@ class World {
     }
 
     /**
-     * Stops character movement and animation intervals when available.
+     * Stops the Character movement and animation loops.
      */
     stopCharacterLoops() {
         if (this.character.stopMovementInterval) {
@@ -550,7 +311,7 @@ class World {
     }
 
     /**
-     * Stops movement and animation intervals for all active enemies.
+     * Stops movement and animation loops for all enemies.
      */
     stopEnemyLoops() {
         for (const enemy of this.level.enemies) {
@@ -560,7 +321,7 @@ class World {
     }
 
     /**
-     * Stops movement intervals for all active bubbles.
+     * Stops movement loops for all active bubbles.
      */
     stopBubbleLoops() {
         for (const bubble of this.bubbles) {

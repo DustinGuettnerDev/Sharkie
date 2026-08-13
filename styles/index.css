@@ -130,19 +130,15 @@
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    gap: clamp(6px, 2cqw, 15px);
 }
 
 .game-container__help-btn,
 .game-container__fullscreen-btn,
 .game-container__mute-btn {
-    width: clamp(24px, 5.5cqw, 48px);
-    height: clamp(24px, 5.5cqw, 48px);
-    border-radius: clamp(0px, 3cqw, 10px) !important;
-}
-
-.game-container__fullscreen-btn {
-    margin-right: 10px;
+    width: clamp(32px, 7cqw, 64px);
+    height: clamp(32px, 7cqw, 64px);
+    border-radius: 50%;
+    margin-right: clamp(6px, 2cqw, 15px);
 }
 
 .game-container__mute-btn {
@@ -168,8 +164,8 @@
 .game-container__help-icon,
 .game-container__fullscreen-icon,
 .game-container__mute-icon {
-    height: clamp(16px, 3.2cqw, 28px);
-    width: clamp(16px, 3.2cqw, 28px);
+    height: clamp(20px, 3.2cqw, 40px);
+    width: clamp(20px, 3.2cqw, 40px);
     filter: invert(80%) sepia(74%) saturate(269%) hue-rotate(95deg) brightness(104%) contrast(102%);
 }
 
@@ -184,8 +180,7 @@
     .game-container__help-btn:hover .game-container__help-icon,
     .game-container__fullscreen-btn:hover .game-container__fullscreen-icon,
     .game-container__mute-btn:hover .game-container__mute-icon {
-        filter: brightness(0) saturate(100%) invert(18%) sepia(47%) saturate(2522%)
-            hue-rotate(255deg) brightness(84%) contrast(96%);
+        filter: brightness(0) saturate(100%) invert(18%) sepia(47%) saturate(2522%) hue-rotate(255deg) brightness(84%) contrast(96%);
     }
 }
 
@@ -198,8 +193,7 @@
 .game-container__help-btn:active .game-container__help-icon,
 .game-container__fullscreen-btn:active .game-container__fullscreen-icon,
 .game-container__mute-btn:active .game-container__mute-icon {
-    filter: brightness(0) saturate(100%) invert(18%) sepia(47%) saturate(2522%) hue-rotate(255deg)
-        brightness(84%) contrast(96%);
+    filter: brightness(0) saturate(100%) invert(18%) sepia(47%) saturate(2522%) hue-rotate(255deg) brightness(84%) contrast(96%);
 }
 
 /* Help overlay and keyboard instruction layout */
@@ -342,6 +336,7 @@
 .triangle-left,
 .triangle-right {
     background-color: #7fffe0;
+    border-radius: 50%;
 }
 
 .triangle-up {

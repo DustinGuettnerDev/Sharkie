@@ -14,12 +14,7 @@ function createLevel1Background() {
  * @param {number} [step=720] Distance between background positions.
  * @returns {BackgroundObject[]} Background object list.
  */
-function createBackgroundObjects(
-    backgroundColumns,
-    startPosition = -720,
-    endPosition = 9360,
-    step = 720,
-) {
+function createBackgroundObjects(backgroundColumns, startPosition = -720, endPosition = 9360, step = 720) {
     const backgroundObjects = [];
 
     for (let x = startPosition; x <= endPosition; x += step) {
@@ -45,8 +40,6 @@ function addLevel1BackgroundColumn(backgroundObjects, x, variant, includeLight) 
     backgroundObjects.push(new BackgroundObject(`assets/img/background/floor-1/${variant}.png`, x));
 
     if (includeLight) {
-        backgroundObjects.push(
-            new BackgroundObject(`assets/img/background/light/${variant}.png`, x),
-        );
+        backgroundObjects.push(new BackgroundObject(`assets/img/background/light/${variant}.png`, x));
     }
 }

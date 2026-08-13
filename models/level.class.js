@@ -17,14 +17,7 @@ class Level {
      * @param {number} levelStart_x Left boundary x position.
      * @param {number} levelEnd_x Right boundary x position.
      */
-    constructor({
-        regularEnemies = [],
-        endboss = null,
-        collectibles = [],
-        backgroundObjects = [],
-        levelStart_x = -1,
-        levelEnd_x = 4000,
-    } = {}) {
+    constructor({ regularEnemies = [], endboss = null, collectibles = [], backgroundObjects = [], levelStart_x = -1, levelEnd_x = 4000 } = {}) {
         this.regularEnemies = regularEnemies;
         this.endboss = endboss;
         this.collectibles = collectibles;

@@ -31,7 +31,9 @@
         <script src="models/jelly-fish.class.js"></script>
         <script src="models/endboss.class.js"></script>
         <script src="models/character.class.js"></script>
+        <script src="models/character-animation.js"></script>
         <script src="models/world.class.js"></script>
+        <script src="models/world-rendering.js"></script>
         <script src="models/background-object.class.js"></script>
         <script src="models/control.class.js"></script>
         <script src="models/level.class.js"></script>
@@ -49,200 +51,84 @@
                 <section id="game-container-id" class="game-container">
                     <section id="mobile-controls-id" class="hidden" aria-label="Mobile controls">
                         <div class="mobile-controls__movement">
-                            <button
-                                id="mobile-up-btn-id"
-                                class="btn mobile-controls__btn triangle-up"
-                            >
-                                <svg width="20" height="20" viewBox="0 0 24 24">
-                                    <path
-                                        class="mobile-controls__btn-path"
-                                        d="M5 16l7 -8 7 8"
-                                        stroke="#531a82"
-                                        fill="none"
-                                        stroke-width="2"
-                                    />
+                            <button id="mobile-up-btn-id" class="btn mobile-controls__btn triangle-up">
+                                <svg width="30" height="30" viewBox="0 0 24 24">
+                                    <path class="mobile-controls__btn-path" d="M5 16l7 -8 7 8" stroke="#531a82" fill="none" stroke-width="2" />
                                 </svg>
                             </button>
-                            <button
-                                id="mobile-left-btn-id"
-                                class="btn mobile-controls__btn triangle-left"
-                            >
-                                <svg width="20" height="20" viewBox="0 0 24 24">
-                                    <path
-                                        class="mobile-controls__btn-path"
-                                        d="M16 19l-8 -7 8 -7"
-                                        stroke="#531a82"
-                                        fill="none"
-                                        stroke-width="2"
-                                    />
+                            <button id="mobile-left-btn-id" class="btn mobile-controls__btn triangle-left">
+                                <svg width="30" height="30" viewBox="0 0 24 24">
+                                    <path class="mobile-controls__btn-path" d="M16 19l-8 -7 8 -7" stroke="#531a82" fill="none" stroke-width="2" />
                                 </svg>
                             </button>
-                            <button
-                                id="mobile-right-btn-id"
-                                class="btn mobile-controls__btn triangle-right"
-                            >
-                                <svg width="20" height="20" viewBox="0 0 24 24">
-                                    <path
-                                        class="mobile-controls__btn-path"
-                                        d="M8 5l8 7-8 7"
-                                        stroke="#531a82"
-                                        fill="none"
-                                        stroke-width="2"
-                                    />
+                            <button id="mobile-right-btn-id" class="btn mobile-controls__btn triangle-right">
+                                <svg width="30" height="30" viewBox="0 0 24 24">
+                                    <path class="mobile-controls__btn-path" d="M8 5l8 7-8 7" stroke="#531a82" fill="none" stroke-width="2" />
                                 </svg>
                             </button>
-                            <button
-                                id="mobile-down-btn-id"
-                                class="btn mobile-controls__btn triangle-down"
-                            >
-                                <svg width="20" height="20" viewBox="0 0 24 24">
-                                    <path
-                                        class="mobile-controls__btn-path"
-                                        d="M5 8 l7 8 7 -8"
-                                        stroke="#531a82"
-                                        fill="none"
-                                        stroke-width="2"
-                                    />
+                            <button id="mobile-down-btn-id" class="btn mobile-controls__btn triangle-down">
+                                <svg width="30" height="30" viewBox="0 0 24 24">
+                                    <path class="mobile-controls__btn-path" d="M5 8 l7 8 7 -8" stroke="#531a82" fill="none" stroke-width="2" />
                                 </svg>
                             </button>
                         </div>
                         <div class="mobile-controls__actions">
-                            <button
-                                id="mobile-bubble-btn-id"
-                                class="btn mobile-controls__btn mobile-controls__action-btn"
-                            >
-                                BUBBLE
-                            </button>
-                            <button
-                                id="mobile-attack-btn-id"
-                                class="btn mobile-controls__btn mobile-controls__action-btn"
-                            >
-                                ATTACK
-                            </button>
+                            <button id="mobile-bubble-btn-id" class="btn mobile-controls__btn mobile-controls__action-btn">BUBBLE</button>
+                            <button id="mobile-attack-btn-id" class="btn mobile-controls__btn mobile-controls__action-btn">ATTACK</button>
                         </div>
                     </section>
 
                     <aside id="lock-screen-id" class="game-container__lock-screen hidden">
-                        <p class="game-container__lock-screen-text fs-opensans">
-                            Please turn your device.
-                        </p>
+                        <p class="game-container__lock-screen-text fs-opensans">Please turn your device.</p>
                     </aside>
-                    <canvas
-                        class="game-container__canvas"
-                        id="canvas"
-                        width="720"
-                        height="480"
-                    ></canvas>
-                    <img
-                        id="start-screen-id"
-                        class="game-container__start-screen"
-                        src="assets/img/overlay/start-screen/1.png"
-                        alt="Start screen"
-                    />
-                    <button id="start-button-id" class="game-container__start-btn btn">
-                        Start
-                    </button>
-                    <button id="resume-button-id" class="game-container__resume-btn btn hidden">
-                        Resume
-                    </button>
-                    <section
-                        id="game-end-container-id"
-                        class="game-container__end-screen hidden"
-                        aria-label="Game end screen"
-                    >
-                        <img
-                            id="game-over-id"
-                            class="game-container__game-over-image hidden"
-                            src="assets/img/overlay/titles/game-over/1.png"
-                            alt="Game Over"
-                        />
-                        <img
-                            id="you-win-id"
-                            class="game-container__you-win-image hidden"
-                            src="assets/img/overlay/titles/you-win/1.png"
-                            alt="You Win"
-                        />
+                    <canvas class="game-container__canvas" id="canvas" width="720" height="480"></canvas>
+                    <img id="start-screen-id" class="game-container__start-screen" src="assets/img/overlay/start-screen/1.png" alt="Start screen" />
+                    <button id="start-button-id" class="game-container__start-btn btn">Start</button>
+                    <button id="resume-button-id" class="game-container__resume-btn btn hidden">Resume</button>
+                    <section id="game-end-container-id" class="game-container__end-screen hidden" aria-label="Game end screen">
+                        <img id="game-over-id" class="game-container__game-over-image hidden" src="assets/img/overlay/titles/game-over/1.png" alt="Game Over" />
+                        <img id="you-win-id" class="game-container__you-win-image hidden" src="assets/img/overlay/titles/you-win/1.png" alt="You Win" />
                         <div class="game-container__endscreen-button-container">
-                            <button id="restart-button-id" class="game-container__restart-btn btn">
-                                Restart
-                            </button>
-                            <button id="menu-button-id" class="game-container__back-to-menu btn">
-                                Menu
-                            </button>
+                            <button id="restart-button-id" class="game-container__restart-btn btn">Restart</button>
+                            <button id="menu-button-id" class="game-container__back-to-menu btn">Menu</button>
                         </div>
                     </section>
                     <aside class="game-container__ui-icons" aria-label="Game controls">
                         <button id="help-button-id" class="game-container__help-btn btn">
-                            <img
-                                class="game-container__help-icon"
-                                src="assets/img/overlay/help/1.svg"
-                                alt=""
-                            />
+                            <img class="game-container__help-icon" src="assets/img/overlay/help/1.svg" alt="" />
                         </button>
 
                         <button id="mute-button-id" class="game-container__mute-btn btn">
-                            <img
-                                class="game-container__mute-icon"
-                                src="assets/img/overlay/audio/1.svg"
-                                alt=""
-                            />
+                            <img class="game-container__mute-icon" src="assets/img/overlay/audio/1.svg" alt="" />
                         </button>
-                        <button
-                            id="fullscreen-button-id"
-                            class="game-container__fullscreen-btn btn"
-                        >
-                            <img
-                                class="game-container__fullscreen-icon"
-                                src="assets/img/overlay/fullscreen/1.svg"
-                                alt=""
-                            />
+                        <button id="fullscreen-button-id" class="game-container__fullscreen-btn btn">
+                            <img class="game-container__fullscreen-icon" src="assets/img/overlay/fullscreen/1.svg" alt="" />
                         </button>
                     </aside>
-                    <aside
-                        id="help-id"
-                        class="game-container__help-overlay hidden fs-opensans"
-                        aria-label="Help"
-                    >
-                        <section
-                            id="keyboard-keys-information-id"
-                            class="game-container__help-keys"
-                            aria-label="Keyboard shortcuts"
-                        >
+                    <aside id="help-id" class="game-container__help-overlay hidden fs-opensans" aria-label="Help">
+                        <section id="keyboard-keys-information-id" class="game-container__help-keys" aria-label="Keyboard shortcuts">
                             <div class="game-container__help-row">
-                                <img
-                                    class="game-container__help-move-key"
-                                    src="assets/img/overlay/key/arrow-keys/1.png"
-                                />
+                                <img class="game-container__help-move-key" src="assets/img/overlay/key/arrow-keys/1.png" />
                             </div>
                             <div class="game-container__help-row">
                                 <p class="game-container__help-text">MOVE SHARK</p>
                             </div>
                             <div class="game-container__help-row">
-                                <img
-                                    class="game-container__help-bubble-key"
-                                    src="assets/img/overlay/key/d-key/1.png"
-                                />
+                                <img class="game-container__help-bubble-key" src="assets/img/overlay/key/d-key/1.png" />
                             </div>
                             <div class="game-container__help-row">
                                 <p class="game-container__help-text">BUBBLE</p>
                             </div>
                             <div class="game-container__help-row">
-                                <img
-                                    class="game-container__help-attack-key"
-                                    src="assets/img/overlay/key/space-bar/1.png"
-                                />
+                                <img class="game-container__help-attack-key" src="assets/img/overlay/key/space-bar/1.png" />
                             </div>
                             <div class="game-container__help-row">
                                 <p class="game-container__help-text">ATTACK</p>
                             </div>
                         </section>
                         <p class="game-container__instruction-text">
-                            In this game, you must guide your shark to the final boss and defeat
-                            him. Every enemy has its own weakness, so you need to figure out which
-                            attack works best against each one. You can avoid the regular enemies,
-                            but to complete the game, you must defeat the final boss. <br />
-                            <br />Tipp: For every 7 coins you get hp back. If you have full hp you
-                            can collect only 6 coins. You can also only collect 2 poison bottles.
+                            In this game, you must guide your shark to the final boss and defeat him. Every enemy has its own weakness, so you need to figure out which attack works best against each one. You can avoid the regular enemies, but to complete the game, you must defeat the final boss. <br />
+                            <br />Tipp: For every 7 coins you get hp back. If you have full hp you can collect only 6 coins. You can also only collect 2 poison bottles.
                         </p>
                     </aside>
                 </section>

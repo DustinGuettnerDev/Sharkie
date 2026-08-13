@@ -7,13 +7,7 @@ function createLevel1Collectibles() {
 }
 
 function createLevel1Coins() {
-    return [
-        ...createCoinCurve(1000, 400, 160, 60),
-        ...createCoinPyramid(2500, 0, 120, 60, true),
-        ...createCoinCurve(4000, 50, 120, 60, true),
-        ...createCoinPyramid(5500, 400, 100, 60),
-        ...createRandomCoinAmount(10),
-    ];
+    return [...createCoinCurve(1000, 400, 160, 60), ...createCoinPyramid(2500, 0, 120, 60, true), ...createCoinCurve(4000, 50, 120, 60, true), ...createCoinPyramid(5500, 400, 100, 60), ...createRandomCoinAmount(10)];
 }
 
 /**
@@ -21,12 +15,7 @@ function createLevel1Coins() {
  * @returns {PoisonBottle[]} Poison bottle list.
  */
 function createLevel1PoisonBottles() {
-    return [
-        new PoisonBottle(1400, 400, true),
-        new PoisonBottle(3500, 400, false),
-        new PoisonBottle(5780, 390, true),
-        new PoisonBottle(7800, 390, false),
-    ];
+    return [new PoisonBottle(1400, 400, true), new PoisonBottle(3500, 400, false), new PoisonBottle(5780, 390, true), new PoisonBottle(7800, 390, false)];
 }
 
 /**
@@ -53,12 +42,7 @@ function createRandomCoinAmount(maxAmount) {
  * @param {number} endRangeYPosition Maximum y position.
  * @returns {Coin} Randomly positioned coin.
  */
-function createRandomCoin(
-    startRangeXPosition,
-    endRangeXPosition,
-    startRangeYPosition,
-    endRangeYPosition,
-) {
+function createRandomCoin(startRangeXPosition, endRangeXPosition, startRangeYPosition, endRangeYPosition) {
     const differenceX = endRangeXPosition - startRangeXPosition;
     const differenceY = endRangeYPosition - startRangeYPosition;
 
@@ -77,13 +61,7 @@ function createRandomCoin(
  * @param {boolean} isUpsideDown Whether the curve should be flipped vertically.
  * @returns {Coin[]} Curve coin pattern.
  */
-function createCoinCurve(
-    coinXPosition,
-    coinYPosition,
-    xGapOffset = 20,
-    yGapOffset = 20,
-    isUpsideDown = false,
-) {
+function createCoinCurve(coinXPosition, coinYPosition, xGapOffset = 20, yGapOffset = 20, isUpsideDown = false) {
     const coinArray = [];
     const yMultipliers = [0, -2, -3, -3, -2, 0];
     const direction = isUpsideDown ? -1 : 1;
@@ -106,13 +84,7 @@ function createCoinCurve(
  * @param {boolean} isUpsideDown Whether the pyramid should be flipped vertically.
  * @returns {Coin[]} Pyramid coin pattern.
  */
-function createCoinPyramid(
-    coinXPosition,
-    coinYPosition,
-    xGapOffset = 20,
-    yGapOffset = 20,
-    isUpsideDown = false,
-) {
+function createCoinPyramid(coinXPosition, coinYPosition, xGapOffset = 20, yGapOffset = 20, isUpsideDown = false) {
     const coinArray = [];
     const yMultipliers = [0, -1, -2, -3, -2, -1, 0];
     const direction = isUpsideDown ? -1 : 1;
