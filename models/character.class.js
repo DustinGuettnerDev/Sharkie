@@ -172,7 +172,7 @@ class Character extends MortalObject {
     }
 
     /**
-     * Finalizes character death movement by disabling game input/state and stopping movement updates.
+     * Marks gameplay inactive after the character's death movement has ended.
      * @returns {boolean} True if the character's death movement has ended, otherwise false.
      */
     checkDeathStopMovement() {

@@ -130,7 +130,7 @@ class World {
 
     /**
      * Checks enemy, collectible, and bubble collisions at regular intervals.
-     * All collision checks are skipped while the game is paused or the character has no life left.
+     * All collision checks are skipped while the game is paused, ended, or the character has no life left.
      */
     checkCollisionsOrAggroRange() {
         this.stopCollisionInterval();
