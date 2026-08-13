@@ -70,8 +70,7 @@ class Endboss extends Enemy {
     }
 
     /**
-     * Moves the boss upward during the death sequence, marks the rise-up as finished,
-     * and disables game state once the boss is fully off-screen.
+     * Moves the boss upward during the death sequence and marks the rise-up as finished.
      * @returns {boolean} True while death movement is applied, otherwise false.
      */
     checkDeathMovement() {
@@ -79,7 +78,6 @@ class Endboss extends Enemy {
             this.moveUp(1);
             if (this.y <= -500) {
                 this.deathRiseUpEnded = true;
-                this.world.uiController.gameStarted = false;
             }
             return true;
         }

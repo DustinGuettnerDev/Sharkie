@@ -204,9 +204,7 @@ class UIController {
     /**
      * Hides the title and footer on mobile landscape or when fullscreen is active on desktop.
      */
-    updateTitleAndFooterVisibility() {
-        const isMobile = this.isMobile();
-        const isLandscape = this.isLandscape();
+    updateTitleAndFooterVisibility(isMobile, isLandscape) {
         const isFullscreen = Boolean(document.fullscreenElement);
         const shouldHideTitleAndFooter = (isMobile && isLandscape) || (!isMobile && isFullscreen);
         this.title.classList.toggle("hidden", shouldHideTitleAndFooter);
@@ -218,8 +216,8 @@ class UIController {
      */
     handleLandscape() {
         const isMobile = this.isMobile();
-        const isLandscape = this.landscapeQuery.matches;
-        this.updateTitleAndFooterVisibility();
+        const isLandscape = this.isLandscape();
+        this.updateTitleAndFooterVisibility(isMobile, isLandscape);
         this.updateUiElementVisibility(isMobile, isLandscape);
         this.handleLockScreen(isMobile, isLandscape);
         this.handleGamePlayState(isMobile, isLandscape);
@@ -306,28 +304,29 @@ class UIController {
     }
 
     /**
-     * Detects whether the current device is mobile.
-     * @returns {boolean} True when the device matches the mobile heuristics.
+     * Detects whether the current device should use the mobile or tablet UI.
+     * @returns {boolean} True when the device has touch input and its largest viewport side is within the tablet limit.
      */
     isMobile() {
         // Touch-like input: finger-driven devices usually report a coarse pointer and no hover.
         const touchLike = window.matchMedia("(pointer: coarse) and (hover: none)").matches;
 
-        // Keep a viewport guard so very large screens are not treated as mobile.
-        const smallViewport = window.matchMedia("(max-width: 1024px)").matches;
+        // Use the larger viewport side so portrait and landscape use the same device limit.
+        const largestViewportSide = Math.max(window.innerWidth, window.innerHeight);
+        const smallViewport = largestViewportSide <= 1368;
 
-        // Extra fallback: some devices expose touch through maxTouchPoints.
+        // Fallback for devices that expose touch through maxTouchPoints.
         const hasTouch = navigator.maxTouchPoints > 0;
 
-        // Consider it mobile only when viewport is small and touch capability is present.
+        // Require both a tablet-sized viewport and touch capability.
         return smallViewport && (touchLike || hasTouch);
     }
 
     /**
-     * @returns {boolean} True if the current orientation is landscape.
+     * @returns {boolean} True when the current viewport is wider than it is high.
      */
     isLandscape() {
-        return window.matchMedia("(orientation: landscape)").matches;
+        return window.innerWidth > window.innerHeight;
     }
 
     /**

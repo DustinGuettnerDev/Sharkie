@@ -16,15 +16,16 @@
 }
 
 .game-container {
+    --height: min(100%, 720px);
     position: relative;
-    width: min(100%, 720px);
-    aspect-ratio: 3 / 2;
+    width: var(--height);
+    height: calc(var(--height) / 3 * 2);
     container-type: inline-size;
 }
 
 .game-container--landscape {
     height: 90vh;
-    width: 90vh / 2 * 3;
+    width: min(100%, calc(90vh / 2 * 3));
 }
 
 .game-container__canvas {
@@ -169,7 +170,7 @@
 .game-container__mute-icon {
     height: clamp(16px, 3.2cqw, 28px);
     width: clamp(16px, 3.2cqw, 28px);
-    filter: brightness(0) invert(1);
+    filter: invert(80%) sepia(74%) saturate(269%) hue-rotate(95deg) brightness(104%) contrast(102%);
 }
 
 @media (pointer: fine) and (hover: hover) {
@@ -287,9 +288,9 @@
 
 /* Mobile touch controls for gameplay input */
 .mobile-controls__actions {
-    position: absolute;
+    position: fixed;
     right: 0;
-    top: 60%;
+    bottom: 20%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -299,14 +300,14 @@
 }
 
 .mobile-controls__movement {
-    position: absolute;
+    position: fixed;
     left: 0;
-    top: 60%;
+    bottom: 20%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     padding-left: 15px;
     z-index: 10;
 }
@@ -324,7 +325,7 @@
     color: #531a82;
     background-color: #7fffe0;
     padding: 2px;
-    font-size: 16px;
+    font-size: 20px;
 }
 
 .mobile-controls__btn.is-pressed {

@@ -178,7 +178,6 @@ class Character extends MortalObject {
     checkDeathStopMovement() {
         if ((this.sinkDownEnded || this.floatUpEnded) && this.deathAnimationEnd) {
             this.world.uiController.gameStarted = false;
-            this.stopMovementInterval();
             return true;
         }
         return false;
@@ -208,7 +207,7 @@ class Character extends MortalObject {
     checkDeath() {
         if (this.hasZeroLife) {
             this.stopSnoring();
-            AUDIO_PATHS.character.hurt.play();
+            AUDIO_PATHS.character.hurt.stop();
             this.playDeathTypeAnimation();
             return true;
         }
@@ -257,6 +256,7 @@ class Character extends MortalObject {
      * @returns {boolean} True if the character is performing a slap action, otherwise false.
      */
     checkSlap() {
+        if (this.world.gameEnd) return false;
         if (this.world.control.spacebar) {
             this.slap = true;
         }
@@ -290,6 +290,7 @@ class Character extends MortalObject {
      * @returns {boolean} True if the character is creating a bubble, otherwise false.
      */
     checkCreateBubble() {
+        if (this.world.gameEnd) return false;
         if (this.world.control.d) {
             this.createBubble.isActive = true;
         }

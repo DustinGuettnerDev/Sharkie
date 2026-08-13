@@ -135,7 +135,7 @@ class World {
     checkCollisionsOrAggroRange() {
         this.stopCollisionInterval();
         this.collisionInterval = setInterval(() => {
-            if (this.isPaused || this.character.hasZeroLife) return;
+            if (this.isPaused || this.gameEnd || this.character.hasZeroLife) return;
             this.enemyCollision();
             this.collectibleCollision();
             this.bubbleCollision();
