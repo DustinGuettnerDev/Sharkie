@@ -56,6 +56,10 @@
 
 .game-container__lock-screen-text {
     padding: 0 10px;
+    font-size: clamp(14px, 6cqw, 40px);
+    color: #7fffe0;
+    background-color: #531a82;
+    border-radius: 50px;
 }
 
 .game-container__start-screen {

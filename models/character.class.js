@@ -17,7 +17,7 @@ class Character extends MortalObject {
     animateInterval = null;
     inactiveStartTime = Date.now();
     waitTime = 1000;
-    sleepTime = 1500;
+    sleepTime = 15000;
     sleepLoop = false;
     slap = false;
     hurtTime = 2;
