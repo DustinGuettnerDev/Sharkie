@@ -73,7 +73,7 @@
     object-fit: cover;
     z-index: 1;
     pointer-events: none;
-    filter: brightness(0.15);
+    filter: brightness(0.25);
 }
 
 .game-container__start-btn,
