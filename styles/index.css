@@ -16,16 +16,15 @@
 }
 
 .game-container {
-    --height: min(100%, 720px);
+    width: 95vw;
+    height: calc(95vw / 3 * 2);
     position: relative;
-    width: var(--height);
-    height: calc(var(--height) / 3 * 2);
     container-type: inline-size;
 }
 
 .game-container--landscape {
-    height: 90vh;
-    width: min(100%, calc(90vh / 2 * 3));
+    height: 100vh;
+    width: 100vw;
 }
 
 .game-container__canvas {
