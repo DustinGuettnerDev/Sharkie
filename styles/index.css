@@ -16,9 +16,10 @@
 }
 
 .game-container {
-    width: 95vw;
-    height: calc(95vw / 3 * 2);
+    --width: min(100%, 720px);
     position: relative;
+    width: var(--width);
+    height: calc(var(--width) / 3 * 2);
     container-type: inline-size;
 }
 
