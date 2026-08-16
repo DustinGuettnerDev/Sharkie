@@ -21,6 +21,13 @@ class World {
     locStorage = null;
     collisionTickMs = 200;
 
+    /**
+     * Creates the game world and immediately sets up rendering and collision loops.
+     * @param {HTMLCanvasElement} canvas The canvas used for rendering.
+     * @param {Control} control The keyboard and touch input controller.
+     * @param {UIController} uiController The UI layer controlling overlays and buttons.
+     * @param {LocalStorage} locStorage Persistent storage for game settings.
+     */
     constructor(canvas, control, uiController, locStorage) {
         this.validateWorldDependencies(canvas, control);
         this.canvas = canvas;
@@ -31,6 +38,11 @@ class World {
         this.startWorldLoops();
     }
 
+    /**
+     * Validates that the canvas and control dependencies are available.
+     * @param {HTMLCanvasElement} canvas The game canvas.
+     * @param {Control} control The input control object.
+     */
     validateWorldDependencies(canvas, control) {
         if (!canvas || typeof canvas.getContext !== "function") {
             throw new Error("World initialization failed: canvas is missing or does not provide getContext('2d').");
@@ -40,6 +52,11 @@ class World {
         }
     }
 
+    /**
+     * Creates the 2D rendering context for the canvas.
+     * @param {HTMLCanvasElement} canvas The canvas element to render to.
+     * @returns {CanvasRenderingContext2D} The 2D drawing context.
+     */
     createRenderingContext(canvas) {
         const ctx = canvas.getContext("2d");
         if (!ctx) {
@@ -48,6 +65,10 @@ class World {
         return ctx;
     }
 
+    /**
+     * Initializes the active level, character, HUD, and world references.
+     * @param {Control} control The active input controller.
+     */
     initializeLevelState(control) {
         this.level = createLevel_1();
         this.control = control;
@@ -56,11 +77,17 @@ class World {
         this.setAttributes();
     }
 
+    /**
+     * Starts the render loop and the periodic collision check loop.
+     */
     startWorldLoops() {
         this.render();
         this.checkCollisionsOrAggroRange();
     }
 
+    /**
+     * Assigns the world reference to all level enemies and the end boss.
+     */
     setAttributes() {
         for (let enemy of this.level.regularEnemies) {
             enemy.world = this;
@@ -68,6 +95,9 @@ class World {
         this.level.endboss.world = this;
     }
 
+    /**
+     * Re-renders the world frame until the game is paused or finished.
+     */
     render() {
         if (this.isPaused) {
             this.renderFrameId = null;
@@ -78,6 +108,9 @@ class World {
         this.renderFrameId = requestAnimationFrame(() => this.render());
     }
 
+    /**
+     * Clears the canvas, updates game-over checks, draws the scrollable world, and re-adds HUD overlays.
+     */
     drawWorldFrame() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.checkGameEnd();
@@ -87,6 +120,9 @@ class World {
         this.addHudToMap();
     }
 
+    /**
+     * Draws all visible background, collectible, bubble, enemy, and player objects in the current frame.
+     */
     drawScrollableWorldLayers() {
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.isVisibleFilterPB(this.level.collectibles));
@@ -95,6 +131,9 @@ class World {
         this.addToMap(this.character);
     }
 
+    /**
+     * Starts the periodic interval that checks enemy, collectible, and bubble collisions.
+     */
     checkCollisionsOrAggroRange() {
         this.stopCollisionInterval();
         this.collisionInterval = setInterval(() => {
@@ -105,6 +144,9 @@ class World {
         }, this.collisionTickMs);
     }
 
+    /**
+     * Clears any existing collision interval before creating a new one.
+     */
     stopCollisionInterval() {
         if (this.collisionInterval) {
             clearInterval(this.collisionInterval);
@@ -112,6 +154,9 @@ class World {
         }
     }
 
+    /**
+     * Checks enemy contact and resolves slap hits or player damage.
+     */
     enemyCollision() {
         for (let enemy of this.level.enemies) {
             if (this.character.isColliding(enemy) && !this.character.hasZeroLife && !this.character.isHurt && enemy.dead !== true) {
@@ -124,6 +169,10 @@ class World {
         }
     }
 
+    /**
+     * Applies damage from a slap attack when the enemy is vulnerable to it.
+     * @param {Enemy} enemy The enemy hit by the player's slap.
+     */
     enemySlapCollision(enemy) {
         AUDIO_PATHS.character.slap.play();
         if (enemy.weakness.includes("slap")) {
@@ -132,6 +181,9 @@ class World {
         }
     }
 
+    /**
+     * Checks all collectible collisions, including coins and poison bottles.
+     */
     collectibleCollision() {
         for (let collectible of this.level.collectibles) {
             this.coinCollision(collectible);
