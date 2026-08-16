@@ -59,8 +59,10 @@
     padding: 0 10px;
     font-size: clamp(14px, 6cqw, 40px);
     color: #7fffe0;
-    background-color: #531a82;
-    border-radius: 50px;
+}
+
+.game-container__lock-screen-img {
+    filter: invert(80%) sepia(74%) saturate(269%) hue-rotate(95deg) brightness(104%) contrast(102%);
 }
 
 .game-container__start-screen {
@@ -71,6 +73,7 @@
     object-fit: cover;
     z-index: 1;
     pointer-events: none;
+    filter: brightness(0.15);
 }
 
 .game-container__start-btn,
