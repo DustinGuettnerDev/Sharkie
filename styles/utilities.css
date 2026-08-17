@@ -24,6 +24,7 @@
     justify-content: center;
     box-sizing: border-box;
     text-align: center;
+    line-height: 1;
 }
 
 @media (pointer: fine) and (hover: hover) {
