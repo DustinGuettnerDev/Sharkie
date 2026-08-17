@@ -103,6 +103,9 @@ class UIController {
         this.muteButton.addEventListener("click", () => this.toggleMute());
         this.fullscreenButton.addEventListener("click", () => this.toggleFullscreen());
         this.menuButton.addEventListener("click", () => this.goBackToMenu());
+        document.addEventListener("click", (event) => {
+            this.closeHelpContainer(event);
+        });
     }
 
     /**
@@ -392,5 +395,15 @@ class UIController {
         this.startScreen.classList.remove("hidden");
         this.startButton.classList.remove("hidden");
         this.gameEndContainer.classList.add("hidden");
+    }
+
+    /**
+     * Closes the help container when the user clicks outside the container and its button.
+     * @param {Event} event The click event.
+     */
+    closeHelpContainer(event) {
+        if (!this.helpContainer.contains(event.target) && !this.helpButton.contains(event.target)) {
+            this.helpContainer.classList.add("hidden");
+        }
     }
 }
